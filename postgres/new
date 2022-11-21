@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# this scripthas helpful args to help you create a new migration
+# it takes a single argument which is thie migration name
+
+DIR=$(dirname "$0")
+
+function usage() {
+	echo "You must supply a migration description as an argument"
+	echo "e.g. ./new add_unique_constraint_to_user_email"
+}
+
+function die() {
+	usage 
+	exit 1
+}
+
+[ "$#" -eq 1 ] || die 
+
+docker-compose -f $DIR/../docker-compose.yml exec --user "$( id -u ):$( id -g )"  postgres migrate create -seq=true -digits=3 -dir="/docker-entrypoint-initdb.d/schema" -ext="sql" $1

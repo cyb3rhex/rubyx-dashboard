@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Usage here is the same as the normal go-migrate tool
+# e.g. 
+# postgres/migrate up
+# postgres/migrate down 1
+# postgres/migrate up
+# postgres/migrate force 123
+
+DIR=$(dirname "$0")
+
+docker-compose -f $DIR/../docker-compose.yml exec postgres migrate -path="/docker-entrypoint-initdb.d/schema/" -database="postgres://postgres@/postgres?host=/var/run/postgresql/" $@

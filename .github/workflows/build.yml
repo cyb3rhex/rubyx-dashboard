@@ -1,0 +1,22 @@
+name: Build
+on:
+  pull_request:
+  push: { branches: master }
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    name: Build
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Build docker images
+      run: docker-compose -f docker-compose.ci.yml build
+
+    # - name: Connect to a container registry
+    #   run: your login steps here....
+
+    # - name: Push images
+    #   run: docker-compose -f docker-compose.ci.yml push

@@ -1,0 +1,54 @@
+version: '3.4'
+services:
+  # back-end api built with golang
+  golang:
+    build: 
+      context: golang
+      dockerfile: server.Dockerfile
+      target: dev
+    volumes:
+      - ./golang:/root
+    ports:
+      - "5000:5000"
+    env_file: .env
+    depends_on:
+      - postgres
+
+  worker:
+    build:
+      context: golang
+      dockerfile: worker.Dockerfile
+      target: dev
+    volumes:
+      - ./golang:/root
+    env_file: .env
+    depends_on:
+      - postgres
+
+  # front-end built with react
+  react:
+    stdin_open: true
+    build:
+      context: dashboard
+      target: dev
+    volumes:
+      - ./dashboard:/root
+    ports:
+      - "3000:3000"
+
+  # postgres is our primary data store
+  postgres:
+    build: postgres
+    volumes:
+      - ./golang/sql/schema:/docker-entrypoint-initdb.d/schema
+
+  # nginx is used for ssl termination
+  nginx:
+    build: 
+      context: nginx
+      target: dev
+    ports:
+      - "443:443"
+    depends_on:
+      - react
+      - golang
