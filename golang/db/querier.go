@@ -9,6 +9,7 @@ import (
 )
 
 type Querier interface {
+	CreateApi(ctx context.Context, arg CreateApiParams) (Api, error)
 	CreateIp(ctx context.Context, arg CreateIpParams) (Ip, error)
 	CreatePlatform(ctx context.Context, arg CreatePlatformParams) (Platform, error)
 	CreatePort(ctx context.Context, arg CreatePortParams) (Port, error)
@@ -20,6 +21,7 @@ type Querier interface {
 	CreateUrl(ctx context.Context, arg CreateUrlParams) (Url, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	CreateVulnerability(ctx context.Context, arg CreateVulnerabilityParams) (Vulnerability, error)
+	DeleteApiByIDs(ctx context.Context, id int64) error
 	DeleteIpByIDs(ctx context.Context, id int64) error
 	DeletePlatformByIDs(ctx context.Context, id int64) error
 	DeletePortByIDs(ctx context.Context, id int64) error
@@ -30,6 +32,8 @@ type Querier interface {
 	DeleteSubdomainByIDs(ctx context.Context, id int64) error
 	DeleteUrlByIDs(ctx context.Context, id int64) error
 	DeleteVulnerabilityByIDs(ctx context.Context, id int64) error
+	FindApiByIDs(ctx context.Context, id int64) (Api, error)
+	FindApis(ctx context.Context) ([]Api, error)
 	FindIpByIDs(ctx context.Context, id int64) (Ip, error)
 	FindIps(ctx context.Context) ([]Ip, error)
 	FindPlatformByIDs(ctx context.Context, id int64) (Platform, error)

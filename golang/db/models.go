@@ -179,6 +179,14 @@ func (ns NullUserStatus) Value() (driver.Value, error) {
 	return ns.UserStatus, nil
 }
 
+type Api struct {
+	ID        int64     `json:"id"`
+	UserID    int64     `json:"user_id"`
+	ApiKey    string    `json:"api_key"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
 type Ip struct {
 	ID          int64     `json:"id"`
 	ProgramID   int64     `json:"program_id"`

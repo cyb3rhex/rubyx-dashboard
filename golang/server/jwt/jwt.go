@@ -20,6 +20,8 @@ const insecureSecret = "asd973hkalkjhx97asdh"
 // so long as the user hasn't been disabled in the interim
 const tokenLifetime = time.Hour * 6
 
+const apiLifetime = time.Hour * 24 * 365 * 100
+
 var hmacSecret []byte
 
 func init() {
@@ -137,6 +139,27 @@ func decodeUser(tokenString string) (*db.User, error) {
 	}
 
 	return getUserFromToken(token), nil
+}
+
+func CreateApiKey(u *db.User) (tokenString string) {
+	t := time.Now()
+
+	claims := claims{
+		u,
+		jwt.StandardClaims{
+			IssuedAt:  t.Add(-time.Second).Unix(),
+			ExpiresAt: t.Add(apiLifetime).Unix(),
+		},
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	// unhandled err here
+	tokenString, err := token.SignedString(hmacSecret)
+	if err != nil {
+		log.Println("Error signing token", err)
+	}
+	return
 }
 
 func getUserFromToken(token *jwt.Token) *db.User {

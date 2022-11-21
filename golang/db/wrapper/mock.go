@@ -35,6 +35,21 @@ func (m *MockQuerier) EXPECT() *MockQuerierMockRecorder {
 	return m.recorder
 }
 
+// CreateApi mocks base method.
+func (m *MockQuerier) CreateApi(ctx context.Context, arg db.CreateApiParams) (db.Api, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateApi", ctx, arg)
+	ret0, _ := ret[0].(db.Api)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateApi indicates an expected call of CreateApi.
+func (mr *MockQuerierMockRecorder) CreateApi(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateApi", reflect.TypeOf((*MockQuerier)(nil).CreateApi), ctx, arg)
+}
+
 // CreateIp mocks base method.
 func (m *MockQuerier) CreateIp(ctx context.Context, arg db.CreateIpParams) (db.Ip, error) {
 	m.ctrl.T.Helper()
@@ -200,6 +215,20 @@ func (mr *MockQuerierMockRecorder) CreateVulnerability(ctx, arg interface{}) *go
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateVulnerability", reflect.TypeOf((*MockQuerier)(nil).CreateVulnerability), ctx, arg)
 }
 
+// DeleteApiByIDs mocks base method.
+func (m *MockQuerier) DeleteApiByIDs(ctx context.Context, id int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteApiByIDs", ctx, id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteApiByIDs indicates an expected call of DeleteApiByIDs.
+func (mr *MockQuerierMockRecorder) DeleteApiByIDs(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteApiByIDs", reflect.TypeOf((*MockQuerier)(nil).DeleteApiByIDs), ctx, id)
+}
+
 // DeleteIpByIDs mocks base method.
 func (m *MockQuerier) DeleteIpByIDs(ctx context.Context, id int64) error {
 	m.ctrl.T.Helper()
@@ -338,6 +367,36 @@ func (m *MockQuerier) DeleteVulnerabilityByIDs(ctx context.Context, id int64) er
 func (mr *MockQuerierMockRecorder) DeleteVulnerabilityByIDs(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteVulnerabilityByIDs", reflect.TypeOf((*MockQuerier)(nil).DeleteVulnerabilityByIDs), ctx, id)
+}
+
+// FindApiByIDs mocks base method.
+func (m *MockQuerier) FindApiByIDs(ctx context.Context, id int64) (db.Api, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindApiByIDs", ctx, id)
+	ret0, _ := ret[0].(db.Api)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindApiByIDs indicates an expected call of FindApiByIDs.
+func (mr *MockQuerierMockRecorder) FindApiByIDs(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindApiByIDs", reflect.TypeOf((*MockQuerier)(nil).FindApiByIDs), ctx, id)
+}
+
+// FindApis mocks base method.
+func (m *MockQuerier) FindApis(ctx context.Context) ([]db.Api, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindApis", ctx)
+	ret0, _ := ret[0].([]db.Api)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindApis indicates an expected call of FindApis.
+func (mr *MockQuerierMockRecorder) FindApis(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindApis", reflect.TypeOf((*MockQuerier)(nil).FindApis), ctx)
 }
 
 // FindIpByIDs mocks base method.

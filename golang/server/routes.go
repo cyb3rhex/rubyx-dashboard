@@ -101,6 +101,12 @@ func (srv *server) ConfigureRouter() {
 	srv.POST("/vulnerability", handlers.CreateVulnerability)
 	srv.PUT("/vulnerability", handlers.UpdateVulnerability)
 	srv.DELETE("/vulnerability/:id", handlers.DeleteVulnerability)
+
+	// API
+	srv.GET("/api", handlers.GetApis)
+	srv.GET("/api/:id", handlers.GetApi)
+	srv.POST("/api", handlers.CreateApi)
+	srv.DELETE("/api/:id", handlers.DeleteApi)
 }
 
 // srvHandler is the extended handler function that our API routes use
