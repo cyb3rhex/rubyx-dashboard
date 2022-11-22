@@ -14,7 +14,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestHandleUserCookie(t *testing.T) {
+func TestHandleUserToken(t *testing.T) {
 
 	expired := encodeUser(&db.User{
 		ID:     30,
@@ -97,7 +97,7 @@ func TestHandleUserCookie(t *testing.T) {
 			})
 			w := httptest.NewRecorder()
 
-			u, err := HandleUserCookie(env, w, r)
+			u, err := HandleUserToken(env, w, r)
 
 			// make sure it returns the expected user and error
 			assert.Equal(t, test.expectedError, err)
@@ -114,11 +114,11 @@ func TestHandleUserCookie(t *testing.T) {
 	}
 }
 
-func TestUserFromCookie(t *testing.T) {
+func TestuserFromToken(t *testing.T) {
 	r := httptest.NewRequest(http.MethodGet, "/path", nil)
 
 	// make sure empty cookie returns "anon user"
-	u, err := userFromCookie(r)
+	u, err := userFromToken(r)
 	assert.Equal(t, int64(0), u.ID)
 	assert.NoError(t, err)
 
@@ -131,7 +131,7 @@ func TestUserFromCookie(t *testing.T) {
 		}, time.Now()),
 	})
 
-	u, err = userFromCookie(r)
+	u, err = userFromToken(r)
 	assert.Equal(t, int64(30), u.ID)
 	assert.NoError(t, err)
 }

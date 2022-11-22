@@ -7,6 +7,9 @@ UPDATE subdomain SET program_id = $2, url = $3, title = $4, body_hash = $5, stat
 -- name: FindSubdomainByIDs :one
 SELECT * FROM subdomain WHERE id = $1 LIMIT 1;
 
+-- name: FindSubdomainByProgram :many
+SELECT * FROM subdomain WHERE program_id = $1;
+
 -- name: FindSubdomains :many
 SELECT * FROM subdomain;
 

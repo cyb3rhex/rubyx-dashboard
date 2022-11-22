@@ -5,15 +5,12 @@ import { HeartIcon, EditIcon } from '../icons'
 
 import PageTitle from '../components/Typography/PageTitle'
 import SectionTitle from '../components/Typography/SectionTitle'
-import CTA from '../components/CTA'
 import { Button } from '@windmill/react-ui'
 
 function Buttons() {
   return (
     <>
       <PageTitle>Buttons</PageTitle>
-
-      <CTA />
 
       <SectionTitle>Primary</SectionTitle>
       <div className="flex flex-col flex-wrap mb-8 space-y-4 md:flex-row md:items-end md:space-x-4">

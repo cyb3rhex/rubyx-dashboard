@@ -12,8 +12,6 @@ import (
 	jwt "github.com/golang-jwt/jwt/v4"
 )
 
-// jwt-cookie building and parsing
-const cookieName = "rubyx-jwt"
 const insecureSecret = "asd973hkalkjhx97asdh"
 
 // tokens auto-refresh at the end of their lifetime,
@@ -39,35 +37,36 @@ type claims struct {
 	jwt.StandardClaims
 }
 
-// WriteUserCookie encodes a user's JWT and sets it as an httpOnly & Secure cookie
-func WriteUserCookie(w http.ResponseWriter, u *db.User) {
-	http.SetCookie(w, &http.Cookie{
-		Name:     cookieName,
-		Value:    encodeUser(u, time.Now()),
-		Path:     "/",
-		HttpOnly: true,
-		Secure:   true,
-		SameSite: http.SameSiteLaxMode,
-		MaxAge:   60 * 60 * 24 * 7, // one week
-	})
+type LoginType struct {
+	User  *db.User
+	Token string
 }
 
-// HandleUserCookie attempts to refresh an expired token if the user is still valid
-func HandleUserCookie(e env.Env, w http.ResponseWriter, r *http.Request) (*db.User, error) {
-	u, err := userFromCookie(r)
+func WriteUserToken(w http.ResponseWriter, u *db.User) LoginType {
+	result := LoginType{
+		u,
+		encodeUser(u, time.Now()),
+	}
+
+	return result
+}
+
+// HandleUserToken attempts to refresh an expired token if the user is still valid
+func HandleUserToken(e env.Env, w http.ResponseWriter, r *http.Request) (*db.User, error) {
+	u, err := userFromToken(r)
 
 	// attempt refresh of expired token:
 	if err == errors.ExpiredToken && u.Status == db.UserStatusActive {
 		user, fetchError := e.DB().FindUserByEmail(r.Context(), u.Email)
 		if fetchError != nil {
-			return wipeCookie(e, w)
+			return wipeToken(e, w)
 		}
 		if user.Status == db.UserStatusActive {
-			WriteUserCookie(w, &user)
+			WriteUserToken(w, &user)
 			return &user, nil
 		} else {
 			// their account isn't verified, log them out
-			return wipeCookie(e, w)
+			return wipeToken(e, w)
 		}
 	}
 
@@ -78,25 +77,21 @@ func HandleUserCookie(e env.Env, w http.ResponseWriter, r *http.Request) (*db.Us
 	return u, err
 }
 
-func wipeCookie(e env.Env, w http.ResponseWriter) (*db.User, error) {
+func wipeToken(e env.Env, w http.ResponseWriter) (*db.User, error) {
 	u := &db.User{}
-	WriteUserCookie(w, u)
+	WriteUserToken(w, u)
 	return u, nil
 }
 
-// userFromCookie builds a user object from a JWT, if it's valid
-func userFromCookie(r *http.Request) (*db.User, error) {
-	cookie, _ := r.Cookie(cookieName)
-	var tokenString string
-	if cookie != nil {
-		tokenString = cookie.Value
-	}
+// userFromToken builds a user object from a JWT, if it's valid
+func userFromToken(r *http.Request) (*db.User, error) {
+	token := r.Header.Get("Api-Key")
 
-	if tokenString == "" {
+	if token == "" {
 		return &db.User{}, nil
 	}
 
-	return decodeUser(tokenString)
+	return decodeUser(token)
 }
 
 // encodeUser convert a user struct into a jwt

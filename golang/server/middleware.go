@@ -21,7 +21,7 @@ func withUserAndEnv(env env.Env, h srvHandler, w http.ResponseWriter, r *http.Re
 	// don't parse user cookie on session routes!
 	if head != "session" {
 		var err error
-		user, err = jwt.HandleUserCookie(env, w, r)
+		user, err = jwt.HandleUserToken(env, w, r)
 		if err != nil {
 			write.Error(err)
 		}

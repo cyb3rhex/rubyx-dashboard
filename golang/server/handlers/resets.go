@@ -69,6 +69,6 @@ func DoReset(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request)
 		return write.Error(err)
 	}
 
-	jwt.WriteUserCookie(w, &u)
-	return write.JSON(&u)
+	res := jwt.WriteUserToken(w, &u)
+	return write.JSON(&res)
 }

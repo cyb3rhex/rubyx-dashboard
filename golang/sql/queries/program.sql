@@ -7,8 +7,14 @@ UPDATE program SET platform_id = $2, name = $3, slug = $4, vdp = $5, url = $6, t
 -- name: FindProgramByIDs :one
 SELECT * FROM program WHERE id = $1 LIMIT 1;
 
+-- name: FindProgramBySlug :one
+SELECT * FROM program WHERE slug = $1 LIMIT 1;
+
 -- name: FindPrograms :many
 SELECT * FROM program;
 
 -- name: DeleteProgramByIDs :exec
 DELETE FROM program WHERE id = $1;
+
+-- name: DeleteProgramBySlug :exec
+DELETE FROM program WHERE slug = $1;

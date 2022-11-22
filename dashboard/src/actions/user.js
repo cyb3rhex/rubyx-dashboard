@@ -1,18 +1,38 @@
-import axios from 'axios'
-import { GET_USER } from '../constants/user';
+import API from './api'
+import { LOGIN, LOGIN_ERROR, LOGOUT, LOGOUT_ERROR } from '../constants/user';
 
-export const getPosts = () => async dispatch => {
-
+export const login = (email, pass) => async dispatch => {
     try {
-        const res = await axios.get('https://jsonplaceholder.typicode.com/posts/');
-        dispatch({
-            type: GET_USER,
-            payload: res.data
+        var data = {
+            "email": email,
+            "pass": pass
+        }
+
+        API.login(data).then(user => {
+            dispatch({
+                type: LOGIN,
+                payload: user
+            })
+        }).catch(err => {
+            dispatch({
+                type: LOGIN_ERROR,
+                payload: err
+            })
         })
+
+        
     } catch (err) {
         dispatch({
-            type: GET_USER_ERROR,
+            type: LOGIN_ERROR,
             payload: err
         })
     }
+}
+
+export const logout = () => async dispatch => {
+    API.logout().then(res => {
+        dispatch({
+            type: LOGOUT
+        })
+    })
 }

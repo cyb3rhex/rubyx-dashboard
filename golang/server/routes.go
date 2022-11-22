@@ -48,10 +48,12 @@ func (srv *server) ConfigureRouter() {
 
 	// PROGRAMS
 	srv.GET("/program", handlers.GetPrograms)
-	srv.GET("/program/:id", handlers.GetProgram)
+	srv.GET("/program/id/:id", handlers.GetProgram)
+	srv.GET("/program/slug/:name", handlers.GetProgramBySlug)
 	srv.POST("/program", handlers.CreateProgram)
 	srv.PUT("/program", handlers.UpdateProgram)
-	srv.DELETE("/program/:id", handlers.DeleteProgram)
+	srv.DELETE("/program/id/:id", handlers.DeleteProgram)
+	srv.DELETE("/program/slug/:name", handlers.DeleteProgramBySlug)
 
 	// PORT
 	srv.GET("/port", handlers.GetPorts)
@@ -83,14 +85,15 @@ func (srv *server) ConfigureRouter() {
 
 	// SUBDOMAIN
 	srv.GET("/subdomain", handlers.GetSubdomains)
-	srv.GET("/subdomain/:id", handlers.GetSubdomain)
+	srv.GET("/subdomain/one/:id", handlers.GetSubdomain)
+	srv.GET("/subdomain/program/:id", handlers.GetSubdomainByProgram)
 	srv.POST("/subdomain", handlers.CreateSubdomain)
 	srv.PUT("/subdomain", handlers.UpdateSubdomain)
 	srv.DELETE("/subdomain/:id", handlers.DeleteSubdomain)
 
 	// URL
 	srv.GET("/url", handlers.GetUrls)
-	srv.GET("/url/:id", handlers.GetUrl)
+	srv.GET("/url/one/:id", handlers.GetUrl)
 	srv.POST("/url", handlers.CreateUrl)
 	srv.PUT("/url", handlers.UpdateUrl)
 	srv.DELETE("/url/:id", handlers.DeleteUrl)

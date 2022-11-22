@@ -55,12 +55,42 @@ func (q *Queries) DeleteProgramByIDs(ctx context.Context, id int64) error {
 	return err
 }
 
+const deleteProgramBySlug = `-- name: DeleteProgramBySlug :exec
+DELETE FROM program WHERE slug = $1
+`
+
+func (q *Queries) DeleteProgramBySlug(ctx context.Context, slug string) error {
+	_, err := q.db.Exec(ctx, deleteProgramBySlug, slug)
+	return err
+}
+
 const findProgramByIDs = `-- name: FindProgramByIDs :one
 SELECT id, platform_id, name, slug, vdp, url, type, created_at, updated_at FROM program WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) FindProgramByIDs(ctx context.Context, id int64) (Program, error) {
 	row := q.db.QueryRow(ctx, findProgramByIDs, id)
+	var i Program
+	err := row.Scan(
+		&i.ID,
+		&i.PlatformID,
+		&i.Name,
+		&i.Slug,
+		&i.Vdp,
+		&i.Url,
+		&i.Type,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const findProgramBySlug = `-- name: FindProgramBySlug :one
+SELECT id, platform_id, name, slug, vdp, url, type, created_at, updated_at FROM program WHERE slug = $1 LIMIT 1
+`
+
+func (q *Queries) FindProgramBySlug(ctx context.Context, slug string) (Program, error) {
+	row := q.db.QueryRow(ctx, findProgramBySlug, slug)
 	var i Program
 	err := row.Scan(
 		&i.ID,

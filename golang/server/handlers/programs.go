@@ -53,6 +53,24 @@ func GetProgram(env env.Env, user *db.User, w http.ResponseWriter, r *http.Reque
 	return write.JSON(program)
 }
 
+func GetProgramBySlug(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
+	if user.Status != db.UserStatusActive {
+		return write.Error(errors.RouteUnauthorized)
+	}
+
+	slug := getString("name", r)
+
+	program, err := env.DB().FindProgramBySlug(r.Context(), slug)
+	if err != nil {
+		if isNotFound(err) {
+			return write.Error(errors.PostNotFound)
+		}
+		return write.Error(err)
+	}
+
+	return write.JSON(program)
+}
+
 func GetPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
 	if user.Status != db.UserStatusActive {
 		return write.Error(errors.RouteUnauthorized)
@@ -95,4 +113,14 @@ func DeleteProgram(env env.Env, user *db.User, w http.ResponseWriter, r *http.Re
 	}
 
 	return write.SuccessOrErr(env.DB().DeleteProgramByIDs(r.Context(), id))
+}
+
+func DeleteProgramBySlug(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
+	if user.Status != db.UserStatusActive {
+		return write.Error(errors.RouteUnauthorized)
+	}
+
+	slug := getString("name", r)
+
+	return write.SuccessOrErr(env.DB().DeleteProgramBySlug(r.Context(), slug))
 }

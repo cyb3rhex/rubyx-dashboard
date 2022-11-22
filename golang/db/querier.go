@@ -26,6 +26,7 @@ type Querier interface {
 	DeletePlatformByIDs(ctx context.Context, id int64) error
 	DeletePortByIDs(ctx context.Context, id int64) error
 	DeleteProgramByIDs(ctx context.Context, id int64) error
+	DeleteProgramBySlug(ctx context.Context, slug string) error
 	DeleteResetsForUser(ctx context.Context, userID int64) error
 	DeleteRevenueByIDs(ctx context.Context, id int64) error
 	DeleteRootDomainByIDs(ctx context.Context, id int64) error
@@ -41,6 +42,7 @@ type Querier interface {
 	FindPortByIDs(ctx context.Context, id int64) (Port, error)
 	FindPorts(ctx context.Context) ([]Port, error)
 	FindProgramByIDs(ctx context.Context, id int64) (Program, error)
+	FindProgramBySlug(ctx context.Context, slug string) (Program, error)
 	FindPrograms(ctx context.Context) ([]Program, error)
 	FindResetByCode(ctx context.Context, code string) (Reset, error)
 	FindRevenueByIDs(ctx context.Context, id int64) (Revenue, error)
@@ -48,6 +50,7 @@ type Querier interface {
 	FindRootDomainByIDs(ctx context.Context, id int64) (Rootdomain, error)
 	FindRootDomains(ctx context.Context) ([]Rootdomain, error)
 	FindSubdomainByIDs(ctx context.Context, id int64) (Subdomain, error)
+	FindSubdomainByProgram(ctx context.Context, programID int64) ([]Subdomain, error)
 	FindSubdomains(ctx context.Context) ([]Subdomain, error)
 	FindUrlByIDs(ctx context.Context, id int64) (Url, error)
 	FindUrls(ctx context.Context) ([]Url, error)

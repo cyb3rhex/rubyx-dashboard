@@ -54,6 +54,27 @@ func GetSubdomain(env env.Env, user *db.User, w http.ResponseWriter, r *http.Req
 	return write.JSON(subdomain)
 }
 
+func GetSubdomainByProgram(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
+	if user.Status != db.UserStatusActive {
+		return write.Error(errors.RouteUnauthorized)
+	}
+
+	id, err := getID(r)
+	if err != nil {
+		return write.Error(errors.RouteNotFound)
+	}
+
+	subdomains, err := env.DB().FindSubdomainByProgram(r.Context(), id)
+	if err != nil {
+		if isNotFound(err) {
+			return write.Error(errors.PostNotFound)
+		}
+		return write.Error(err)
+	}
+
+	return write.JSON(subdomains)
+}
+
 func GetSubdomains(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
 	if user.Status != db.UserStatusActive {
 		return write.Error(errors.RouteUnauthorized)

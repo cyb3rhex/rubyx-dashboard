@@ -1,4 +1,6 @@
 import React, { useContext, Suspense, useEffect, lazy } from 'react'
+import { useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom'
 import routes from '../routes'
 
@@ -11,8 +13,16 @@ import { SidebarContext } from '../context/SidebarContext'
 const Page404 = lazy(() => import('../pages/404'))
 
 function Layout() {
+  const userState = useSelector((state) => state.user)
+  const history = useHistory()
   const { isSidebarOpen, closeSidebar } = useContext(SidebarContext)
   let location = useLocation()
+
+  useEffect(() => {
+    if(!userState.token){
+      history.push("/login")
+    }
+  }, [userState])
 
   useEffect(() => {
     closeSidebar()

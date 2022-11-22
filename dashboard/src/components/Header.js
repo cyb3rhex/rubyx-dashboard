@@ -1,4 +1,6 @@
 import React, { useContext, useState } from 'react'
+import { logout } from '../actions/user'
+import { useDispatch } from 'react-redux'
 import { SidebarContext } from '../context/SidebarContext'
 import {
   SearchIcon,
@@ -13,6 +15,7 @@ import {
 import { Avatar, Badge, Input, Dropdown, DropdownItem, WindmillContext } from '@windmill/react-ui'
 
 function Header() {
+  const dispatch = useDispatch()
   const { mode, toggleMode } = useContext(WindmillContext)
   const { toggleSidebar } = useContext(SidebarContext)
 
@@ -25,6 +28,10 @@ function Header() {
 
   function handleProfileClick() {
     setIsProfileMenuOpen(!isProfileMenuOpen)
+  }
+
+  const handleLogout = () => {
+    dispatch(logout())
   }
 
   return (
@@ -128,7 +135,7 @@ function Header() {
                 <OutlineCogIcon className="w-4 h-4 mr-3" aria-hidden="true" />
                 <span>Settings</span>
               </DropdownItem>
-              <DropdownItem onClick={() => alert('Log out!')}>
+              <DropdownItem onClick={() => handleLogout()}>
                 <OutlineLogoutIcon className="w-4 h-4 mr-3" aria-hidden="true" />
                 <span>Log out</span>
               </DropdownItem>

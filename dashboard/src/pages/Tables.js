@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 
 import PageTitle from '../components/Typography/PageTitle'
 import SectionTitle from '../components/Typography/SectionTitle'
-import CTA from '../components/CTA'
 import {
   Table,
   TableHeader,
@@ -69,7 +68,6 @@ function Tables() {
     <>
       <PageTitle>Tables</PageTitle>
 
-      <CTA />
 
       <SectionTitle>Simple table</SectionTitle>
       <TableContainer className="mb-8">

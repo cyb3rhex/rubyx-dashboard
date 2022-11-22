@@ -285,6 +285,20 @@ func (mr *MockQuerierMockRecorder) DeleteProgramByIDs(ctx, id interface{}) *gomo
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteProgramByIDs", reflect.TypeOf((*MockQuerier)(nil).DeleteProgramByIDs), ctx, id)
 }
 
+// DeleteProgramBySlug mocks base method.
+func (m *MockQuerier) DeleteProgramBySlug(ctx context.Context, slug string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteProgramBySlug", ctx, slug)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteProgramBySlug indicates an expected call of DeleteProgramBySlug.
+func (mr *MockQuerierMockRecorder) DeleteProgramBySlug(ctx, slug interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteProgramBySlug", reflect.TypeOf((*MockQuerier)(nil).DeleteProgramBySlug), ctx, slug)
+}
+
 // DeleteResetsForUser mocks base method.
 func (m *MockQuerier) DeleteResetsForUser(ctx context.Context, userID int64) error {
 	m.ctrl.T.Helper()
@@ -504,6 +518,21 @@ func (mr *MockQuerierMockRecorder) FindProgramByIDs(ctx, id interface{}) *gomock
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindProgramByIDs", reflect.TypeOf((*MockQuerier)(nil).FindProgramByIDs), ctx, id)
 }
 
+// FindProgramBySlug mocks base method.
+func (m *MockQuerier) FindProgramBySlug(ctx context.Context, slug string) (db.Program, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindProgramBySlug", ctx, slug)
+	ret0, _ := ret[0].(db.Program)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindProgramBySlug indicates an expected call of FindProgramBySlug.
+func (mr *MockQuerierMockRecorder) FindProgramBySlug(ctx, slug interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindProgramBySlug", reflect.TypeOf((*MockQuerier)(nil).FindProgramBySlug), ctx, slug)
+}
+
 // FindPrograms mocks base method.
 func (m *MockQuerier) FindPrograms(ctx context.Context) ([]db.Program, error) {
 	m.ctrl.T.Helper()
@@ -607,6 +636,21 @@ func (m *MockQuerier) FindSubdomainByIDs(ctx context.Context, id int64) (db.Subd
 func (mr *MockQuerierMockRecorder) FindSubdomainByIDs(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindSubdomainByIDs", reflect.TypeOf((*MockQuerier)(nil).FindSubdomainByIDs), ctx, id)
+}
+
+// FindSubdomainByProgram mocks base method.
+func (m *MockQuerier) FindSubdomainByProgram(ctx context.Context, programID int64) ([]db.Subdomain, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindSubdomainByProgram", ctx, programID)
+	ret0, _ := ret[0].([]db.Subdomain)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindSubdomainByProgram indicates an expected call of FindSubdomainByProgram.
+func (mr *MockQuerierMockRecorder) FindSubdomainByProgram(ctx, programID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindSubdomainByProgram", reflect.TypeOf((*MockQuerier)(nil).FindSubdomainByProgram), ctx, programID)
 }
 
 // FindSubdomains mocks base method.

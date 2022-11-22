@@ -80,6 +80,41 @@ func (q *Queries) FindSubdomainByIDs(ctx context.Context, id int64) (Subdomain, 
 	return i, err
 }
 
+const findSubdomainByProgram = `-- name: FindSubdomainByProgram :many
+SELECT id, program_id, url, title, body_hash, status_code, technologies, content_length, created_at, updated_at FROM subdomain WHERE program_id = $1
+`
+
+func (q *Queries) FindSubdomainByProgram(ctx context.Context, programID int64) ([]Subdomain, error) {
+	rows, err := q.db.Query(ctx, findSubdomainByProgram, programID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Subdomain{}
+	for rows.Next() {
+		var i Subdomain
+		if err := rows.Scan(
+			&i.ID,
+			&i.ProgramID,
+			&i.Url,
+			&i.Title,
+			&i.BodyHash,
+			&i.StatusCode,
+			&i.Technologies,
+			&i.ContentLength,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const findSubdomains = `-- name: FindSubdomains :many
 SELECT id, program_id, url, title, body_hash, status_code, technologies, content_length, created_at, updated_at FROM subdomain
 `

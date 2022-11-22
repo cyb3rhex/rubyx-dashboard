@@ -36,12 +36,12 @@ func Login(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) h
 		return write.Error(errors.FailedLogin)
 	}
 
-	jwt.WriteUserCookie(w, &u)
-	return write.JSON(&u)
+	res := jwt.WriteUserToken(w, &u)
+	return write.JSON(&res)
 }
 
 func Logout(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
 	u := &db.User{}
-	jwt.WriteUserCookie(w, u)
+	jwt.WriteUserToken(w, u)
 	return write.Success()
 }
