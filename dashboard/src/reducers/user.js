@@ -1,4 +1,4 @@
-import { LOGIN, LOGIN_ERROR, LOGOUT } from "../constants/user";
+import { LOGIN, LOGIN_ERROR, LOGOUT, CHANGE_PASSWORD, CHANGE_PASSWORD_ERROR } from "../constants/user";
 
 const initialState = {
   loading: true,
@@ -25,6 +25,18 @@ export default function (state = initialState, action) {
         token: null,
         error: action.payload,
       };
+      case CHANGE_PASSWORD:
+        return {
+          ...state,
+          loading: false,
+          error: "",
+        };
+      case CHANGE_PASSWORD_ERROR:
+        return {
+          ...state,
+          loading: false,
+          error: action.payload,
+        };
     case LOGOUT:
       return {
         ...state,

@@ -12,60 +12,41 @@ const routes = [
     name: 'Dashboard', // name that appear in Sidebar
   },
   {
-    path: '/app/forms',
-    icon: 'FormsIcon',
-    name: 'Forms',
-  },
-  {
-    path: '/app/cards',
-    icon: 'CardsIcon',
-    name: 'Cards',
-  },
-  {
     path: '/app/charts',
     icon: 'ChartsIcon',
-    name: 'Charts',
+    name: 'Revenues',
   },
   {
-    path: '/app/buttons',
-    icon: 'ButtonsIcon',
-    name: 'Buttons',
+    path: '/app/platform',
+    icon: 'CardsIcon',
+    name: 'Platforms',
   },
   {
-    path: '/app/modals',
-    icon: 'ModalsIcon',
-    name: 'Modals',
-  },
-  {
-    path: '/app/tables',
-    icon: 'TablesIcon',
-    name: 'Tables',
+    path: '/app/program',
+    icon: 'FormsIcon',
+    name: 'Programs',
   },
   {
     icon: 'PagesIcon',
-    name: 'Pages',
+    name: 'Data',
     routes: [
       // submenu
       {
-        path: '/login',
-        name: 'Login',
+        path: '/app/subdomain',
+        name: 'Subdomains',
       },
       {
-        path: '/create-account',
-        name: 'Create account',
+        path: '/app/urls',
+        name: 'Urls',
       },
       {
-        path: '/forgot-password',
-        name: 'Forgot password',
+        path: '/app/ip',
+        name: 'IP',
       },
       {
-        path: '/app/404',
-        name: '404',
-      },
-      {
-        path: '/app/blank',
-        name: 'Blank',
-      },
+        path: '/app/screenshots',
+        name: 'Screenshots',
+      }
     ],
   },
 ]

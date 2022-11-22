@@ -1,38 +1,47 @@
-import React, { useContext, useState } from 'react'
-import { logout } from '../actions/user'
-import { useDispatch } from 'react-redux'
-import { SidebarContext } from '../context/SidebarContext'
+import React, { useContext, useState } from "react";
+import { logout } from "../actions/user";
+import { NavLink } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { SidebarContext } from "../context/SidebarContext";
 import {
   SearchIcon,
   MoonIcon,
   SunIcon,
   BellIcon,
   MenuIcon,
+  PersonIcon,
   OutlinePersonIcon,
   OutlineCogIcon,
   OutlineLogoutIcon,
-} from '../icons'
-import { Avatar, Badge, Input, Dropdown, DropdownItem, WindmillContext } from '@windmill/react-ui'
+} from "../icons";
+import {
+  Avatar,
+  Badge,
+  Input,
+  Dropdown,
+  DropdownItem,
+  WindmillContext,
+} from "@windmill/react-ui";
 
 function Header() {
-  const dispatch = useDispatch()
-  const { mode, toggleMode } = useContext(WindmillContext)
-  const { toggleSidebar } = useContext(SidebarContext)
+  const dispatch = useDispatch();
+  const { mode, toggleMode } = useContext(WindmillContext);
+  const { toggleSidebar } = useContext(SidebarContext);
 
-  const [isNotificationsMenuOpen, setIsNotificationsMenuOpen] = useState(false)
-  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
+  const [isNotificationsMenuOpen, setIsNotificationsMenuOpen] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
   function handleNotificationsClick() {
-    setIsNotificationsMenuOpen(!isNotificationsMenuOpen)
+    setIsNotificationsMenuOpen(!isNotificationsMenuOpen);
   }
 
   function handleProfileClick() {
-    setIsProfileMenuOpen(!isProfileMenuOpen)
+    setIsProfileMenuOpen(!isProfileMenuOpen);
   }
 
   const handleLogout = () => {
-    dispatch(logout())
-  }
+    dispatch(logout());
+  };
 
   return (
     <header className="z-40 py-4 bg-white shadow-bottom dark:bg-gray-800">
@@ -66,7 +75,7 @@ function Header() {
               onClick={toggleMode}
               aria-label="Toggle color mode"
             >
-              {mode === 'dark' ? (
+              {mode === "dark" ? (
                 <SunIcon className="w-5 h-5" aria-hidden="true" />
               ) : (
                 <MoonIcon className="w-5 h-5" aria-hidden="true" />
@@ -98,45 +107,55 @@ function Header() {
                 <span>Messages</span>
                 <Badge type="danger">13</Badge>
               </DropdownItem>
-              <DropdownItem tag="a" href="#" className="justify-between">
-                <span>Sales</span>
-                <Badge type="danger">2</Badge>
-              </DropdownItem>
-              <DropdownItem onClick={() => alert('Alerts!')}>
-                <span>Alerts</span>
-              </DropdownItem>
             </Dropdown>
           </li>
           {/* <!-- Profile menu --> */}
           <li className="relative">
             <button
-              className="rounded-full focus:shadow-outline-purple focus:outline-none"
+              className="relative align-middle rounded-md focus:outline-none focus:shadow-outline-purple"
               onClick={handleProfileClick}
               aria-label="Account"
               aria-haspopup="true"
             >
-              <Avatar
-                className="align-middle"
-                src="https://images.unsplash.com/photo-1502378735452-bc7d86632805?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=aa3a807e1bbdfd4364d1f449eaa96d82"
-                alt=""
-                aria-hidden="true"
-              />
+              <PersonIcon className="w-5 h-5" aria-hidden="true" />
             </button>
+
             <Dropdown
               align="right"
               isOpen={isProfileMenuOpen}
               onClose={() => setIsProfileMenuOpen(false)}
             >
-              <DropdownItem tag="a" href="#">
-                <OutlinePersonIcon className="w-4 h-4 mr-3" aria-hidden="true" />
-                <span>Profile</span>
+              <DropdownItem>
+                <NavLink
+                  exact
+                  to="/app/account"
+                  className="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                  activeClassName="text-gray-800 dark:text-gray-100"
+                >
+                  <OutlinePersonIcon
+                    className="w-4 h-4 mr-3"
+                    aria-hidden="true"
+                  />
+                  <span>Profile</span>
+                </NavLink>
               </DropdownItem>
+
               <DropdownItem tag="a" href="#">
-                <OutlineCogIcon className="w-4 h-4 mr-3" aria-hidden="true" />
-                <span>Settings</span>
+                <NavLink
+                  exact
+                  to="/app/settings"
+                  className="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                  activeClassName="text-gray-800 dark:text-gray-100"
+                >
+                  <OutlineCogIcon className="w-4 h-4 mr-3" aria-hidden="true" />
+                  <span>Settings</span>
+                </NavLink>
               </DropdownItem>
               <DropdownItem onClick={() => handleLogout()}>
-                <OutlineLogoutIcon className="w-4 h-4 mr-3" aria-hidden="true" />
+                <OutlineLogoutIcon
+                  className="w-4 h-4 mr-3"
+                  aria-hidden="true"
+                />
                 <span>Log out</span>
               </DropdownItem>
             </Dropdown>
@@ -144,7 +163,7 @@ function Header() {
         </ul>
       </div>
     </header>
-  )
+  );
 }
 
-export default Header
+export default Header;

@@ -24,6 +24,7 @@ import { ReactComponent as BellIcon } from './bell.svg'
 import { ReactComponent as MenuIcon } from './menu.svg'
 import { ReactComponent as DropdownIcon } from './dropdown.svg'
 import { ReactComponent as OutlinePersonIcon } from './outlinePerson.svg'
+import { ReactComponent as PersonIcon } from './person.svg'
 import { ReactComponent as OutlineCogIcon } from './outlineCog.svg'
 import { ReactComponent as OutlineLogoutIcon } from './outlineLogout.svg'
 
@@ -51,6 +52,7 @@ export {
   MoonIcon,
   SunIcon,
   BellIcon,
+  PersonIcon,
   MenuIcon,
   DropdownIcon,
   OutlinePersonIcon,

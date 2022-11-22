@@ -1,0 +1,8 @@
+export const GET_API_KEY = 'GET_API_KEY';
+export const GET_API_KEY_ERROR = 'GET_API_KEY_ERROR';
+
+export const CREATE_API_KEY = 'CREATE_API_KEY';
+export const CREATE_API_KEY_ERROR = 'CREATE_API_KEY_ERROR';
+
+export const DELETE_API_KEY = 'DELETE_API_KEY';
+export const DELETE_API_KEY_ERROR = 'DELETE_API_KEY_ERROR';

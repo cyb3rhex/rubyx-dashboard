@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"net/http"
 
 	"github.com/aituglo/rubyx/golang/db"
@@ -16,12 +15,7 @@ func CreateApi(env env.Env, user *db.User, w http.ResponseWriter, r *http.Reques
 		return write.Error(errors.RouteUnauthorized)
 	}
 
-	decoder := json.NewDecoder(r.Body)
 	p := &db.Api{}
-	err := decoder.Decode(p)
-	if err != nil || p == nil {
-		return write.Error(errors.NoJSONBody)
-	}
 
 	p.UserID = user.ID
 	p.ApiKey = jwt.CreateApiKey(user)

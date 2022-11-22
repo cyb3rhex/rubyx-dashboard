@@ -31,22 +31,19 @@ export default class API {
     _put('/user/password', body)
   )
 
-  // POSTS
-  static getPosts = () => (
-    _get('/post')
+  // SETTINGS
+  static getApiKeys = () => (
+    _get('/api')
   )
-  static getPost = (id) => (
-    _get(`/post/${id}`)
+
+  static createApiKey = () => (
+    _post('/api')
   )
-  static createPost = (body) => (
-    _post('/post', body)
+
+  static deleteApiKey = (id) => (
+    _delete(`/api/${id}`)
   )
-  static updatePost = (body) => (
-    _put('/post', body)
-  )
-  static deletePost = (id) => (
-    _delete(`/post/${id}`)
-  )
+  
 }
 
 // internal utils
