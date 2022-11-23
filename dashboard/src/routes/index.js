@@ -6,7 +6,10 @@ const MyAccount = lazy(() => import('../pages/MyAccount'))
 const Settings = lazy(() => import('../pages/Settings'))
 const Platform = lazy(() => import('../pages/Platform'))
 const Program = lazy(() => import('../pages/Program'))
+const Url = lazy(() => import('../pages/Url'))
 const Vulnerability = lazy(() => import('../pages/Vulnerability'))
+const Subdomain = lazy(() => import('../pages/Subdomain'))
+const Ip = lazy(() => import('../pages/Ip'))
 const Revenue = lazy(() => import('../pages/Revenue'))
 const Cards = lazy(() => import('../pages/Cards'))
 const Charts = lazy(() => import('../pages/Charts'))
@@ -50,6 +53,18 @@ const routes = [
   {
     path: '/vulnerabilities',
     component: Vulnerability,
+  },
+  {
+    path: '/subdomains',
+    component: Subdomain,
+  },
+  {
+    path: '/urls',
+    component: Url,
+  },
+  {
+    path: '/ips',
+    component: Ip,
   },
   {
     path: '/cards',

@@ -5,6 +5,9 @@ import program from "./program";
 import platform from "./platform";
 import revenue from "./revenue";
 import vulnerability from "./vulnerability";
+import subdomain from "./subdomain";
+import url from "./url";
+import ip from "./ip";
 
 export default combineReducers({
   user,
@@ -12,5 +15,8 @@ export default combineReducers({
   platform,
   program,
   revenue,
-  vulnerability
+  vulnerability,
+  subdomain,
+  url,
+  ip
 });

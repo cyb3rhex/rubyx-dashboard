@@ -32,7 +32,7 @@ const routes = [
     routes: [
       // submenu
       {
-        path: '/app/subdomain',
+        path: '/app/subdomains',
         name: 'Subdomains',
       },
       {
@@ -40,7 +40,7 @@ const routes = [
         name: 'Urls',
       },
       {
-        path: '/app/ip',
+        path: '/app/ips',
         name: 'IP',
       },
       {

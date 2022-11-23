@@ -61,6 +61,57 @@ export default class API {
     _delete(`/revenue/${id}`)
   )
 
+  // SUBDOMAIN
+  static getSubdomains = () => (
+    _get('/subdomain')
+  )
+
+  static createSubdomain = (body) => (
+    _post('/subdomain', body)
+  )
+
+  static updateSubdomain = (body) => (
+    _put('/subdomain', body)
+  )
+
+  static deleteSubdomain = (id) => (
+    _delete(`/subdomain/${id}`)
+  )
+
+  // IP
+  static getIps = () => (
+    _get('/ip')
+  )
+
+  static createIp = (body) => (
+    _post('/ip', body)
+  )
+
+  static updateIp = (body) => (
+    _put('/ip', body)
+  )
+
+  static deleteIp = (id) => (
+    _delete(`/ip/${id}`)
+  )
+
+  // URL
+  static getUrls = () => (
+    _get('/url')
+  )
+
+  static createUrl = (body) => (
+    _post('/url', body)
+  )
+
+  static updateUrl = (body) => (
+    _put('/url', body)
+  )
+
+  static deleteUrl = (id) => (
+    _delete(`/url/${id}`)
+  )
+
   // VULNERABILITY
   static getVulnerabilities = () => (
     _get('/vulnerability')
@@ -77,6 +128,7 @@ export default class API {
   static deleteVulnerability = (id) => (
     _delete(`/vulnerability/${id}`)
   )
+  
 
   // PLATFORM
   static getPlatforms = () => (
