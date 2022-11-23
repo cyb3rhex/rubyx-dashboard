@@ -6,6 +6,8 @@ const MyAccount = lazy(() => import('../pages/MyAccount'))
 const Settings = lazy(() => import('../pages/Settings'))
 const Platform = lazy(() => import('../pages/Platform'))
 const Program = lazy(() => import('../pages/Program'))
+const Vulnerability = lazy(() => import('../pages/Vulnerability'))
+const Revenue = lazy(() => import('../pages/Revenue'))
 const Cards = lazy(() => import('../pages/Cards'))
 const Charts = lazy(() => import('../pages/Charts'))
 const Page404 = lazy(() => import('../pages/404'))
@@ -40,6 +42,14 @@ const routes = [
   {
     path: '/programs',
     component: Program,
+  },
+  {
+    path: '/revenues',
+    component: Revenue,
+  },
+  {
+    path: '/vulnerabilities',
+    component: Vulnerability,
   },
   {
     path: '/cards',

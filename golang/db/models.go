@@ -301,6 +301,7 @@ type Vulnerability struct {
 	ID        int64     `json:"id"`
 	ProgramID int64     `json:"program_id"`
 	Url       string    `json:"url"`
+	Type      string    `json:"type"`
 	Severity  string    `json:"severity"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`

@@ -1,12 +1,24 @@
 import React, { useState, useEffect } from 'react'
-
+import { useSelector, useDispatch } from 'react-redux'
 import InfoCard from '../components/Cards/InfoCard'
 import PageTitle from '../components/Typography/PageTitle'
 import { ChatIcon, CartIcon, MoneyIcon, PeopleIcon } from '../icons'
 import RoundIcon from '../components/RoundIcon'
+import { getRevenues } from '../actions/revenue'
 
 function Dashboard() {
+  const revenueState = useSelector(state => state.revenue)
+  const dispatch = useDispatch()
 
+  const totalRevenue = (revenues) => {
+    var total = 0;
+    revenues.map(item => total += item.money)
+    return total
+  }
+
+  useEffect(() => {
+    dispatch(getRevenues())
+  }, [])
 
   return (
     <>
@@ -23,7 +35,7 @@ function Dashboard() {
           />
         </InfoCard>
 
-        <InfoCard title="Bounties balance" value="$ 45,000">
+        <InfoCard title="Bounties balance" value={`$ ${revenueState.revenues ? totalRevenue(revenueState.revenues) : 0}`}>
           <RoundIcon
             icon={MoneyIcon}
             iconColorClass="text-green-500 dark:text-green-100"

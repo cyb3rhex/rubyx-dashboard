@@ -12,8 +12,8 @@ const routes = [
     name: 'Dashboard', // name that appear in Sidebar
   },
   {
-    path: '/app/charts',
-    icon: 'ChartsIcon',
+    path: '/app/revenues',
+    icon: 'MoneyIcon',
     name: 'Revenues',
   },
   {
@@ -42,6 +42,10 @@ const routes = [
       {
         path: '/app/ip',
         name: 'IP',
+      },
+      {
+        path: '/app/vulnerabilities',
+        name: 'Vulnerabilities',
       },
       {
         path: '/app/screenshots',

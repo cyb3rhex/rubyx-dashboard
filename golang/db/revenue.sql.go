@@ -92,7 +92,7 @@ func (q *Queries) FindRevenues(ctx context.Context) ([]Revenue, error) {
 }
 
 const updateRevenue = `-- name: UpdateRevenue :one
-UPDATE revenue SET program_id = $2, vulnerability_id = $3, money = $4, service = $4, updated_at = NOW() WHERE id = $1 RETURNING id, program_id, vulnerability_id, money, created_at, updated_at
+UPDATE revenue SET program_id = $2, vulnerability_id = $3, money = $4, updated_at = NOW() WHERE id = $1 RETURNING id, program_id, vulnerability_id, money, created_at, updated_at
 `
 
 type UpdateRevenueParams struct {

@@ -44,6 +44,40 @@ export default class API {
     _delete(`/api/${id}`)
   )
 
+  // REVENUE
+  static getRevenues = () => (
+    _get('/revenue')
+  )
+
+  static createRevenue = (body) => (
+    _post('/revenue', body)
+  )
+
+  static updateRevenue = (body) => (
+    _put('/revenue', body)
+  )
+
+  static deleteRevenue = (id) => (
+    _delete(`/revenue/${id}`)
+  )
+
+  // VULNERABILITY
+  static getVulnerabilities = () => (
+    _get('/vulnerability')
+  )
+
+  static createVulnerability = (body) => (
+    _post('/vulnerability', body)
+  )
+
+  static updateVulnerability = (body) => (
+    _put('/vulnerability', body)
+  )
+
+  static deleteVulnerability = (id) => (
+    _delete(`/vulnerability/${id}`)
+  )
+
   // PLATFORM
   static getPlatforms = () => (
     _get('/platform')
