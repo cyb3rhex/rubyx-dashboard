@@ -12,8 +12,6 @@ import {
   TableRow,
   TableFooter,
   TableContainer,
-  Badge,
-  Avatar,
   Button,
   Pagination,
 } from "@windmill/react-ui";
@@ -80,7 +78,7 @@ function Settings() {
                 </tr>
               </TableHeader>
               <TableBody>
-                {settingsState.apikeys.map((key, i) => (
+                {dataTable.map((key, i) => (
                   <TableRow key={i}>
                     <TableCell>
                       <span className="text-sm">{key.id}</span>

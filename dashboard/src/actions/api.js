@@ -43,6 +43,40 @@ export default class API {
   static deleteApiKey = (id) => (
     _delete(`/api/${id}`)
   )
+
+  // PLATFORM
+  static getPlatforms = () => (
+    _get('/platform')
+  )
+
+  static createPlatform = (body) => (
+    _post('/platform', body)
+  )
+
+  static updatePlatform = (body) => (
+    _put('/platform', body)
+  )
+
+  static deletePlatform = (id) => (
+    _delete(`/platform/${id}`)
+  )
+
+   // PROGRAM
+   static getPrograms = () => (
+    _get('/program')
+  )
+
+  static createProgram = (body) => (
+    _post('/program', body)
+  )
+
+  static updateProgram = (body) => (
+    _put('/program', body)
+  )
+
+  static deleteProgram = (id) => (
+    _delete(`/program/id/${id}`)
+  )
   
 }
 

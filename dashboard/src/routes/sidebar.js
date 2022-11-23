@@ -17,12 +17,12 @@ const routes = [
     name: 'Revenues',
   },
   {
-    path: '/app/platform',
+    path: '/app/platforms',
     icon: 'CardsIcon',
     name: 'Platforms',
   },
   {
-    path: '/app/program',
+    path: '/app/programs',
     icon: 'FormsIcon',
     name: 'Programs',
   },

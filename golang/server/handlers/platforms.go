@@ -26,7 +26,7 @@ func CreatePlatform(env env.Env, user *db.User, w http.ResponseWriter, r *http.R
 		Name: p.Name,
 		Slug: p.Slug,
 		Url:  p.Url,
-		Type: db.PlatformTypePublic,
+		Type: p.Type,
 	}))
 }
 

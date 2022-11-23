@@ -4,13 +4,11 @@ import { lazy } from 'react'
 const Dashboard = lazy(() => import('../pages/Dashboard'))
 const MyAccount = lazy(() => import('../pages/MyAccount'))
 const Settings = lazy(() => import('../pages/Settings'))
+const Platform = lazy(() => import('../pages/Platform'))
+const Program = lazy(() => import('../pages/Program'))
 const Cards = lazy(() => import('../pages/Cards'))
 const Charts = lazy(() => import('../pages/Charts'))
-const Buttons = lazy(() => import('../pages/Buttons'))
-const Modals = lazy(() => import('../pages/Modals'))
-const Tables = lazy(() => import('../pages/Tables'))
 const Page404 = lazy(() => import('../pages/404'))
-const Blank = lazy(() => import('../pages/Blank'))
 
 /**
  * ⚠ These are internal routes!
@@ -36,6 +34,14 @@ const routes = [
     component: Settings,
   },
   {
+    path: '/platforms',
+    component: Platform,
+  },
+  {
+    path: '/programs',
+    component: Program,
+  },
+  {
     path: '/cards',
     component: Cards,
   },
@@ -44,24 +50,8 @@ const routes = [
     component: Charts,
   },
   {
-    path: '/buttons',
-    component: Buttons,
-  },
-  {
-    path: '/modals',
-    component: Modals,
-  },
-  {
-    path: '/tables',
-    component: Tables,
-  },
-  {
     path: '/404',
     component: Page404,
-  },
-  {
-    path: '/blank',
-    component: Blank,
   },
 ]
 
