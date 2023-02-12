@@ -263,6 +263,15 @@ type Rootdomain struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
+type Scope struct {
+	ID        int64     `json:"id"`
+	Scope     string    `json:"scope"`
+	ScopeType string    `json:"scope_type"`
+	ProgramID int64     `json:"program_id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
 type Stat struct {
 	ID           int64     `json:"id"`
 	ReportID     string    `json:"report_id"`

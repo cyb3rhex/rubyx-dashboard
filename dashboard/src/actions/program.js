@@ -8,8 +8,67 @@ import {
   DELETE_PROGRAM,
   DELETE_PROGRAM_ERROR,
   UPDATE_PROGRAM,
-  UPDATE_PROGRAM_ERROR
+  UPDATE_PROGRAM_ERROR,
+  RELOAD_PROGRAM,
+  RELOAD_PROGRAM_ERROR,
+  GET_SCOPE,
+  GET_SCOPE_ERROR,
+  GET_SCOPE_SUCCESS,
 } from "../constants/program";
+
+export const getScope = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: GET_SCOPE,
+    });
+
+    API.getScope(id)
+      .then((data) => {
+        dispatch({
+          type: GET_SCOPE_SUCCESS,
+          payload: data,
+        });
+      })
+      .catch((err) => {
+        dispatch({
+          type: GET_SCOPE_ERROR,
+          payload: err,
+        });
+      });
+  } catch (err) {
+    dispatch({
+      type: GET_SCOPE_ERROR,
+      payload: err,
+    });
+  }
+};
+
+
+export const reloadPrograms = () => async (dispatch) => {
+  try {
+    API.reloadPrograms()
+      .then((res) => {
+        API.getPrograms().then((data) => {
+          dispatch({
+            type: RELOAD_PROGRAM,
+            payload: data,
+          });
+        });
+      })
+      .catch((err) => {
+        dispatch({
+          type: RELOAD_PROGRAM_ERROR,
+          payload: err,
+        });
+      });
+  } catch (err) {
+    dispatch({
+      type: RELOAD_PROGRAM_ERROR,
+      payload: err,
+    });
+  }
+};
+
 
 export const getPrograms = () => async (dispatch) => {
   try {

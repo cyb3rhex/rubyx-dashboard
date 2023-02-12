@@ -140,6 +140,21 @@ func (mr *MockQuerierMockRecorder) CreateRootDomain(ctx, arg interface{}) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateRootDomain", reflect.TypeOf((*MockQuerier)(nil).CreateRootDomain), ctx, arg)
 }
 
+// CreateScope mocks base method.
+func (m *MockQuerier) CreateScope(ctx context.Context, arg db.CreateScopeParams) (db.Scope, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateScope", ctx, arg)
+	ret0, _ := ret[0].(db.Scope)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateScope indicates an expected call of CreateScope.
+func (mr *MockQuerierMockRecorder) CreateScope(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateScope", reflect.TypeOf((*MockQuerier)(nil).CreateScope), ctx, arg)
+}
+
 // CreateStat mocks base method.
 func (m *MockQuerier) CreateStat(ctx context.Context, arg db.CreateStatParams) (db.Stat, error) {
 	m.ctrl.T.Helper()
@@ -325,6 +340,20 @@ func (m *MockQuerier) DeleteRootDomainByIDs(ctx context.Context, id int64) error
 func (mr *MockQuerierMockRecorder) DeleteRootDomainByIDs(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteRootDomainByIDs", reflect.TypeOf((*MockQuerier)(nil).DeleteRootDomainByIDs), ctx, id)
+}
+
+// DeleteScopeByID mocks base method.
+func (m *MockQuerier) DeleteScopeByID(ctx context.Context, id int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteScopeByID", ctx, id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteScopeByID indicates an expected call of DeleteScopeByID.
+func (mr *MockQuerierMockRecorder) DeleteScopeByID(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteScopeByID", reflect.TypeOf((*MockQuerier)(nil).DeleteScopeByID), ctx, id)
 }
 
 // DeleteStatByID mocks base method.
@@ -593,6 +622,51 @@ func (mr *MockQuerierMockRecorder) FindRootDomains(ctx interface{}) *gomock.Call
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindRootDomains", reflect.TypeOf((*MockQuerier)(nil).FindRootDomains), ctx)
 }
 
+// FindScopeByID mocks base method.
+func (m *MockQuerier) FindScopeByID(ctx context.Context, id int64) (db.Scope, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindScopeByID", ctx, id)
+	ret0, _ := ret[0].(db.Scope)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindScopeByID indicates an expected call of FindScopeByID.
+func (mr *MockQuerierMockRecorder) FindScopeByID(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindScopeByID", reflect.TypeOf((*MockQuerier)(nil).FindScopeByID), ctx, id)
+}
+
+// FindScopes mocks base method.
+func (m *MockQuerier) FindScopes(ctx context.Context) ([]db.Scope, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindScopes", ctx)
+	ret0, _ := ret[0].([]db.Scope)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindScopes indicates an expected call of FindScopes.
+func (mr *MockQuerierMockRecorder) FindScopes(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindScopes", reflect.TypeOf((*MockQuerier)(nil).FindScopes), ctx)
+}
+
+// FindScopesByProgramID mocks base method.
+func (m *MockQuerier) FindScopesByProgramID(ctx context.Context, programID int64) ([]db.Scope, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindScopesByProgramID", ctx, programID)
+	ret0, _ := ret[0].([]db.Scope)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindScopesByProgramID indicates an expected call of FindScopesByProgramID.
+func (mr *MockQuerierMockRecorder) FindScopesByProgramID(ctx, programID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindScopesByProgramID", reflect.TypeOf((*MockQuerier)(nil).FindScopesByProgramID), ctx, programID)
+}
+
 // FindStatByID mocks base method.
 func (m *MockQuerier) FindStatByID(ctx context.Context, id int64) (db.Stat, error) {
 	m.ctrl.T.Helper()
@@ -801,6 +875,21 @@ func (m *MockQuerier) GetPlatforms(ctx context.Context) ([]db.Platform, error) {
 func (mr *MockQuerierMockRecorder) GetPlatforms(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPlatforms", reflect.TypeOf((*MockQuerier)(nil).GetPlatforms), ctx)
+}
+
+// GetScopeByProgramIDAndScope mocks base method.
+func (m *MockQuerier) GetScopeByProgramIDAndScope(ctx context.Context, arg db.GetScopeByProgramIDAndScopeParams) (db.Scope, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetScopeByProgramIDAndScope", ctx, arg)
+	ret0, _ := ret[0].(db.Scope)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetScopeByProgramIDAndScope indicates an expected call of GetScopeByProgramIDAndScope.
+func (mr *MockQuerierMockRecorder) GetScopeByProgramIDAndScope(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetScopeByProgramIDAndScope", reflect.TypeOf((*MockQuerier)(nil).GetScopeByProgramIDAndScope), ctx, arg)
 }
 
 // UpdateIp mocks base method.

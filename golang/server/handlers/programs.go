@@ -7,8 +7,28 @@ import (
 	"github.com/aituglo/rubyx/golang/db"
 	"github.com/aituglo/rubyx/golang/env"
 	"github.com/aituglo/rubyx/golang/errors"
+	"github.com/aituglo/rubyx/golang/server/utils"
 	"github.com/aituglo/rubyx/golang/server/write"
 )
+
+func ReloadPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
+	if user.Status != db.UserStatusActive {
+		return write.Error(errors.RouteUnauthorized)
+	}
+
+	platform, err := env.DB().GetPlatforms(r.Context())
+	if err != nil {
+		return write.Error(err)
+	}
+
+	for _, p := range platform {
+		if p.Name == "yeswehack" {
+			utils.UpdatePrograms(&p, 0, env, r.Context())
+		}
+	}
+
+	return write.JSONorErr(env.DB().FindStats(r.Context()))
+}
 
 func CreateProgram(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
 	if user.Status != db.UserStatusActive {
@@ -69,6 +89,24 @@ func GetProgramBySlug(env env.Env, user *db.User, w http.ResponseWriter, r *http
 	}
 
 	return write.JSON(program)
+}
+
+func GetScopeByProgramID(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
+	if user.Status != db.UserStatusActive {
+		return write.Error(errors.RouteUnauthorized)
+	}
+
+	id, _ := getID(r)
+
+	scope, err := env.DB().FindScopesByProgramID(r.Context(), id)
+	if err != nil {
+		if isNotFound(err) {
+			return write.Error(errors.ItemNotFound)
+		}
+		return write.Error(err)
+	}
+
+	return write.JSON(scope)
 }
 
 func GetPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {

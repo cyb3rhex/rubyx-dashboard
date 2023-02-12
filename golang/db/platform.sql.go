@@ -87,10 +87,11 @@ func (q *Queries) FindPlatformByIDs(ctx context.Context, id int64) (FindPlatform
 }
 
 const findPlatforms = `-- name: FindPlatforms :many
-SELECT name, slug, email, hunter_username, type FROM platform
+SELECT id, name, slug, email, hunter_username, type FROM platform
 `
 
 type FindPlatformsRow struct {
+	ID             int64        `json:"id"`
 	Name           string       `json:"name"`
 	Slug           string       `json:"slug"`
 	Email          string       `json:"email"`
@@ -108,6 +109,7 @@ func (q *Queries) FindPlatforms(ctx context.Context) ([]FindPlatformsRow, error)
 	for rows.Next() {
 		var i FindPlatformsRow
 		if err := rows.Scan(
+			&i.ID,
 			&i.Name,
 			&i.Slug,
 			&i.Email,

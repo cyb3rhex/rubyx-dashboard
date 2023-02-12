@@ -155,6 +155,14 @@ export default class API {
   static deleteProgram = (id) => (
     _delete(`/program/id/${id}`)
   )
+
+  static reloadPrograms = () => (
+    _get('/program/reload')
+  )
+
+  static getScope = (id) => (
+    _get(`/program/scope/${id}`)
+  )
   
 }
 

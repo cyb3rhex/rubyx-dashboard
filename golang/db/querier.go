@@ -16,6 +16,7 @@ type Querier interface {
 	CreateProgram(ctx context.Context, arg CreateProgramParams) (Program, error)
 	CreateReset(ctx context.Context, arg CreateResetParams) (Reset, error)
 	CreateRootDomain(ctx context.Context, arg CreateRootDomainParams) (Rootdomain, error)
+	CreateScope(ctx context.Context, arg CreateScopeParams) (Scope, error)
 	CreateStat(ctx context.Context, arg CreateStatParams) (Stat, error)
 	CreateSubdomain(ctx context.Context, arg CreateSubdomainParams) (Subdomain, error)
 	CreateUrl(ctx context.Context, arg CreateUrlParams) (Url, error)
@@ -29,6 +30,7 @@ type Querier interface {
 	DeleteProgramBySlug(ctx context.Context, slug string) error
 	DeleteResetsForUser(ctx context.Context, userID int64) error
 	DeleteRootDomainByIDs(ctx context.Context, id int64) error
+	DeleteScopeByID(ctx context.Context, id int64) error
 	DeleteStatByID(ctx context.Context, id int64) error
 	DeleteSubdomainByIDs(ctx context.Context, id int64) error
 	DeleteUrlByIDs(ctx context.Context, id int64) error
@@ -47,6 +49,9 @@ type Querier interface {
 	FindResetByCode(ctx context.Context, code string) (Reset, error)
 	FindRootDomainByIDs(ctx context.Context, id int64) (Rootdomain, error)
 	FindRootDomains(ctx context.Context) ([]Rootdomain, error)
+	FindScopeByID(ctx context.Context, id int64) (Scope, error)
+	FindScopes(ctx context.Context) ([]Scope, error)
+	FindScopesByProgramID(ctx context.Context, programID int64) ([]Scope, error)
 	FindStatByID(ctx context.Context, id int64) (Stat, error)
 	FindStatByReportID(ctx context.Context, reportID string) (Stat, error)
 	FindStats(ctx context.Context) ([]Stat, error)
@@ -61,6 +66,7 @@ type Querier interface {
 	FindVulnerabilityByIDs(ctx context.Context, id int64) (Vulnerability, error)
 	FindVulnerabilitys(ctx context.Context) ([]Vulnerability, error)
 	GetPlatforms(ctx context.Context) ([]Platform, error)
+	GetScopeByProgramIDAndScope(ctx context.Context, arg GetScopeByProgramIDAndScopeParams) (Scope, error)
 	UpdateIp(ctx context.Context, arg UpdateIpParams) (Ip, error)
 	UpdatePlatform(ctx context.Context, arg UpdatePlatformParams) (Platform, error)
 	UpdatePort(ctx context.Context, arg UpdatePortParams) (Port, error)

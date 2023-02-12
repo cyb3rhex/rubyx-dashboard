@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { createProgram, deleteProgram, getPrograms, updateProgram } from "../actions/program";
+import { createProgram, deleteProgram, getPrograms, reloadPrograms, updateProgram, getScope } from "../actions/program";
 import PageTitle from "../components/Typography/PageTitle";
-import { TrashIcon, EditIcon } from "../icons";
+import { TrashIcon, EditIcon, SearchIcon, ButtonsIcon } from "../icons";
 import {
   Table,
   TableHeader,
@@ -36,6 +36,13 @@ function Program() {
   const [editMode, setEditMode] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [seeScope, setSeeScope] = useState(false);
+
+  useEffect(() => {
+    if (programState.scope) {
+      console.log(programState.scope);
+    }
+  }, [programState.scope]);
 
   function openModal() {
     setEditMode(false);
@@ -45,6 +52,15 @@ function Program() {
   function closeModal() {
     setIsModalOpen(false);
   }
+
+  const handleGetScope = (id) => {
+    dispatch(getScope(id));
+    setSeeScope(true);
+  };
+
+  const handleReloadPrograms = () => {
+    dispatch(reloadPrograms());
+  };
 
   useEffect(() => {
     dispatch(getPlatforms());
@@ -97,7 +113,7 @@ function Program() {
   const [dataTable, setDataTable] = useState([]);
 
   // pagination setup
-  const resultsPerPage = 10;
+  const resultsPerPage = 30;
   const totalResults = programState.programs ? programState.programs.length : 0;
 
   function onPageChangeTable(p) {
@@ -135,6 +151,9 @@ function Program() {
         <div className="py-3">
           <Button onClick={openModal}>Add a Program</Button>
         </div>
+        <div className="py-3">
+          <Button onClick={() => handleReloadPrograms()}>Reload Programs</Button>
+        </div>
 
         {totalResults > 0 && (
           <TableContainer className="mb-8">
@@ -144,6 +163,7 @@ function Program() {
                   <TableCell>Name</TableCell>
                   <TableCell>Url</TableCell>
                   <TableCell>Type</TableCell>
+                  <TableCell>Scope</TableCell>
                   <TableCell>Platform</TableCell>
                   <TableCell>Actions</TableCell>
                 </tr>
@@ -166,6 +186,17 @@ function Program() {
                       <span className="text-sm">
                         {key.type === "public" ? "Public" : "Private"}
                       </span>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center space-x-4">
+                        <Button layout="link" size="icon" aria-label="Delete">
+                          <ButtonsIcon
+                            onClick={() => handleGetScope(key.id)}
+                            className="w-5 h-5"
+                            aria-hidden="true"
+                          />
+                        </Button>
+                      </div>
                     </TableCell>
                     <TableCell>
                       <span className="text-sm">
@@ -301,6 +332,59 @@ function Program() {
                   Add
                 </Button>
               )}
+            </div>
+          </ModalFooter>
+        </Modal>
+
+        <Modal isOpen={seeScope} onClose={() => setSeeScope(false)}>
+          <ModalHeader>Scope</ModalHeader>
+          <ModalBody>
+          <TableContainer className="mb-8">
+            <Table>
+              <TableHeader>
+                <tr>
+                  <TableCell>Scope</TableCell>
+                  <TableCell>Type</TableCell>
+                  <TableCell>Actions</TableCell>
+                </tr>
+              </TableHeader>
+              <TableBody>
+                {programState.scope && programState.scope.map((key, i) => (
+                  <TableRow key={i}>
+                    <TableCell>
+                      <span className="text-sm">{key.scope}</span>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-sm">{key.scope_type}</span>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center space-x-4">
+                        <Button layout="link" size="icon" aria-label="Delete">
+                          <SearchIcon
+                            className="w-5 h-5"
+                            aria-hidden="true"
+                          />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        
+
+          </ModalBody>
+          <ModalFooter>
+            <div className="hidden sm:block">
+              <Button layout="outline" onClick={() => setSeeScope(false)}>
+                Cancel
+              </Button>
+            </div>
+            <div className="block w-full sm:hidden">
+              <Button block size="large" layout="outline" onClick={() => setSeeScope(false)}>
+                Cancel
+              </Button>
             </div>
           </ModalFooter>
         </Modal>

@@ -6,12 +6,25 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/aituglo/rubyx/golang/db"
 	"github.com/aituglo/rubyx/golang/env"
 	"github.com/pquerna/otp/totp"
 )
+
+type ProgramsInfos struct {
+	NbPages  int
+	Programs []interface{}
+}
+
+type ProgramResponse struct {
+	Title  string   `json:"title"`
+	Slug   string   `json:"slug"`
+	Vdp    string   `json:"vdp"`
+	Scopes []string `json:"scopes"`
+}
 
 func GetJWT(platform *db.Platform) (string, error) {
 	if platform.Jwt != "" && time.Since(platform.UpdatedAt) <= 3500*time.Second {
@@ -140,6 +153,131 @@ func GetUsername(platform *db.Platform) (string, error) {
 	return username, nil
 }
 
+func UpdatePrograms(platform *db.Platform, pageID int, env env.Env, ctx context.Context) {
+	GetJWT(platform)
+
+	programsInfos := GetProgramsInfos(platform, pageID)
+	if programsInfos == nil {
+		return
+	}
+
+	ParsePrograms(programsInfos.Programs, platform, env, ctx)
+	if pageID+1 <= programsInfos.NbPages {
+		UpdatePrograms(platform, pageID+1, env, ctx)
+	}
+}
+
+func GetProgramsInfos(platform *db.Platform, pageID int) *ProgramsInfos {
+	response, err := apiGetRequest(fmt.Sprintf("https://api.yeswehack.com/programs?page=%d", pageID), platform)
+	if err != nil || response == nil || response.StatusCode != 200 {
+		return nil
+	}
+
+	jsonBody := make(map[string]interface{})
+	json.NewDecoder(response.Body).Decode(&jsonBody)
+
+	nbPages := int(jsonBody["pagination"].(map[string]interface{})["nb_pages"].(float64))
+	programs := jsonBody["items"].([]interface{})
+
+	return &ProgramsInfos{
+		NbPages:  nbPages,
+		Programs: programs,
+	}
+}
+
+func ParsePrograms(programs []interface{}, platform *db.Platform, env env.Env, ctx context.Context) {
+	for _, program := range programs {
+		programMap := program.(map[string]interface{})
+
+		_, err := env.DB().FindProgramBySlug(ctx, programMap["slug"].(string))
+		if err != nil {
+
+			programType := db.ProgramTypePrivate
+			if programMap["public"].(bool) {
+				programType = db.ProgramTypePublic
+			}
+
+			programUrl := fmt.Sprintf("https://yeswehack.com/programs/%s", programMap["slug"].(string))
+
+			_, err := env.DB().CreateProgram(ctx, db.CreateProgramParams{
+				Name:       programMap["title"].(string),
+				Slug:       programMap["slug"].(string),
+				Vdp:        programMap["vdp"].(bool),
+				Url:        programUrl,
+				Tag:        "",
+				Type:       programType,
+				PlatformID: platform.ID,
+			})
+
+			if err != nil {
+				fmt.Println(err)
+			}
+
+		}
+
+		// And in any case we update the scopes of the program
+		UpdateScopes(platform, programMap["slug"].(string), env, ctx)
+	}
+}
+
+func UpdateScopes(platform *db.Platform, slug string, env env.Env, ctx context.Context) {
+	scopeInfos := GetScopeInfos(platform, slug)
+	if scopeInfos == nil || len(scopeInfos) == 0 {
+		return
+	}
+
+	ParseScopes(scopeInfos, slug, platform, env, ctx)
+}
+
+func GetScopeInfos(platform *db.Platform, slug string) []interface{} {
+	response, err := apiGetRequest(fmt.Sprintf("https://api.yeswehack.com/programs/%s", slug), platform)
+	if err != nil || response == nil || response.StatusCode != 200 {
+		return nil
+	}
+
+	jsonBody := make(map[string]interface{})
+	json.NewDecoder(response.Body).Decode(&jsonBody)
+
+	return jsonBody["scopes"].([]interface{})
+}
+
+func ParseScopes(scopes []interface{}, slug string, platform *db.Platform, env env.Env, ctx context.Context) {
+	program, err := env.DB().FindProgramBySlug(ctx, slug)
+	if err != nil {
+		fmt.Println(err)
+	}
+	for _, scope := range scopes {
+		scopeMap := scope.(map[string]interface{})
+		scopeType := scopeMap["scope_type"].(string)
+
+		if !strings.Contains(scopeType, "web-application") && !strings.Contains(scopeType, "api") {
+			continue
+		}
+
+		scope := db.GetScopeByProgramIDAndScopeParams{
+			ProgramID: program.ID,
+			Scope:     scopeMap["scope"].(string),
+		}
+
+		_, err := env.DB().GetScopeByProgramIDAndScope(ctx, scope)
+
+		if err != nil {
+			_, err := env.DB().CreateScope(ctx, db.CreateScopeParams{
+				Scope:     scopeMap["scope"].(string),
+				ScopeType: scopeType,
+				ProgramID: program.ID,
+			})
+
+			if err != nil {
+				fmt.Println(err)
+			}
+
+		}
+
+	}
+
+}
+
 func GetReports(platform *db.Platform, collab bool, pageID int, env env.Env, ctx context.Context) {
 	apiURL := ""
 	if collab {
@@ -201,30 +339,6 @@ func parseReports(reports []interface{}, platform *db.Platform, collab bool, env
 		} else {
 			fmt.Println(currentReport)
 		}
-
-		/*
-
-			if currentReport == nil {
-				reportInfos["report_id"] = reportMap["local_id"].(string)
-				reportInfos["platform_id"] = platform.ID
-				reportInfos["report_date"] = time.Unix(int64(reportMap["created_at"].(float64)), 0).Format("2006-01-02")
-
-				env.DB().CreateStat(r.Context(), db.CreateStatParams{
-					ReportID:     reportInfos["report_id"],
-					ReportTitle:  reportInfos["report_title"],
-					Severity:     reportInfos["severity"],
-					Reward:       reportInfos["reward"],
-					Currency:     reportInfos["currency"],
-					Collab:       reportInfos["collab"],
-					ReportStatus: reportInfos["report_status"],
-					ReportDate:   reportInfos["report_date"],
-					PlatformID:   reportInfos["platform_id"],
-				})
-			} else {
-				currentReport.Update(reportInfos)
-			}
-
-		*/
 	}
 }
 

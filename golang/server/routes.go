@@ -47,7 +47,9 @@ func (srv *server) ConfigureRouter() {
 	srv.DELETE("/platform/:id", handlers.DeletePlatform)
 
 	// PROGRAMS
+	srv.GET("/program/reload", handlers.ReloadPrograms)
 	srv.GET("/program", handlers.GetPrograms)
+	srv.GET("/program/scope/:id", handlers.GetScopeByProgramID)
 	srv.GET("/program/id/:id", handlers.GetProgram)
 	srv.GET("/program/slug/:name", handlers.GetProgramBySlug)
 	srv.POST("/program", handlers.CreateProgram)

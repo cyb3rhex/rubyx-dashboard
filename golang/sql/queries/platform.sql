@@ -8,7 +8,7 @@ UPDATE platform SET name = $2, slug = $3, email = $4, password = $5, otp = $6, t
 SELECT name, slug, email, hunter_username, type FROM platform WHERE id = $1 LIMIT 1;
 
 -- name: FindPlatforms :many
-SELECT name, slug, email, hunter_username, type FROM platform;
+SELECT id, name, slug, email, hunter_username, type FROM platform;
 
 -- name: GetPlatforms :many
 SELECT * FROM platform;

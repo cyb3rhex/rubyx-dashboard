@@ -10,7 +10,7 @@ import (
 )
 
 const createProgram = `-- name: CreateProgram :one
-INSERT INTO program (platform_id, name, slug, vdp, url, type) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, platform_id, name, slug, vdp, tag, url, type, created_at, updated_at
+INSERT INTO program (platform_id, name, slug, vdp, tag, url, type) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, platform_id, name, slug, vdp, tag, url, type, created_at, updated_at
 `
 
 type CreateProgramParams struct {
@@ -18,6 +18,7 @@ type CreateProgramParams struct {
 	Name       string      `json:"name"`
 	Slug       string      `json:"slug"`
 	Vdp        bool        `json:"vdp"`
+	Tag        string      `json:"tag"`
 	Url        string      `json:"url"`
 	Type       ProgramType `json:"type"`
 }
@@ -28,6 +29,7 @@ func (q *Queries) CreateProgram(ctx context.Context, arg CreateProgramParams) (P
 		arg.Name,
 		arg.Slug,
 		arg.Vdp,
+		arg.Tag,
 		arg.Url,
 		arg.Type,
 	)
