@@ -11,6 +11,7 @@ CREATE TABLE program (
   name varchar(60) NOT NULL,
   slug varchar(60) NOT NULL UNIQUE,
   vdp boolean NOT NULL,
+  tag text NOT NULL,
   url text NOT NULL,
   type program_type NOT NULL,
   created_at timestamp NOT NULL DEFAULT now(),

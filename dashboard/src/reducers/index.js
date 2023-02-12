@@ -3,7 +3,7 @@ import user from "./user";
 import settings from "./settings";
 import program from "./program";
 import platform from "./platform";
-import revenue from "./revenue";
+import stat from "./stat";
 import vulnerability from "./vulnerability";
 import subdomain from "./subdomain";
 import url from "./url";
@@ -14,7 +14,7 @@ export default combineReducers({
   settings,
   platform,
   program,
-  revenue,
+  stat,
   vulnerability,
   subdomain,
   url,

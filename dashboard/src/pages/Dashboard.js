@@ -4,20 +4,34 @@ import InfoCard from '../components/Cards/InfoCard'
 import PageTitle from '../components/Typography/PageTitle'
 import { ChatIcon, CartIcon, MoneyIcon, PeopleIcon } from '../icons'
 import RoundIcon from '../components/RoundIcon'
-import { getRevenues } from '../actions/revenue'
+import { getStats } from '../actions/stat'
 
 function Dashboard() {
-  const revenueState = useSelector(state => state.revenue)
+  const statState = useSelector(state => state.stat)
   const dispatch = useDispatch()
 
-  const totalRevenue = (revenues) => {
+  const totalStat = (stats) => {
     var total = 0;
-    revenues.map(item => total += item.money)
+    stats.map(item => total += item.reward)
+    return total
+  }
+
+  const currentMonth = (stats) => {
+    var total = 0;
+    stats.map(item => {
+      let date = new Date(item.report_date);
+      let now = new Date();
+
+      if (date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear()) {
+        total += item.reward
+      } 
+      
+    })
     return total
   }
 
   useEffect(() => {
-    dispatch(getRevenues())
+    dispatch(getStats())
   }, [])
 
   return (
@@ -35,7 +49,7 @@ function Dashboard() {
           />
         </InfoCard>
 
-        <InfoCard title="Bounties balance" value={`$ ${revenueState.revenues ? totalRevenue(revenueState.revenues) : 0}`}>
+        <InfoCard title="Total Bounties balance" value={`$ ${statState.stats ? totalStat(statState.stats) : 0}`}>
           <RoundIcon
             icon={MoneyIcon}
             iconColorClass="text-green-500 dark:text-green-100"
@@ -44,11 +58,11 @@ function Dashboard() {
           />
         </InfoCard>
 
-        <InfoCard title="New sales" value="376">
+        <InfoCard title="Current Month" value={`$ ${statState.stats ? currentMonth(statState.stats) : 0}`}>
           <RoundIcon
-            icon={CartIcon}
-            iconColorClass="text-blue-500 dark:text-blue-100"
-            bgColorClass="bg-blue-100 dark:bg-blue-500"
+            icon={MoneyIcon}
+            iconColorClass="text-green-500 dark:text-green-100"
+            bgColorClass="bg-green-100 dark:bg-green-500"
             className="mr-4"
           />
         </InfoCard>

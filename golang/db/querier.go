@@ -15,8 +15,8 @@ type Querier interface {
 	CreatePort(ctx context.Context, arg CreatePortParams) (Port, error)
 	CreateProgram(ctx context.Context, arg CreateProgramParams) (Program, error)
 	CreateReset(ctx context.Context, arg CreateResetParams) (Reset, error)
-	CreateRevenue(ctx context.Context, arg CreateRevenueParams) (Revenue, error)
 	CreateRootDomain(ctx context.Context, arg CreateRootDomainParams) (Rootdomain, error)
+	CreateStat(ctx context.Context, arg CreateStatParams) (Stat, error)
 	CreateSubdomain(ctx context.Context, arg CreateSubdomainParams) (Subdomain, error)
 	CreateUrl(ctx context.Context, arg CreateUrlParams) (Url, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
@@ -28,8 +28,8 @@ type Querier interface {
 	DeleteProgramByIDs(ctx context.Context, id int64) error
 	DeleteProgramBySlug(ctx context.Context, slug string) error
 	DeleteResetsForUser(ctx context.Context, userID int64) error
-	DeleteRevenueByIDs(ctx context.Context, id int64) error
 	DeleteRootDomainByIDs(ctx context.Context, id int64) error
+	DeleteStatByID(ctx context.Context, id int64) error
 	DeleteSubdomainByIDs(ctx context.Context, id int64) error
 	DeleteUrlByIDs(ctx context.Context, id int64) error
 	DeleteVulnerabilityByIDs(ctx context.Context, id int64) error
@@ -37,18 +37,19 @@ type Querier interface {
 	FindApis(ctx context.Context) ([]Api, error)
 	FindIpByIDs(ctx context.Context, id int64) (Ip, error)
 	FindIps(ctx context.Context) ([]Ip, error)
-	FindPlatformByIDs(ctx context.Context, id int64) (Platform, error)
-	FindPlatforms(ctx context.Context) ([]Platform, error)
+	FindPlatformByIDs(ctx context.Context, id int64) (FindPlatformByIDsRow, error)
+	FindPlatforms(ctx context.Context) ([]FindPlatformsRow, error)
 	FindPortByIDs(ctx context.Context, id int64) (Port, error)
 	FindPorts(ctx context.Context) ([]Port, error)
 	FindProgramByIDs(ctx context.Context, id int64) (Program, error)
 	FindProgramBySlug(ctx context.Context, slug string) (Program, error)
 	FindPrograms(ctx context.Context) ([]Program, error)
 	FindResetByCode(ctx context.Context, code string) (Reset, error)
-	FindRevenueByIDs(ctx context.Context, id int64) (Revenue, error)
-	FindRevenues(ctx context.Context) ([]Revenue, error)
 	FindRootDomainByIDs(ctx context.Context, id int64) (Rootdomain, error)
 	FindRootDomains(ctx context.Context) ([]Rootdomain, error)
+	FindStatByID(ctx context.Context, id int64) (Stat, error)
+	FindStatByReportID(ctx context.Context, reportID string) (Stat, error)
+	FindStats(ctx context.Context) ([]Stat, error)
 	FindSubdomainByIDs(ctx context.Context, id int64) (Subdomain, error)
 	FindSubdomainByProgram(ctx context.Context, programID int64) ([]Subdomain, error)
 	FindSubdomains(ctx context.Context) ([]Subdomain, error)
@@ -59,12 +60,13 @@ type Querier interface {
 	FindUserByVerificationCode(ctx context.Context, verification string) (User, error)
 	FindVulnerabilityByIDs(ctx context.Context, id int64) (Vulnerability, error)
 	FindVulnerabilitys(ctx context.Context) ([]Vulnerability, error)
+	GetPlatforms(ctx context.Context) ([]Platform, error)
 	UpdateIp(ctx context.Context, arg UpdateIpParams) (Ip, error)
 	UpdatePlatform(ctx context.Context, arg UpdatePlatformParams) (Platform, error)
 	UpdatePort(ctx context.Context, arg UpdatePortParams) (Port, error)
 	UpdateProgram(ctx context.Context, arg UpdateProgramParams) (Program, error)
-	UpdateRevenue(ctx context.Context, arg UpdateRevenueParams) (Revenue, error)
 	UpdateRootDomain(ctx context.Context, arg UpdateRootDomainParams) (Rootdomain, error)
+	UpdateStat(ctx context.Context, arg UpdateStatParams) (Stat, error)
 	UpdateSubdomain(ctx context.Context, arg UpdateSubdomainParams) (Subdomain, error)
 	UpdateUrl(ctx context.Context, arg UpdateUrlParams) (Url, error)
 	UpdateUserPassword(ctx context.Context, arg UpdateUserPasswordParams) error

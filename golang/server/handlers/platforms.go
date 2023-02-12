@@ -7,6 +7,7 @@ import (
 	"github.com/aituglo/rubyx/golang/db"
 	"github.com/aituglo/rubyx/golang/env"
 	"github.com/aituglo/rubyx/golang/errors"
+	utils "github.com/aituglo/rubyx/golang/server/utils"
 	"github.com/aituglo/rubyx/golang/server/write"
 )
 
@@ -22,11 +23,24 @@ func CreatePlatform(env env.Env, user *db.User, w http.ResponseWriter, r *http.R
 		return write.Error(errors.NoJSONBody)
 	}
 
+	if p.Name == "yeswehack" {
+		username, err := utils.GetUsername(p)
+		if err != nil {
+			return write.Error(errors.RouteNotFound)
+		}
+
+		p.HunterUsername = username
+	}
+
 	return write.JSONorErr(env.DB().CreatePlatform(r.Context(), db.CreatePlatformParams{
-		Name: p.Name,
-		Slug: p.Slug,
-		Url:  p.Url,
-		Type: p.Type,
+		Name:           p.Name,
+		Slug:           p.Slug,
+		HunterUsername: p.HunterUsername,
+		Email:          p.Email,
+		Password:       p.Password,
+		Otp:            p.Otp,
+		Jwt:            p.Jwt,
+		Type:           p.Type,
 	}))
 }
 
@@ -43,7 +57,7 @@ func GetPlatform(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 	platform, err := env.DB().FindPlatformByIDs(r.Context(), id)
 	if err != nil {
 		if isNotFound(err) {
-			return write.Error(errors.PostNotFound)
+			return write.Error(errors.ItemNotFound)
 		}
 		return write.Error(err)
 	}
@@ -71,12 +85,25 @@ func UpdatePlatform(env env.Env, user *db.User, w http.ResponseWriter, r *http.R
 		return write.Error(errors.NoJSONBody)
 	}
 
+	if p.Name == "yeswehack" {
+		username, err := utils.GetUsername(p)
+		if err != nil {
+			return write.Error(errors.RouteNotFound)
+		}
+
+		p.HunterUsername = username
+	}
+
 	return write.JSONorErr(env.DB().UpdatePlatform(r.Context(), db.UpdatePlatformParams{
-		ID:   p.ID,
-		Name: p.Name,
-		Slug: p.Slug,
-		Url:  p.Url,
-		Type: db.PlatformTypePublic,
+		ID:             p.ID,
+		Name:           p.Name,
+		Slug:           p.Slug,
+		HunterUsername: p.HunterUsername,
+		Email:          p.Email,
+		Password:       p.Password,
+		Otp:            p.Otp,
+		Jwt:            p.Jwt,
+		Type:           p.Type,
 	}))
 }
 

@@ -4,6 +4,7 @@ CREATE TABLE urls (
   id bigserial PRIMARY KEY,
   subdomain_id bigserial NOT NULL,
   url text NOT NULL,
+  tag text NOT NULL,
   title text NOT NULL,
   body_hash text NOT NULL,
   status_code int NOT NULL,

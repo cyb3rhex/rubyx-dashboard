@@ -10,7 +10,7 @@ import (
 )
 
 const createUrl = `-- name: CreateUrl :one
-INSERT INTO urls (subdomain_id, url, title, body_hash, status_code, technologies, content_length) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, subdomain_id, url, title, body_hash, status_code, technologies, content_length, created_at, updated_at
+INSERT INTO urls (subdomain_id, url, title, body_hash, status_code, technologies, content_length) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, subdomain_id, url, tag, title, body_hash, status_code, technologies, content_length, created_at, updated_at
 `
 
 type CreateUrlParams struct {
@@ -38,6 +38,7 @@ func (q *Queries) CreateUrl(ctx context.Context, arg CreateUrlParams) (Url, erro
 		&i.ID,
 		&i.SubdomainID,
 		&i.Url,
+		&i.Tag,
 		&i.Title,
 		&i.BodyHash,
 		&i.StatusCode,
@@ -59,7 +60,7 @@ func (q *Queries) DeleteUrlByIDs(ctx context.Context, id int64) error {
 }
 
 const findUrlByIDs = `-- name: FindUrlByIDs :one
-SELECT id, subdomain_id, url, title, body_hash, status_code, technologies, content_length, created_at, updated_at FROM urls WHERE id = $1 LIMIT 1
+SELECT id, subdomain_id, url, tag, title, body_hash, status_code, technologies, content_length, created_at, updated_at FROM urls WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) FindUrlByIDs(ctx context.Context, id int64) (Url, error) {
@@ -69,6 +70,7 @@ func (q *Queries) FindUrlByIDs(ctx context.Context, id int64) (Url, error) {
 		&i.ID,
 		&i.SubdomainID,
 		&i.Url,
+		&i.Tag,
 		&i.Title,
 		&i.BodyHash,
 		&i.StatusCode,
@@ -81,7 +83,7 @@ func (q *Queries) FindUrlByIDs(ctx context.Context, id int64) (Url, error) {
 }
 
 const findUrls = `-- name: FindUrls :many
-SELECT id, subdomain_id, url, title, body_hash, status_code, technologies, content_length, created_at, updated_at FROM urls
+SELECT id, subdomain_id, url, tag, title, body_hash, status_code, technologies, content_length, created_at, updated_at FROM urls
 `
 
 func (q *Queries) FindUrls(ctx context.Context) ([]Url, error) {
@@ -97,6 +99,7 @@ func (q *Queries) FindUrls(ctx context.Context) ([]Url, error) {
 			&i.ID,
 			&i.SubdomainID,
 			&i.Url,
+			&i.Tag,
 			&i.Title,
 			&i.BodyHash,
 			&i.StatusCode,
@@ -116,7 +119,7 @@ func (q *Queries) FindUrls(ctx context.Context) ([]Url, error) {
 }
 
 const updateUrl = `-- name: UpdateUrl :one
-UPDATE urls SET subdomain_id = $2, url = $3, title = $4, body_hash = $5, status_code = $6, technologies = $7, content_length = $8, updated_at = NOW() WHERE id = $1 RETURNING id, subdomain_id, url, title, body_hash, status_code, technologies, content_length, created_at, updated_at
+UPDATE urls SET subdomain_id = $2, url = $3, title = $4, body_hash = $5, status_code = $6, technologies = $7, content_length = $8, updated_at = NOW() WHERE id = $1 RETURNING id, subdomain_id, url, tag, title, body_hash, status_code, technologies, content_length, created_at, updated_at
 `
 
 type UpdateUrlParams struct {
@@ -146,6 +149,7 @@ func (q *Queries) UpdateUrl(ctx context.Context, arg UpdateUrlParams) (Url, erro
 		&i.ID,
 		&i.SubdomainID,
 		&i.Url,
+		&i.Tag,
 		&i.Title,
 		&i.BodyHash,
 		&i.StatusCode,

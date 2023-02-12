@@ -30,8 +30,10 @@ import {
 function Platform() {
   const dispatch = useDispatch();
   const platformState = useSelector((state) => state.platform);
-  const [name, setName] = useState("")
-  const [url, setUrl] = useState("")
+  const [name, setName] = useState("yeswehack")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [otp, setOtp] = useState("")
   const [type, setType] = useState("public")
   const [editId, setEditId] = useState(0);
   const [editMode, setEditMode] = useState(false);
@@ -54,11 +56,13 @@ function Platform() {
   const handleCreatePlatform = () => {
     setIsModalOpen(false)
 
-    dispatch(createPlatform(name, url, type));
+    dispatch(createPlatform(name, email, password, otp, type));
 
-    setName("");
+    setName("yeswehack");
     setType("public");
-    setUrl("");
+    setEmail("");
+    setPassword("");
+    setOtp("");
     setEditId(0);
   };
 
@@ -70,18 +74,22 @@ function Platform() {
     setIsModalOpen(false);
     setEditMode(false);
 
-    dispatch(updatePlatform(parseInt(editId), name, url, type));
+    dispatch(updatePlatform(parseInt(editId), name, email, password, otp, type));
 
-    setName("");
+    setName("yeswehack");
     setType("public");
-    setUrl("");
+    setEmail("");
+    setPassword("");
+    setOtp("");
     setEditId(0);
   };
 
   const handleEditPlatform = (platform) => {
     setName(platform.name);
     setType(platform.type);
-    setUrl(platform.url);
+    setEmail(platform.email);
+    setPassword("");
+    setOtp("");
     setEditId(platform.id);
     setEditMode(true);
     setIsModalOpen(true);
@@ -126,21 +134,19 @@ function Platform() {
               <TableHeader>
                 <tr>
                   <TableCell>Name</TableCell>
-                  <TableCell>Url</TableCell>
+                  <TableCell>Username</TableCell>
                   <TableCell>Type</TableCell>
                   <TableCell>Actions</TableCell>
                 </tr>
               </TableHeader>
               <TableBody>
-                {dataTable.map((key, i) => (
+                {dataTable && dataTable.map((key, i) => (
                   <TableRow key={i}>
                     <TableCell>
-                      <span className="text-sm">{key.name}</span>
+                      <span className="text-sm">{key.name && key.name}</span>
                     </TableCell>
                     <TableCell>
-                      <a className="text-sm truncate text-ellipsis overflow-hidden" href={key.url}>
-                        {key.url}
-                      </a>
+                    <span className="text-sm">{key.hunter_username && key.hunter_username}</span>
                     </TableCell>
                     <TableCell>
                       <span className="text-sm">{key.type === "public" ? "Public" : "Private"}</span>
@@ -181,14 +187,26 @@ function Platform() {
         <Modal isOpen={isModalOpen} onClose={closeModal}>
           <ModalHeader>Add a Platform</ModalHeader>
           <ModalBody>
-            <Label className="pt-5">
+          <Label className="pt-5">
               <span>Name</span>
-              <Input className="mt-1" placeholder="" value={name} onChange={(e) => setName(e.target.value)} />
+              <Select value={type} onChange={(e) => setName(e.target.value)} className="mt-1">
+                <option value="yeswehack">YesWeHack</option>
+              </Select>
             </Label>
 
             <Label className="pt-5">
-              <span>Url</span>
-              <Input className="mt-1" placeholder="" value={url} onChange={(e) => setUrl(e.target.value)} />
+              <span>Email</span>
+              <Input className="mt-1" placeholder="" value={email} onChange={(e) => setEmail(e.target.value)} />
+            </Label>
+
+            <Label className="pt-5">
+              <span>Password</span>
+              <Input className="mt-1" type="password" placeholder="" value={password} onChange={(e) => setPassword(e.target.value)} />
+            </Label>
+
+            <Label className="pt-5">
+              <span>OTP</span>
+              <Input className="mt-1" placeholder="" value={otp} onChange={(e) => setOtp(e.target.value)} />
             </Label>
 
             <Label className="pt-5">

@@ -42,7 +42,7 @@ func GetIp(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) h
 	ip, err := env.DB().FindIpByIDs(r.Context(), id)
 	if err != nil {
 		if isNotFound(err) {
-			return write.Error(errors.PostNotFound)
+			return write.Error(errors.ItemNotFound)
 		}
 		return write.Error(err)
 	}

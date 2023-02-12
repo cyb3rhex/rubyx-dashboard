@@ -12,9 +12,9 @@ const routes = [
     name: 'Dashboard', // name that appear in Sidebar
   },
   {
-    path: '/app/revenues',
+    path: '/app/stats',
     icon: 'MoneyIcon',
-    name: 'Revenues',
+    name: 'Stats',
   },
   {
     path: '/app/platforms',

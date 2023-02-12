@@ -24,7 +24,6 @@ func CreateSubdomain(env env.Env, user *db.User, w http.ResponseWriter, r *http.
 
 	return write.JSONorErr(env.DB().CreateSubdomain(r.Context(), db.CreateSubdomainParams{
 		ProgramID:     p.ProgramID,
-		Url:           p.Url,
 		Title:         p.Title,
 		BodyHash:      p.BodyHash,
 		StatusCode:    p.StatusCode,
@@ -46,7 +45,7 @@ func GetSubdomain(env env.Env, user *db.User, w http.ResponseWriter, r *http.Req
 	subdomain, err := env.DB().FindSubdomainByIDs(r.Context(), id)
 	if err != nil {
 		if isNotFound(err) {
-			return write.Error(errors.PostNotFound)
+			return write.Error(errors.ItemNotFound)
 		}
 		return write.Error(err)
 	}
@@ -67,7 +66,7 @@ func GetSubdomainByProgram(env env.Env, user *db.User, w http.ResponseWriter, r 
 	subdomains, err := env.DB().FindSubdomainByProgram(r.Context(), id)
 	if err != nil {
 		if isNotFound(err) {
-			return write.Error(errors.PostNotFound)
+			return write.Error(errors.ItemNotFound)
 		}
 		return write.Error(err)
 	}
@@ -98,7 +97,6 @@ func UpdateSubdomain(env env.Env, user *db.User, w http.ResponseWriter, r *http.
 	return write.JSONorErr(env.DB().UpdateSubdomain(r.Context(), db.UpdateSubdomainParams{
 		ID:            p.ID,
 		ProgramID:     p.ProgramID,
-		Url:           p.Url,
 		Title:         p.Title,
 		BodyHash:      p.BodyHash,
 		StatusCode:    p.StatusCode,

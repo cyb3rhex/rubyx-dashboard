@@ -6,6 +6,7 @@ CREATE TABLE subdomain (
   url text NOT NULL,
   title text NOT NULL,
   body_hash text NOT NULL,
+  tag text NOT NULL,
   status_code int NOT NULL,
   technologies text NOT NULL,
   content_length int NOT NULL,

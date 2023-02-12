@@ -15,6 +15,7 @@ export const getPlatforms = () => async (dispatch) => {
   try {
     API.getPlatforms()
       .then((data) => {
+        console.log(data)
         dispatch({
           type: GET_PLATFORM,
           payload: data,
@@ -34,12 +35,15 @@ export const getPlatforms = () => async (dispatch) => {
   }
 };
 
-export const createPlatform = (name, url, type) => async (dispatch) => {
+export const createPlatform = (name, email, password, otp, type) => async (dispatch) => {
   try {
     var platform = {
       name: name,
       slug: slugify(name),
-      url: url,
+      email: email,
+      password: password,
+      otp: otp,
+      hunter_username: "",
       type: type,
     };
 
@@ -66,13 +70,15 @@ export const createPlatform = (name, url, type) => async (dispatch) => {
   }
 };
 
-export const updatePlatform = (id, name, url, type) => async (dispatch) => {
+export const updatePlatform = (id, name, email, password, otp, type) => async (dispatch) => {
   try {
     var platform = {
       id: id,
       name: name,
       slug: slugify(name),
-      url: url,
+      email: email,
+      password: password,
+      otp: otp,
       type: type,
     };
 

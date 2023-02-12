@@ -44,21 +44,13 @@ export default class API {
     _delete(`/api/${id}`)
   )
 
-  // REVENUE
-  static getRevenues = () => (
-    _get('/revenue')
+  // STAT
+  static getStats = () => (
+    _get('/stats')
   )
 
-  static createRevenue = (body) => (
-    _post('/revenue', body)
-  )
-
-  static updateRevenue = (body) => (
-    _put('/revenue', body)
-  )
-
-  static deleteRevenue = (id) => (
-    _delete(`/revenue/${id}`)
+  static reloadStats = () => (
+    _get('/stats/reload')
   )
 
   // SUBDOMAIN

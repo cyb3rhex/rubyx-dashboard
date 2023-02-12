@@ -10,7 +10,7 @@ import (
 )
 
 const createRootDomain = `-- name: CreateRootDomain :one
-INSERT INTO rootdomain (program_id, url) VALUES ($1, $2) RETURNING id, program_id, url, created_at, updated_at
+INSERT INTO rootdomain (program_id, url) VALUES ($1, $2) RETURNING id, program_id, wildcard, inscope, tag, url, created_at, updated_at
 `
 
 type CreateRootDomainParams struct {
@@ -24,6 +24,9 @@ func (q *Queries) CreateRootDomain(ctx context.Context, arg CreateRootDomainPara
 	err := row.Scan(
 		&i.ID,
 		&i.ProgramID,
+		&i.Wildcard,
+		&i.Inscope,
+		&i.Tag,
 		&i.Url,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -41,7 +44,7 @@ func (q *Queries) DeleteRootDomainByIDs(ctx context.Context, id int64) error {
 }
 
 const findRootDomainByIDs = `-- name: FindRootDomainByIDs :one
-SELECT id, program_id, url, created_at, updated_at FROM rootdomain WHERE id = $1 LIMIT 1
+SELECT id, program_id, wildcard, inscope, tag, url, created_at, updated_at FROM rootdomain WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) FindRootDomainByIDs(ctx context.Context, id int64) (Rootdomain, error) {
@@ -50,6 +53,9 @@ func (q *Queries) FindRootDomainByIDs(ctx context.Context, id int64) (Rootdomain
 	err := row.Scan(
 		&i.ID,
 		&i.ProgramID,
+		&i.Wildcard,
+		&i.Inscope,
+		&i.Tag,
 		&i.Url,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -58,7 +64,7 @@ func (q *Queries) FindRootDomainByIDs(ctx context.Context, id int64) (Rootdomain
 }
 
 const findRootDomains = `-- name: FindRootDomains :many
-SELECT id, program_id, url, created_at, updated_at FROM rootdomain
+SELECT id, program_id, wildcard, inscope, tag, url, created_at, updated_at FROM rootdomain
 `
 
 func (q *Queries) FindRootDomains(ctx context.Context) ([]Rootdomain, error) {
@@ -73,6 +79,9 @@ func (q *Queries) FindRootDomains(ctx context.Context) ([]Rootdomain, error) {
 		if err := rows.Scan(
 			&i.ID,
 			&i.ProgramID,
+			&i.Wildcard,
+			&i.Inscope,
+			&i.Tag,
 			&i.Url,
 			&i.CreatedAt,
 			&i.UpdatedAt,
@@ -88,7 +97,7 @@ func (q *Queries) FindRootDomains(ctx context.Context) ([]Rootdomain, error) {
 }
 
 const updateRootDomain = `-- name: UpdateRootDomain :one
-UPDATE rootdomain SET program_id = $2, url = $3, updated_at = NOW() WHERE id = $1 RETURNING id, program_id, url, created_at, updated_at
+UPDATE rootdomain SET program_id = $2, url = $3, updated_at = NOW() WHERE id = $1 RETURNING id, program_id, wildcard, inscope, tag, url, created_at, updated_at
 `
 
 type UpdateRootDomainParams struct {
@@ -103,6 +112,9 @@ func (q *Queries) UpdateRootDomain(ctx context.Context, arg UpdateRootDomainPara
 	err := row.Scan(
 		&i.ID,
 		&i.ProgramID,
+		&i.Wildcard,
+		&i.Inscope,
+		&i.Tag,
 		&i.Url,
 		&i.CreatedAt,
 		&i.UpdatedAt,

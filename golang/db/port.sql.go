@@ -10,7 +10,7 @@ import (
 )
 
 const createPort = `-- name: CreatePort :one
-INSERT INTO port (ip_id, port, service) VALUES ($1, $2, $3) RETURNING id, ip_id, port, service, created_at, updated_at
+INSERT INTO port (ip_id, port, service) VALUES ($1, $2, $3) RETURNING id, ip_id, port, tag, service, created_at, updated_at
 `
 
 type CreatePortParams struct {
@@ -26,6 +26,7 @@ func (q *Queries) CreatePort(ctx context.Context, arg CreatePortParams) (Port, e
 		&i.ID,
 		&i.IpID,
 		&i.Port,
+		&i.Tag,
 		&i.Service,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -43,7 +44,7 @@ func (q *Queries) DeletePortByIDs(ctx context.Context, id int64) error {
 }
 
 const findPortByIDs = `-- name: FindPortByIDs :one
-SELECT id, ip_id, port, service, created_at, updated_at FROM port WHERE id = $1 LIMIT 1
+SELECT id, ip_id, port, tag, service, created_at, updated_at FROM port WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) FindPortByIDs(ctx context.Context, id int64) (Port, error) {
@@ -53,6 +54,7 @@ func (q *Queries) FindPortByIDs(ctx context.Context, id int64) (Port, error) {
 		&i.ID,
 		&i.IpID,
 		&i.Port,
+		&i.Tag,
 		&i.Service,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -61,7 +63,7 @@ func (q *Queries) FindPortByIDs(ctx context.Context, id int64) (Port, error) {
 }
 
 const findPorts = `-- name: FindPorts :many
-SELECT id, ip_id, port, service, created_at, updated_at FROM port
+SELECT id, ip_id, port, tag, service, created_at, updated_at FROM port
 `
 
 func (q *Queries) FindPorts(ctx context.Context) ([]Port, error) {
@@ -77,6 +79,7 @@ func (q *Queries) FindPorts(ctx context.Context) ([]Port, error) {
 			&i.ID,
 			&i.IpID,
 			&i.Port,
+			&i.Tag,
 			&i.Service,
 			&i.CreatedAt,
 			&i.UpdatedAt,
@@ -92,7 +95,7 @@ func (q *Queries) FindPorts(ctx context.Context) ([]Port, error) {
 }
 
 const updatePort = `-- name: UpdatePort :one
-UPDATE port SET ip_id = $2, port = $3, service = $4, updated_at = NOW() WHERE id = $1 RETURNING id, ip_id, port, service, created_at, updated_at
+UPDATE port SET ip_id = $2, port = $3, service = $4, updated_at = NOW() WHERE id = $1 RETURNING id, ip_id, port, tag, service, created_at, updated_at
 `
 
 type UpdatePortParams struct {
@@ -114,6 +117,7 @@ func (q *Queries) UpdatePort(ctx context.Context, arg UpdatePortParams) (Port, e
 		&i.ID,
 		&i.IpID,
 		&i.Port,
+		&i.Tag,
 		&i.Service,
 		&i.CreatedAt,
 		&i.UpdatedAt,

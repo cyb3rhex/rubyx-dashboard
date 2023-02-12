@@ -52,48 +52,6 @@ func (ns NullPlatformType) Value() (driver.Value, error) {
 	return ns.PlatformType, nil
 }
 
-type PostStatus string
-
-const (
-	PostStatusDraft     PostStatus = "draft"
-	PostStatusPublished PostStatus = "published"
-)
-
-func (e *PostStatus) Scan(src interface{}) error {
-	switch s := src.(type) {
-	case []byte:
-		*e = PostStatus(s)
-	case string:
-		*e = PostStatus(s)
-	default:
-		return fmt.Errorf("unsupported scan type for PostStatus: %T", src)
-	}
-	return nil
-}
-
-type NullPostStatus struct {
-	PostStatus PostStatus
-	Valid      bool // Valid is true if String is not NULL
-}
-
-// Scan implements the Scanner interface.
-func (ns *NullPostStatus) Scan(value interface{}) error {
-	if value == nil {
-		ns.PostStatus, ns.Valid = "", false
-		return nil
-	}
-	ns.Valid = true
-	return ns.PostStatus.Scan(value)
-}
-
-// Value implements the driver Valuer interface.
-func (ns NullPostStatus) Value() (driver.Value, error) {
-	if !ns.Valid {
-		return nil, nil
-	}
-	return ns.PostStatus, nil
-}
-
 type ProgramType string
 
 const (
@@ -134,6 +92,48 @@ func (ns NullProgramType) Value() (driver.Value, error) {
 		return nil, nil
 	}
 	return ns.ProgramType, nil
+}
+
+type ReportStatus string
+
+const (
+	ReportStatusDraft     ReportStatus = "draft"
+	ReportStatusPublished ReportStatus = "published"
+)
+
+func (e *ReportStatus) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = ReportStatus(s)
+	case string:
+		*e = ReportStatus(s)
+	default:
+		return fmt.Errorf("unsupported scan type for ReportStatus: %T", src)
+	}
+	return nil
+}
+
+type NullReportStatus struct {
+	ReportStatus ReportStatus
+	Valid        bool // Valid is true if String is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullReportStatus) Scan(value interface{}) error {
+	if value == nil {
+		ns.ReportStatus, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.ReportStatus.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullReportStatus) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return ns.ReportStatus, nil
 }
 
 type UserStatus string
@@ -191,38 +191,34 @@ type Ip struct {
 	ID          int64     `json:"id"`
 	ProgramID   int64     `json:"program_id"`
 	SubdomainID int64     `json:"subdomain_id"`
+	Tag         string    `json:"tag"`
 	Ip          string    `json:"ip"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 }
 
 type Platform struct {
-	ID        int64        `json:"id"`
-	Name      string       `json:"name"`
-	Slug      string       `json:"slug"`
-	Url       string       `json:"url"`
-	Type      PlatformType `json:"type"`
-	CreatedAt time.Time    `json:"created_at"`
-	UpdatedAt time.Time    `json:"updated_at"`
+	ID             int64        `json:"id"`
+	Name           string       `json:"name"`
+	Slug           string       `json:"slug"`
+	Email          string       `json:"email"`
+	Password       string       `json:"password"`
+	HunterUsername string       `json:"hunter_username"`
+	Otp            string       `json:"otp"`
+	Jwt            string       `json:"jwt"`
+	Type           PlatformType `json:"type"`
+	CreatedAt      time.Time    `json:"created_at"`
+	UpdatedAt      time.Time    `json:"updated_at"`
 }
 
 type Port struct {
 	ID        int64     `json:"id"`
 	IpID      int64     `json:"ip_id"`
 	Port      int32     `json:"port"`
+	Tag       string    `json:"tag"`
 	Service   string    `json:"service"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
-}
-
-type Post struct {
-	ID        int64      `json:"id"`
-	AuthorID  int64      `json:"author_id"`
-	Title     string     `json:"title"`
-	Body      string     `json:"body"`
-	Status    PostStatus `json:"status"`
-	CreatedAt time.Time  `json:"created_at"`
-	UpdatedAt time.Time  `json:"updated_at"`
 }
 
 type Program struct {
@@ -231,10 +227,23 @@ type Program struct {
 	Name       string      `json:"name"`
 	Slug       string      `json:"slug"`
 	Vdp        bool        `json:"vdp"`
+	Tag        string      `json:"tag"`
 	Url        string      `json:"url"`
 	Type       ProgramType `json:"type"`
 	CreatedAt  time.Time   `json:"created_at"`
 	UpdatedAt  time.Time   `json:"updated_at"`
+}
+
+type Report struct {
+	ID              int64        `json:"id"`
+	AuthorID        int64        `json:"author_id"`
+	VulnerabilityID int64        `json:"vulnerability_id"`
+	Title           string       `json:"title"`
+	Body            string       `json:"body"`
+	Tag             string       `json:"tag"`
+	Status          ReportStatus `json:"status"`
+	CreatedAt       time.Time    `json:"created_at"`
+	UpdatedAt       time.Time    `json:"updated_at"`
 }
 
 type Reset struct {
@@ -243,21 +252,30 @@ type Reset struct {
 	CreatedAt time.Time `json:"created_at"`
 }
 
-type Revenue struct {
-	ID              int64     `json:"id"`
-	ProgramID       int64     `json:"program_id"`
-	VulnerabilityID int64     `json:"vulnerability_id"`
-	Money           int32     `json:"money"`
-	CreatedAt       time.Time `json:"created_at"`
-	UpdatedAt       time.Time `json:"updated_at"`
-}
-
 type Rootdomain struct {
 	ID        int64     `json:"id"`
 	ProgramID int64     `json:"program_id"`
+	Wildcard  bool      `json:"wildcard"`
+	Inscope   bool      `json:"inscope"`
+	Tag       string    `json:"tag"`
 	Url       string    `json:"url"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
+}
+
+type Stat struct {
+	ID           int64     `json:"id"`
+	ReportID     string    `json:"report_id"`
+	ReportTitle  string    `json:"report_title"`
+	Severity     string    `json:"severity"`
+	Reward       float32   `json:"reward"`
+	Currency     string    `json:"currency"`
+	Collab       bool      `json:"collab"`
+	ReportStatus string    `json:"report_status"`
+	ReportDate   time.Time `json:"report_date"`
+	PlatformID   int64     `json:"platform_id"`
+	CreatedAt    time.Time `json:"created_at"`
+	UpdatedAt    time.Time `json:"updated_at"`
 }
 
 type Subdomain struct {
@@ -266,6 +284,7 @@ type Subdomain struct {
 	Url           string    `json:"url"`
 	Title         string    `json:"title"`
 	BodyHash      string    `json:"body_hash"`
+	Tag           string    `json:"tag"`
 	StatusCode    int32     `json:"status_code"`
 	Technologies  string    `json:"technologies"`
 	ContentLength int32     `json:"content_length"`
@@ -277,6 +296,7 @@ type Url struct {
 	ID            int64     `json:"id"`
 	SubdomainID   int64     `json:"subdomain_id"`
 	Url           string    `json:"url"`
+	Tag           string    `json:"tag"`
 	Title         string    `json:"title"`
 	BodyHash      string    `json:"body_hash"`
 	StatusCode    int32     `json:"status_code"`
@@ -300,7 +320,8 @@ type User struct {
 type Vulnerability struct {
 	ID        int64     `json:"id"`
 	ProgramID int64     `json:"program_id"`
-	Url       string    `json:"url"`
+	UrlID     int64     `json:"url_id"`
+	Tag       string    `json:"tag"`
 	Type      string    `json:"type"`
 	Severity  string    `json:"severity"`
 	CreatedAt time.Time `json:"created_at"`

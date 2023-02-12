@@ -42,7 +42,7 @@ func GetPort(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request)
 	port, err := env.DB().FindPortByIDs(r.Context(), id)
 	if err != nil {
 		if isNotFound(err) {
-			return write.Error(errors.PostNotFound)
+			return write.Error(errors.ItemNotFound)
 		}
 		return write.Error(err)
 	}

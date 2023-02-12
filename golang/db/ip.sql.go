@@ -10,7 +10,7 @@ import (
 )
 
 const createIp = `-- name: CreateIp :one
-INSERT INTO ip (program_id, subdomain_id, ip) VALUES ($1, $2, $3) RETURNING id, program_id, subdomain_id, ip, created_at, updated_at
+INSERT INTO ip (program_id, subdomain_id, ip) VALUES ($1, $2, $3) RETURNING id, program_id, subdomain_id, tag, ip, created_at, updated_at
 `
 
 type CreateIpParams struct {
@@ -26,6 +26,7 @@ func (q *Queries) CreateIp(ctx context.Context, arg CreateIpParams) (Ip, error) 
 		&i.ID,
 		&i.ProgramID,
 		&i.SubdomainID,
+		&i.Tag,
 		&i.Ip,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -43,7 +44,7 @@ func (q *Queries) DeleteIpByIDs(ctx context.Context, id int64) error {
 }
 
 const findIpByIDs = `-- name: FindIpByIDs :one
-SELECT id, program_id, subdomain_id, ip, created_at, updated_at FROM ip WHERE id = $1 LIMIT 1
+SELECT id, program_id, subdomain_id, tag, ip, created_at, updated_at FROM ip WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) FindIpByIDs(ctx context.Context, id int64) (Ip, error) {
@@ -53,6 +54,7 @@ func (q *Queries) FindIpByIDs(ctx context.Context, id int64) (Ip, error) {
 		&i.ID,
 		&i.ProgramID,
 		&i.SubdomainID,
+		&i.Tag,
 		&i.Ip,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -61,7 +63,7 @@ func (q *Queries) FindIpByIDs(ctx context.Context, id int64) (Ip, error) {
 }
 
 const findIps = `-- name: FindIps :many
-SELECT id, program_id, subdomain_id, ip, created_at, updated_at FROM ip
+SELECT id, program_id, subdomain_id, tag, ip, created_at, updated_at FROM ip
 `
 
 func (q *Queries) FindIps(ctx context.Context) ([]Ip, error) {
@@ -77,6 +79,7 @@ func (q *Queries) FindIps(ctx context.Context) ([]Ip, error) {
 			&i.ID,
 			&i.ProgramID,
 			&i.SubdomainID,
+			&i.Tag,
 			&i.Ip,
 			&i.CreatedAt,
 			&i.UpdatedAt,
@@ -92,7 +95,7 @@ func (q *Queries) FindIps(ctx context.Context) ([]Ip, error) {
 }
 
 const updateIp = `-- name: UpdateIp :one
-UPDATE ip SET program_id = $2, subdomain_id = $3, ip = $4, updated_at = NOW() WHERE id = $1 RETURNING id, program_id, subdomain_id, ip, created_at, updated_at
+UPDATE ip SET program_id = $2, subdomain_id = $3, ip = $4, updated_at = NOW() WHERE id = $1 RETURNING id, program_id, subdomain_id, tag, ip, created_at, updated_at
 `
 
 type UpdateIpParams struct {
@@ -114,6 +117,7 @@ func (q *Queries) UpdateIp(ctx context.Context, arg UpdateIpParams) (Ip, error) 
 		&i.ID,
 		&i.ProgramID,
 		&i.SubdomainID,
+		&i.Tag,
 		&i.Ip,
 		&i.CreatedAt,
 		&i.UpdatedAt,

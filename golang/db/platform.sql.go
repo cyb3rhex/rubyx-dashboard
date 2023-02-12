@@ -10,21 +10,29 @@ import (
 )
 
 const createPlatform = `-- name: CreatePlatform :one
-INSERT INTO platform (name, slug, url, type) VALUES ($1, $2, $3, $4) RETURNING id, name, slug, url, type, created_at, updated_at
+INSERT INTO platform (name, slug, email, password, otp, hunter_username, jwt, type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id, name, slug, email, password, hunter_username, otp, jwt, type, created_at, updated_at
 `
 
 type CreatePlatformParams struct {
-	Name string       `json:"name"`
-	Slug string       `json:"slug"`
-	Url  string       `json:"url"`
-	Type PlatformType `json:"type"`
+	Name           string       `json:"name"`
+	Slug           string       `json:"slug"`
+	Email          string       `json:"email"`
+	Password       string       `json:"password"`
+	Otp            string       `json:"otp"`
+	HunterUsername string       `json:"hunter_username"`
+	Jwt            string       `json:"jwt"`
+	Type           PlatformType `json:"type"`
 }
 
 func (q *Queries) CreatePlatform(ctx context.Context, arg CreatePlatformParams) (Platform, error) {
 	row := q.db.QueryRow(ctx, createPlatform,
 		arg.Name,
 		arg.Slug,
-		arg.Url,
+		arg.Email,
+		arg.Password,
+		arg.Otp,
+		arg.HunterUsername,
+		arg.Jwt,
 		arg.Type,
 	)
 	var i Platform
@@ -32,7 +40,11 @@ func (q *Queries) CreatePlatform(ctx context.Context, arg CreatePlatformParams) 
 		&i.ID,
 		&i.Name,
 		&i.Slug,
-		&i.Url,
+		&i.Email,
+		&i.Password,
+		&i.HunterUsername,
+		&i.Otp,
+		&i.Jwt,
 		&i.Type,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -50,30 +62,74 @@ func (q *Queries) DeletePlatformByIDs(ctx context.Context, id int64) error {
 }
 
 const findPlatformByIDs = `-- name: FindPlatformByIDs :one
-SELECT id, name, slug, url, type, created_at, updated_at FROM platform WHERE id = $1 LIMIT 1
+SELECT name, slug, email, hunter_username, type FROM platform WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) FindPlatformByIDs(ctx context.Context, id int64) (Platform, error) {
+type FindPlatformByIDsRow struct {
+	Name           string       `json:"name"`
+	Slug           string       `json:"slug"`
+	Email          string       `json:"email"`
+	HunterUsername string       `json:"hunter_username"`
+	Type           PlatformType `json:"type"`
+}
+
+func (q *Queries) FindPlatformByIDs(ctx context.Context, id int64) (FindPlatformByIDsRow, error) {
 	row := q.db.QueryRow(ctx, findPlatformByIDs, id)
-	var i Platform
+	var i FindPlatformByIDsRow
 	err := row.Scan(
-		&i.ID,
 		&i.Name,
 		&i.Slug,
-		&i.Url,
+		&i.Email,
+		&i.HunterUsername,
 		&i.Type,
-		&i.CreatedAt,
-		&i.UpdatedAt,
 	)
 	return i, err
 }
 
 const findPlatforms = `-- name: FindPlatforms :many
-SELECT id, name, slug, url, type, created_at, updated_at FROM platform
+SELECT name, slug, email, hunter_username, type FROM platform
 `
 
-func (q *Queries) FindPlatforms(ctx context.Context) ([]Platform, error) {
+type FindPlatformsRow struct {
+	Name           string       `json:"name"`
+	Slug           string       `json:"slug"`
+	Email          string       `json:"email"`
+	HunterUsername string       `json:"hunter_username"`
+	Type           PlatformType `json:"type"`
+}
+
+func (q *Queries) FindPlatforms(ctx context.Context) ([]FindPlatformsRow, error) {
 	rows, err := q.db.Query(ctx, findPlatforms)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []FindPlatformsRow{}
+	for rows.Next() {
+		var i FindPlatformsRow
+		if err := rows.Scan(
+			&i.Name,
+			&i.Slug,
+			&i.Email,
+			&i.HunterUsername,
+			&i.Type,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getPlatforms = `-- name: GetPlatforms :many
+SELECT id, name, slug, email, password, hunter_username, otp, jwt, type, created_at, updated_at FROM platform
+`
+
+func (q *Queries) GetPlatforms(ctx context.Context) ([]Platform, error) {
+	rows, err := q.db.Query(ctx, getPlatforms)
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +141,11 @@ func (q *Queries) FindPlatforms(ctx context.Context) ([]Platform, error) {
 			&i.ID,
 			&i.Name,
 			&i.Slug,
-			&i.Url,
+			&i.Email,
+			&i.Password,
+			&i.HunterUsername,
+			&i.Otp,
+			&i.Jwt,
 			&i.Type,
 			&i.CreatedAt,
 			&i.UpdatedAt,
@@ -101,15 +161,19 @@ func (q *Queries) FindPlatforms(ctx context.Context) ([]Platform, error) {
 }
 
 const updatePlatform = `-- name: UpdatePlatform :one
-UPDATE platform SET name = $2, slug = $3, url = $4, type = $5, updated_at = NOW() WHERE id = $1 RETURNING id, name, slug, url, type, created_at, updated_at
+UPDATE platform SET name = $2, slug = $3, email = $4, password = $5, otp = $6, type = $7, hunter_username = $8, jwt = $9, updated_at = NOW() WHERE id = $1 RETURNING id, name, slug, email, password, hunter_username, otp, jwt, type, created_at, updated_at
 `
 
 type UpdatePlatformParams struct {
-	ID   int64        `json:"id"`
-	Name string       `json:"name"`
-	Slug string       `json:"slug"`
-	Url  string       `json:"url"`
-	Type PlatformType `json:"type"`
+	ID             int64        `json:"id"`
+	Name           string       `json:"name"`
+	Slug           string       `json:"slug"`
+	Email          string       `json:"email"`
+	Password       string       `json:"password"`
+	Otp            string       `json:"otp"`
+	Type           PlatformType `json:"type"`
+	HunterUsername string       `json:"hunter_username"`
+	Jwt            string       `json:"jwt"`
 }
 
 func (q *Queries) UpdatePlatform(ctx context.Context, arg UpdatePlatformParams) (Platform, error) {
@@ -117,15 +181,23 @@ func (q *Queries) UpdatePlatform(ctx context.Context, arg UpdatePlatformParams) 
 		arg.ID,
 		arg.Name,
 		arg.Slug,
-		arg.Url,
+		arg.Email,
+		arg.Password,
+		arg.Otp,
 		arg.Type,
+		arg.HunterUsername,
+		arg.Jwt,
 	)
 	var i Platform
 	err := row.Scan(
 		&i.ID,
 		&i.Name,
 		&i.Slug,
-		&i.Url,
+		&i.Email,
+		&i.Password,
+		&i.HunterUsername,
+		&i.Otp,
+		&i.Jwt,
 		&i.Type,
 		&i.CreatedAt,
 		&i.UpdatedAt,

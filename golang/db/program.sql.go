@@ -10,7 +10,7 @@ import (
 )
 
 const createProgram = `-- name: CreateProgram :one
-INSERT INTO program (platform_id, name, slug, vdp, url, type) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, platform_id, name, slug, vdp, url, type, created_at, updated_at
+INSERT INTO program (platform_id, name, slug, vdp, url, type) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, platform_id, name, slug, vdp, tag, url, type, created_at, updated_at
 `
 
 type CreateProgramParams struct {
@@ -38,6 +38,7 @@ func (q *Queries) CreateProgram(ctx context.Context, arg CreateProgramParams) (P
 		&i.Name,
 		&i.Slug,
 		&i.Vdp,
+		&i.Tag,
 		&i.Url,
 		&i.Type,
 		&i.CreatedAt,
@@ -65,7 +66,7 @@ func (q *Queries) DeleteProgramBySlug(ctx context.Context, slug string) error {
 }
 
 const findProgramByIDs = `-- name: FindProgramByIDs :one
-SELECT id, platform_id, name, slug, vdp, url, type, created_at, updated_at FROM program WHERE id = $1 LIMIT 1
+SELECT id, platform_id, name, slug, vdp, tag, url, type, created_at, updated_at FROM program WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) FindProgramByIDs(ctx context.Context, id int64) (Program, error) {
@@ -77,6 +78,7 @@ func (q *Queries) FindProgramByIDs(ctx context.Context, id int64) (Program, erro
 		&i.Name,
 		&i.Slug,
 		&i.Vdp,
+		&i.Tag,
 		&i.Url,
 		&i.Type,
 		&i.CreatedAt,
@@ -86,7 +88,7 @@ func (q *Queries) FindProgramByIDs(ctx context.Context, id int64) (Program, erro
 }
 
 const findProgramBySlug = `-- name: FindProgramBySlug :one
-SELECT id, platform_id, name, slug, vdp, url, type, created_at, updated_at FROM program WHERE slug = $1 LIMIT 1
+SELECT id, platform_id, name, slug, vdp, tag, url, type, created_at, updated_at FROM program WHERE slug = $1 LIMIT 1
 `
 
 func (q *Queries) FindProgramBySlug(ctx context.Context, slug string) (Program, error) {
@@ -98,6 +100,7 @@ func (q *Queries) FindProgramBySlug(ctx context.Context, slug string) (Program, 
 		&i.Name,
 		&i.Slug,
 		&i.Vdp,
+		&i.Tag,
 		&i.Url,
 		&i.Type,
 		&i.CreatedAt,
@@ -107,7 +110,7 @@ func (q *Queries) FindProgramBySlug(ctx context.Context, slug string) (Program, 
 }
 
 const findPrograms = `-- name: FindPrograms :many
-SELECT id, platform_id, name, slug, vdp, url, type, created_at, updated_at FROM program
+SELECT id, platform_id, name, slug, vdp, tag, url, type, created_at, updated_at FROM program
 `
 
 func (q *Queries) FindPrograms(ctx context.Context) ([]Program, error) {
@@ -125,6 +128,7 @@ func (q *Queries) FindPrograms(ctx context.Context) ([]Program, error) {
 			&i.Name,
 			&i.Slug,
 			&i.Vdp,
+			&i.Tag,
 			&i.Url,
 			&i.Type,
 			&i.CreatedAt,
@@ -141,7 +145,7 @@ func (q *Queries) FindPrograms(ctx context.Context) ([]Program, error) {
 }
 
 const updateProgram = `-- name: UpdateProgram :one
-UPDATE program SET platform_id = $2, name = $3, slug = $4, vdp = $5, url = $6, type = $7, updated_at = NOW() WHERE id = $1 RETURNING id, platform_id, name, slug, vdp, url, type, created_at, updated_at
+UPDATE program SET platform_id = $2, name = $3, slug = $4, vdp = $5, url = $6, type = $7, updated_at = NOW() WHERE id = $1 RETURNING id, platform_id, name, slug, vdp, tag, url, type, created_at, updated_at
 `
 
 type UpdateProgramParams struct {
@@ -171,6 +175,7 @@ func (q *Queries) UpdateProgram(ctx context.Context, arg UpdateProgramParams) (P
 		&i.Name,
 		&i.Slug,
 		&i.Vdp,
+		&i.Tag,
 		&i.Url,
 		&i.Type,
 		&i.CreatedAt,

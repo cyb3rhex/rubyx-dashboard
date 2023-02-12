@@ -1,0 +1,2 @@
+DROP SCHEMA stats;
+DROP TABLE stats;

@@ -125,21 +125,6 @@ func (mr *MockQuerierMockRecorder) CreateReset(ctx, arg interface{}) *gomock.Cal
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateReset", reflect.TypeOf((*MockQuerier)(nil).CreateReset), ctx, arg)
 }
 
-// CreateRevenue mocks base method.
-func (m *MockQuerier) CreateRevenue(ctx context.Context, arg db.CreateRevenueParams) (db.Revenue, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateRevenue", ctx, arg)
-	ret0, _ := ret[0].(db.Revenue)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CreateRevenue indicates an expected call of CreateRevenue.
-func (mr *MockQuerierMockRecorder) CreateRevenue(ctx, arg interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateRevenue", reflect.TypeOf((*MockQuerier)(nil).CreateRevenue), ctx, arg)
-}
-
 // CreateRootDomain mocks base method.
 func (m *MockQuerier) CreateRootDomain(ctx context.Context, arg db.CreateRootDomainParams) (db.Rootdomain, error) {
 	m.ctrl.T.Helper()
@@ -153,6 +138,21 @@ func (m *MockQuerier) CreateRootDomain(ctx context.Context, arg db.CreateRootDom
 func (mr *MockQuerierMockRecorder) CreateRootDomain(ctx, arg interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateRootDomain", reflect.TypeOf((*MockQuerier)(nil).CreateRootDomain), ctx, arg)
+}
+
+// CreateStat mocks base method.
+func (m *MockQuerier) CreateStat(ctx context.Context, arg db.CreateStatParams) (db.Stat, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateStat", ctx, arg)
+	ret0, _ := ret[0].(db.Stat)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateStat indicates an expected call of CreateStat.
+func (mr *MockQuerierMockRecorder) CreateStat(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateStat", reflect.TypeOf((*MockQuerier)(nil).CreateStat), ctx, arg)
 }
 
 // CreateSubdomain mocks base method.
@@ -313,20 +313,6 @@ func (mr *MockQuerierMockRecorder) DeleteResetsForUser(ctx, userID interface{}) 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteResetsForUser", reflect.TypeOf((*MockQuerier)(nil).DeleteResetsForUser), ctx, userID)
 }
 
-// DeleteRevenueByIDs mocks base method.
-func (m *MockQuerier) DeleteRevenueByIDs(ctx context.Context, id int64) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteRevenueByIDs", ctx, id)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// DeleteRevenueByIDs indicates an expected call of DeleteRevenueByIDs.
-func (mr *MockQuerierMockRecorder) DeleteRevenueByIDs(ctx, id interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteRevenueByIDs", reflect.TypeOf((*MockQuerier)(nil).DeleteRevenueByIDs), ctx, id)
-}
-
 // DeleteRootDomainByIDs mocks base method.
 func (m *MockQuerier) DeleteRootDomainByIDs(ctx context.Context, id int64) error {
 	m.ctrl.T.Helper()
@@ -339,6 +325,20 @@ func (m *MockQuerier) DeleteRootDomainByIDs(ctx context.Context, id int64) error
 func (mr *MockQuerierMockRecorder) DeleteRootDomainByIDs(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteRootDomainByIDs", reflect.TypeOf((*MockQuerier)(nil).DeleteRootDomainByIDs), ctx, id)
+}
+
+// DeleteStatByID mocks base method.
+func (m *MockQuerier) DeleteStatByID(ctx context.Context, id int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteStatByID", ctx, id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteStatByID indicates an expected call of DeleteStatByID.
+func (mr *MockQuerierMockRecorder) DeleteStatByID(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteStatByID", reflect.TypeOf((*MockQuerier)(nil).DeleteStatByID), ctx, id)
 }
 
 // DeleteSubdomainByIDs mocks base method.
@@ -444,10 +444,10 @@ func (mr *MockQuerierMockRecorder) FindIps(ctx interface{}) *gomock.Call {
 }
 
 // FindPlatformByIDs mocks base method.
-func (m *MockQuerier) FindPlatformByIDs(ctx context.Context, id int64) (db.Platform, error) {
+func (m *MockQuerier) FindPlatformByIDs(ctx context.Context, id int64) (db.FindPlatformByIDsRow, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindPlatformByIDs", ctx, id)
-	ret0, _ := ret[0].(db.Platform)
+	ret0, _ := ret[0].(db.FindPlatformByIDsRow)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -459,10 +459,10 @@ func (mr *MockQuerierMockRecorder) FindPlatformByIDs(ctx, id interface{}) *gomoc
 }
 
 // FindPlatforms mocks base method.
-func (m *MockQuerier) FindPlatforms(ctx context.Context) ([]db.Platform, error) {
+func (m *MockQuerier) FindPlatforms(ctx context.Context) ([]db.FindPlatformsRow, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindPlatforms", ctx)
-	ret0, _ := ret[0].([]db.Platform)
+	ret0, _ := ret[0].([]db.FindPlatformsRow)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -563,36 +563,6 @@ func (mr *MockQuerierMockRecorder) FindResetByCode(ctx, code interface{}) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindResetByCode", reflect.TypeOf((*MockQuerier)(nil).FindResetByCode), ctx, code)
 }
 
-// FindRevenueByIDs mocks base method.
-func (m *MockQuerier) FindRevenueByIDs(ctx context.Context, id int64) (db.Revenue, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindRevenueByIDs", ctx, id)
-	ret0, _ := ret[0].(db.Revenue)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindRevenueByIDs indicates an expected call of FindRevenueByIDs.
-func (mr *MockQuerierMockRecorder) FindRevenueByIDs(ctx, id interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindRevenueByIDs", reflect.TypeOf((*MockQuerier)(nil).FindRevenueByIDs), ctx, id)
-}
-
-// FindRevenues mocks base method.
-func (m *MockQuerier) FindRevenues(ctx context.Context) ([]db.Revenue, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindRevenues", ctx)
-	ret0, _ := ret[0].([]db.Revenue)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindRevenues indicates an expected call of FindRevenues.
-func (mr *MockQuerierMockRecorder) FindRevenues(ctx interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindRevenues", reflect.TypeOf((*MockQuerier)(nil).FindRevenues), ctx)
-}
-
 // FindRootDomainByIDs mocks base method.
 func (m *MockQuerier) FindRootDomainByIDs(ctx context.Context, id int64) (db.Rootdomain, error) {
 	m.ctrl.T.Helper()
@@ -621,6 +591,51 @@ func (m *MockQuerier) FindRootDomains(ctx context.Context) ([]db.Rootdomain, err
 func (mr *MockQuerierMockRecorder) FindRootDomains(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindRootDomains", reflect.TypeOf((*MockQuerier)(nil).FindRootDomains), ctx)
+}
+
+// FindStatByID mocks base method.
+func (m *MockQuerier) FindStatByID(ctx context.Context, id int64) (db.Stat, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindStatByID", ctx, id)
+	ret0, _ := ret[0].(db.Stat)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindStatByID indicates an expected call of FindStatByID.
+func (mr *MockQuerierMockRecorder) FindStatByID(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindStatByID", reflect.TypeOf((*MockQuerier)(nil).FindStatByID), ctx, id)
+}
+
+// FindStatByReportID mocks base method.
+func (m *MockQuerier) FindStatByReportID(ctx context.Context, reportID string) (db.Stat, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindStatByReportID", ctx, reportID)
+	ret0, _ := ret[0].(db.Stat)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindStatByReportID indicates an expected call of FindStatByReportID.
+func (mr *MockQuerierMockRecorder) FindStatByReportID(ctx, reportID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindStatByReportID", reflect.TypeOf((*MockQuerier)(nil).FindStatByReportID), ctx, reportID)
+}
+
+// FindStats mocks base method.
+func (m *MockQuerier) FindStats(ctx context.Context) ([]db.Stat, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindStats", ctx)
+	ret0, _ := ret[0].([]db.Stat)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindStats indicates an expected call of FindStats.
+func (mr *MockQuerierMockRecorder) FindStats(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindStats", reflect.TypeOf((*MockQuerier)(nil).FindStats), ctx)
 }
 
 // FindSubdomainByIDs mocks base method.
@@ -773,6 +788,21 @@ func (mr *MockQuerierMockRecorder) FindVulnerabilitys(ctx interface{}) *gomock.C
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindVulnerabilitys", reflect.TypeOf((*MockQuerier)(nil).FindVulnerabilitys), ctx)
 }
 
+// GetPlatforms mocks base method.
+func (m *MockQuerier) GetPlatforms(ctx context.Context) ([]db.Platform, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetPlatforms", ctx)
+	ret0, _ := ret[0].([]db.Platform)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetPlatforms indicates an expected call of GetPlatforms.
+func (mr *MockQuerierMockRecorder) GetPlatforms(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPlatforms", reflect.TypeOf((*MockQuerier)(nil).GetPlatforms), ctx)
+}
+
 // UpdateIp mocks base method.
 func (m *MockQuerier) UpdateIp(ctx context.Context, arg db.UpdateIpParams) (db.Ip, error) {
 	m.ctrl.T.Helper()
@@ -833,21 +863,6 @@ func (mr *MockQuerierMockRecorder) UpdateProgram(ctx, arg interface{}) *gomock.C
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateProgram", reflect.TypeOf((*MockQuerier)(nil).UpdateProgram), ctx, arg)
 }
 
-// UpdateRevenue mocks base method.
-func (m *MockQuerier) UpdateRevenue(ctx context.Context, arg db.UpdateRevenueParams) (db.Revenue, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateRevenue", ctx, arg)
-	ret0, _ := ret[0].(db.Revenue)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// UpdateRevenue indicates an expected call of UpdateRevenue.
-func (mr *MockQuerierMockRecorder) UpdateRevenue(ctx, arg interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateRevenue", reflect.TypeOf((*MockQuerier)(nil).UpdateRevenue), ctx, arg)
-}
-
 // UpdateRootDomain mocks base method.
 func (m *MockQuerier) UpdateRootDomain(ctx context.Context, arg db.UpdateRootDomainParams) (db.Rootdomain, error) {
 	m.ctrl.T.Helper()
@@ -861,6 +876,21 @@ func (m *MockQuerier) UpdateRootDomain(ctx context.Context, arg db.UpdateRootDom
 func (mr *MockQuerierMockRecorder) UpdateRootDomain(ctx, arg interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateRootDomain", reflect.TypeOf((*MockQuerier)(nil).UpdateRootDomain), ctx, arg)
+}
+
+// UpdateStat mocks base method.
+func (m *MockQuerier) UpdateStat(ctx context.Context, arg db.UpdateStatParams) (db.Stat, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateStat", ctx, arg)
+	ret0, _ := ret[0].(db.Stat)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateStat indicates an expected call of UpdateStat.
+func (mr *MockQuerierMockRecorder) UpdateStat(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateStat", reflect.TypeOf((*MockQuerier)(nil).UpdateStat), ctx, arg)
 }
 
 // UpdateSubdomain mocks base method.

@@ -69,13 +69,6 @@ func (srv *server) ConfigureRouter() {
 	srv.PUT("/ip", handlers.UpdateIp)
 	srv.DELETE("/ip/:id", handlers.DeleteIp)
 
-	// REVENUE
-	srv.GET("/revenue", handlers.GetRevenues)
-	srv.GET("/revenue/:id", handlers.GetRevenue)
-	srv.POST("/revenue", handlers.CreateRevenue)
-	srv.PUT("/revenue", handlers.UpdateRevenue)
-	srv.DELETE("/revenue/:id", handlers.DeleteRevenue)
-
 	// ROOTDOMAIN
 	srv.GET("/rootdomain", handlers.GetRootDomains)
 	srv.GET("/rootdomain/:id", handlers.GetRootDomain)
@@ -90,6 +83,11 @@ func (srv *server) ConfigureRouter() {
 	srv.POST("/subdomain", handlers.CreateSubdomain)
 	srv.PUT("/subdomain", handlers.UpdateSubdomain)
 	srv.DELETE("/subdomain/:id", handlers.DeleteSubdomain)
+
+	// STATS
+	srv.GET("/stats", handlers.GetStats)
+	srv.GET("/stat/one/:id", handlers.GetStat)
+	srv.GET("/stats/reload", handlers.ReloadStats)
 
 	// URL
 	srv.GET("/url", handlers.GetUrls)

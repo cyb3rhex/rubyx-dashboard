@@ -45,7 +45,7 @@ func GetProgram(env env.Env, user *db.User, w http.ResponseWriter, r *http.Reque
 	program, err := env.DB().FindProgramByIDs(r.Context(), id)
 	if err != nil {
 		if isNotFound(err) {
-			return write.Error(errors.PostNotFound)
+			return write.Error(errors.ItemNotFound)
 		}
 		return write.Error(err)
 	}
@@ -63,7 +63,7 @@ func GetProgramBySlug(env env.Env, user *db.User, w http.ResponseWriter, r *http
 	program, err := env.DB().FindProgramBySlug(r.Context(), slug)
 	if err != nil {
 		if isNotFound(err) {
-			return write.Error(errors.PostNotFound)
+			return write.Error(errors.ItemNotFound)
 		}
 		return write.Error(err)
 	}

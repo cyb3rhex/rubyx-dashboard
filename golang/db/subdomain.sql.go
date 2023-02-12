@@ -10,7 +10,7 @@ import (
 )
 
 const createSubdomain = `-- name: CreateSubdomain :one
-INSERT INTO subdomain (program_id, url, title, body_hash, status_code, technologies, content_length) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, program_id, url, title, body_hash, status_code, technologies, content_length, created_at, updated_at
+INSERT INTO subdomain (program_id, url, title, body_hash, status_code, technologies, content_length) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, program_id, url, title, body_hash, tag, status_code, technologies, content_length, created_at, updated_at
 `
 
 type CreateSubdomainParams struct {
@@ -40,6 +40,7 @@ func (q *Queries) CreateSubdomain(ctx context.Context, arg CreateSubdomainParams
 		&i.Url,
 		&i.Title,
 		&i.BodyHash,
+		&i.Tag,
 		&i.StatusCode,
 		&i.Technologies,
 		&i.ContentLength,
@@ -59,7 +60,7 @@ func (q *Queries) DeleteSubdomainByIDs(ctx context.Context, id int64) error {
 }
 
 const findSubdomainByIDs = `-- name: FindSubdomainByIDs :one
-SELECT id, program_id, url, title, body_hash, status_code, technologies, content_length, created_at, updated_at FROM subdomain WHERE id = $1 LIMIT 1
+SELECT id, program_id, url, title, body_hash, tag, status_code, technologies, content_length, created_at, updated_at FROM subdomain WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) FindSubdomainByIDs(ctx context.Context, id int64) (Subdomain, error) {
@@ -71,6 +72,7 @@ func (q *Queries) FindSubdomainByIDs(ctx context.Context, id int64) (Subdomain, 
 		&i.Url,
 		&i.Title,
 		&i.BodyHash,
+		&i.Tag,
 		&i.StatusCode,
 		&i.Technologies,
 		&i.ContentLength,
@@ -81,7 +83,7 @@ func (q *Queries) FindSubdomainByIDs(ctx context.Context, id int64) (Subdomain, 
 }
 
 const findSubdomainByProgram = `-- name: FindSubdomainByProgram :many
-SELECT id, program_id, url, title, body_hash, status_code, technologies, content_length, created_at, updated_at FROM subdomain WHERE program_id = $1
+SELECT id, program_id, url, title, body_hash, tag, status_code, technologies, content_length, created_at, updated_at FROM subdomain WHERE program_id = $1
 `
 
 func (q *Queries) FindSubdomainByProgram(ctx context.Context, programID int64) ([]Subdomain, error) {
@@ -99,6 +101,7 @@ func (q *Queries) FindSubdomainByProgram(ctx context.Context, programID int64) (
 			&i.Url,
 			&i.Title,
 			&i.BodyHash,
+			&i.Tag,
 			&i.StatusCode,
 			&i.Technologies,
 			&i.ContentLength,
@@ -116,7 +119,7 @@ func (q *Queries) FindSubdomainByProgram(ctx context.Context, programID int64) (
 }
 
 const findSubdomains = `-- name: FindSubdomains :many
-SELECT id, program_id, url, title, body_hash, status_code, technologies, content_length, created_at, updated_at FROM subdomain
+SELECT id, program_id, url, title, body_hash, tag, status_code, technologies, content_length, created_at, updated_at FROM subdomain
 `
 
 func (q *Queries) FindSubdomains(ctx context.Context) ([]Subdomain, error) {
@@ -134,6 +137,7 @@ func (q *Queries) FindSubdomains(ctx context.Context) ([]Subdomain, error) {
 			&i.Url,
 			&i.Title,
 			&i.BodyHash,
+			&i.Tag,
 			&i.StatusCode,
 			&i.Technologies,
 			&i.ContentLength,
@@ -151,7 +155,7 @@ func (q *Queries) FindSubdomains(ctx context.Context) ([]Subdomain, error) {
 }
 
 const updateSubdomain = `-- name: UpdateSubdomain :one
-UPDATE subdomain SET program_id = $2, url = $3, title = $4, body_hash = $5, status_code = $6, technologies = $7, content_length = $8, updated_at = NOW() WHERE id = $1 RETURNING id, program_id, url, title, body_hash, status_code, technologies, content_length, created_at, updated_at
+UPDATE subdomain SET program_id = $2, url = $3, title = $4, body_hash = $5, status_code = $6, technologies = $7, content_length = $8, updated_at = NOW() WHERE id = $1 RETURNING id, program_id, url, title, body_hash, tag, status_code, technologies, content_length, created_at, updated_at
 `
 
 type UpdateSubdomainParams struct {
@@ -183,6 +187,7 @@ func (q *Queries) UpdateSubdomain(ctx context.Context, arg UpdateSubdomainParams
 		&i.Url,
 		&i.Title,
 		&i.BodyHash,
+		&i.Tag,
 		&i.StatusCode,
 		&i.Technologies,
 		&i.ContentLength,

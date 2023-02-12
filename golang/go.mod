@@ -11,6 +11,7 @@ require (
 )
 
 require (
+	github.com/boombuler/barcode v1.0.1-0.20190219062509-6c824513bacc // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect
@@ -21,6 +22,7 @@ require (
 	github.com/jackc/puddle v1.3.0 // indirect
 	github.com/kr/pretty v0.2.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/pquerna/otp v1.4.0 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
