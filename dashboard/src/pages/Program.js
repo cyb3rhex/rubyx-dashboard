@@ -149,20 +149,17 @@ function Program() {
 
       <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
         <div className="py-3">
-          <Button onClick={openModal}>Add a Program</Button>
-        </div>
-        <div className="py-3">
           <Button onClick={() => handleReloadPrograms()}>Reload Programs</Button>
         </div>
 
         {totalResults > 0 && (
-          <TableContainer className="mb-8">
+          <div className="overflow-x-auto">
+          <TableContainer className="mb-8 w-full sm:w-auto">
             <Table>
               <TableHeader>
                 <tr>
                   <TableCell>Name</TableCell>
-                  <TableCell>Url</TableCell>
-                  <TableCell>Type</TableCell>
+                  <TableCell className="hidden sm:table-cell">Type</TableCell>
                   <TableCell>Scope</TableCell>
                   <TableCell>Platform</TableCell>
                   <TableCell>Actions</TableCell>
@@ -172,17 +169,15 @@ function Program() {
                 {dataTable && dataTable.map((key, i) => (
                   <TableRow key={i}>
                     <TableCell>
-                      <span className="text-sm">{key.name}</span>
-                    </TableCell>
-                    <TableCell>
                       <a
                         className="text-sm truncate text-ellipsis overflow-hidden"
                         href={key.url}
+                        target="_blank"
                       >
-                        {key.url}
+                        {key.name}
                       </a>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="hidden sm:table-cell">
                       <span className="text-sm">
                         {key.type === "public" ? "Public" : "Private"}
                       </span>
@@ -234,6 +229,7 @@ function Program() {
               />
             </TableFooter>
           </TableContainer>
+        </div>
         )}
 
         <Modal isOpen={isModalOpen} onClose={closeModal}>

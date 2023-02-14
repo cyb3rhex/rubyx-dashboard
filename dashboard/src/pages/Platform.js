@@ -191,6 +191,7 @@ function Platform() {
               <span>Name</span>
               <Select value={type} onChange={(e) => setName(e.target.value)} className="mt-1">
                 <option value="yeswehack">YesWeHack</option>
+                <option value="hackerone">HackerOne</option>
               </Select>
             </Label>
 

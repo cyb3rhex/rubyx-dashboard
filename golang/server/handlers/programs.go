@@ -23,7 +23,9 @@ func ReloadPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.R
 
 	for _, p := range platform {
 		if p.Name == "yeswehack" {
-			utils.UpdatePrograms(&p, 0, env, r.Context())
+			utils.UpdateProgramsYWH(&p, 0, env, r.Context())
+		} else if p.Name == "hackerone" {
+			utils.UpdateProgramsH1(&p, 0, env, r.Context())
 		}
 	}
 

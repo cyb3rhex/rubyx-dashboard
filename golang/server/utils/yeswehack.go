@@ -14,7 +14,7 @@ import (
 	"github.com/pquerna/otp/totp"
 )
 
-type ProgramsInfos struct {
+type ProgramsInfosYWH struct {
 	NbPages  int
 	Programs []interface{}
 }
@@ -26,18 +26,18 @@ type ProgramResponse struct {
 	Scopes []string `json:"scopes"`
 }
 
-func GetJWT(platform *db.Platform) (string, error) {
+func GetJWTYWH(platform *db.Platform) (string, error) {
 	if platform.Jwt != "" && time.Since(platform.UpdatedAt) <= 3500*time.Second {
 		return platform.Jwt, nil
 	}
 
-	totpToken, err := GetTOTPToken(platform)
+	totpToken, err := GetTOTPTokenYWH(platform)
 	if err != nil {
 		fmt.Println(err)
 		return "", err
 	}
 
-	jwtToken, err := GetJWTToken(platform, totpToken)
+	jwtToken, err := GetJWTTokenYWH(platform, totpToken)
 	if err != nil {
 		fmt.Println(err)
 		return "", err
@@ -49,7 +49,7 @@ func GetJWT(platform *db.Platform) (string, error) {
 	return jwtToken, nil
 }
 
-func GetTOTPToken(platform *db.Platform) (string, error) {
+func GetTOTPTokenYWH(platform *db.Platform) (string, error) {
 	data := map[string]string{
 		"email":    platform.Email,
 		"password": platform.Password,
@@ -59,7 +59,7 @@ func GetTOTPToken(platform *db.Platform) (string, error) {
 		return "", err
 	}
 
-	response, err := apiPostRequest("https://api.yeswehack.com/login", jsonData, platform)
+	response, err := apiPostRequestYWH("https://api.yeswehack.com/login", jsonData, platform)
 	if err != nil {
 		return "", err
 	}
@@ -83,7 +83,7 @@ func GetTOTPToken(platform *db.Platform) (string, error) {
 	return totpToken, nil
 }
 
-func GetJWTToken(platform *db.Platform, totpToken string) (string, error) {
+func GetJWTTokenYWH(platform *db.Platform, totpToken string) (string, error) {
 	code, err := totp.GenerateCode(platform.Otp, time.Now())
 	if err != nil {
 		fmt.Println("Error in generation of TOTP", err)
@@ -99,7 +99,7 @@ func GetJWTToken(platform *db.Platform, totpToken string) (string, error) {
 		return "", err
 	}
 
-	response, err := apiPostRequest("https://api.yeswehack.com/account/totp", jsonData, platform)
+	response, err := apiPostRequestYWH("https://api.yeswehack.com/account/totp", jsonData, platform)
 	if err != nil {
 		return "", err
 	}
@@ -123,13 +123,13 @@ func GetJWTToken(platform *db.Platform, totpToken string) (string, error) {
 	return jwtToken, nil
 }
 
-func GetUsername(platform *db.Platform) (string, error) {
-	_, err := GetJWT(platform)
+func GetUsernameYWH(platform *db.Platform) (string, error) {
+	_, err := GetJWTYWH(platform)
 	if err != nil {
 		return "", err
 	}
 
-	response, err := apiGetRequest("https://api.yeswehack.com/user", platform)
+	response, err := apiGetRequestYWH("https://api.yeswehack.com/user", platform)
 	if err != nil {
 		return "", err
 	}
@@ -153,22 +153,22 @@ func GetUsername(platform *db.Platform) (string, error) {
 	return username, nil
 }
 
-func UpdatePrograms(platform *db.Platform, pageID int, env env.Env, ctx context.Context) {
-	GetJWT(platform)
+func UpdateProgramsYWH(platform *db.Platform, pageID int, env env.Env, ctx context.Context) {
+	GetJWTYWH(platform)
 
-	programsInfos := GetProgramsInfos(platform, pageID)
+	programsInfos := GetProgramsInfosYWH(platform, pageID)
 	if programsInfos == nil {
 		return
 	}
 
-	ParsePrograms(programsInfos.Programs, platform, env, ctx)
+	ParseProgramsYWH(programsInfos.Programs, platform, env, ctx)
 	if pageID+1 <= programsInfos.NbPages {
-		UpdatePrograms(platform, pageID+1, env, ctx)
+		UpdateProgramsYWH(platform, pageID+1, env, ctx)
 	}
 }
 
-func GetProgramsInfos(platform *db.Platform, pageID int) *ProgramsInfos {
-	response, err := apiGetRequest(fmt.Sprintf("https://api.yeswehack.com/programs?page=%d", pageID), platform)
+func GetProgramsInfosYWH(platform *db.Platform, pageID int) *ProgramsInfosYWH {
+	response, err := apiGetRequestYWH(fmt.Sprintf("https://api.yeswehack.com/programs?page=%d", pageID), platform)
 	if err != nil || response == nil || response.StatusCode != 200 {
 		return nil
 	}
@@ -179,13 +179,13 @@ func GetProgramsInfos(platform *db.Platform, pageID int) *ProgramsInfos {
 	nbPages := int(jsonBody["pagination"].(map[string]interface{})["nb_pages"].(float64))
 	programs := jsonBody["items"].([]interface{})
 
-	return &ProgramsInfos{
+	return &ProgramsInfosYWH{
 		NbPages:  nbPages,
 		Programs: programs,
 	}
 }
 
-func ParsePrograms(programs []interface{}, platform *db.Platform, env env.Env, ctx context.Context) {
+func ParseProgramsYWH(programs []interface{}, platform *db.Platform, env env.Env, ctx context.Context) {
 	for _, program := range programs {
 		programMap := program.(map[string]interface{})
 
@@ -216,21 +216,21 @@ func ParsePrograms(programs []interface{}, platform *db.Platform, env env.Env, c
 		}
 
 		// And in any case we update the scopes of the program
-		UpdateScopes(platform, programMap["slug"].(string), env, ctx)
+		UpdateScopesYWH(platform, programMap["slug"].(string), env, ctx)
 	}
 }
 
-func UpdateScopes(platform *db.Platform, slug string, env env.Env, ctx context.Context) {
-	scopeInfos := GetScopeInfos(platform, slug)
+func UpdateScopesYWH(platform *db.Platform, slug string, env env.Env, ctx context.Context) {
+	scopeInfos := GetScopeInfosYWH(platform, slug)
 	if scopeInfos == nil || len(scopeInfos) == 0 {
 		return
 	}
 
-	ParseScopes(scopeInfos, slug, platform, env, ctx)
+	ParseScopesYWH(scopeInfos, slug, platform, env, ctx)
 }
 
-func GetScopeInfos(platform *db.Platform, slug string) []interface{} {
-	response, err := apiGetRequest(fmt.Sprintf("https://api.yeswehack.com/programs/%s", slug), platform)
+func GetScopeInfosYWH(platform *db.Platform, slug string) []interface{} {
+	response, err := apiGetRequestYWH(fmt.Sprintf("https://api.yeswehack.com/programs/%s", slug), platform)
 	if err != nil || response == nil || response.StatusCode != 200 {
 		return nil
 	}
@@ -241,7 +241,7 @@ func GetScopeInfos(platform *db.Platform, slug string) []interface{} {
 	return jsonBody["scopes"].([]interface{})
 }
 
-func ParseScopes(scopes []interface{}, slug string, platform *db.Platform, env env.Env, ctx context.Context) {
+func ParseScopesYWH(scopes []interface{}, slug string, platform *db.Platform, env env.Env, ctx context.Context) {
 	program, err := env.DB().FindProgramBySlug(ctx, slug)
 	if err != nil {
 		fmt.Println(err)
@@ -278,7 +278,7 @@ func ParseScopes(scopes []interface{}, slug string, platform *db.Platform, env e
 
 }
 
-func GetReports(platform *db.Platform, collab bool, pageID int, env env.Env, ctx context.Context) {
+func GetReportsYWH(platform *db.Platform, collab bool, pageID int, env env.Env, ctx context.Context) {
 	apiURL := ""
 	if collab {
 		apiURL = fmt.Sprintf("https://api.yeswehack.com/collaborator/reports?page=%d", pageID)
@@ -286,7 +286,7 @@ func GetReports(platform *db.Platform, collab bool, pageID int, env env.Env, ctx
 		apiURL = fmt.Sprintf("https://api.yeswehack.com/user/reports?page=%d", pageID)
 	}
 
-	response, _ := apiGetRequest(apiURL, platform)
+	response, _ := apiGetRequestYWH(apiURL, platform)
 	if response == nil || response.StatusCode != 200 {
 		fmt.Println(response.StatusCode)
 		return
@@ -297,20 +297,20 @@ func GetReports(platform *db.Platform, collab bool, pageID int, env env.Env, ctx
 	nbPages := int(responseJSON["pagination"].(map[string]interface{})["nb_pages"].(float64))
 	reports := responseJSON["items"].([]interface{})
 
-	parseReports(reports, platform, collab, env, ctx)
+	parseReportsYWH(reports, platform, collab, env, ctx)
 	if pageID == nbPages {
 		return
 	}
 
-	GetReports(platform, collab, pageID+1, env, ctx)
+	GetReportsYWH(platform, collab, pageID+1, env, ctx)
 }
 
-func parseReports(reports []interface{}, platform *db.Platform, collab bool, env env.Env, ctx context.Context) {
+func parseReportsYWH(reports []interface{}, platform *db.Platform, collab bool, env env.Env, ctx context.Context) {
 	for _, report := range reports {
 		reportMap := report.(map[string]interface{})
 		reportID := reportMap["id"].(float64)
 
-		finalReport := reportsInfos(reportID, collab, platform)
+		finalReport := reportsInfosYWH(reportID, collab, platform)
 
 		finalReport["report_title"] = reportMap["title"].(string)
 		finalReport["report_status"] = reportMap["status"].(map[string]interface{})["workflow_state"].(string)
@@ -342,8 +342,8 @@ func parseReports(reports []interface{}, platform *db.Platform, collab bool, env
 	}
 }
 
-func reportsInfos(reportID float64, collab bool, platform *db.Platform) map[string]interface{} {
-	response, _ := apiGetRequest(fmt.Sprintf("https://api.yeswehack.com/reports/%d/logs", int(reportID)), platform)
+func reportsInfosYWH(reportID float64, collab bool, platform *db.Platform) map[string]interface{} {
+	response, _ := apiGetRequestYWH(fmt.Sprintf("https://api.yeswehack.com/reports/%d/logs", int(reportID)), platform)
 	if response == nil || response.StatusCode != 200 {
 		return nil
 	}
@@ -352,10 +352,10 @@ func reportsInfos(reportID float64, collab bool, platform *db.Platform) map[stri
 	json.NewDecoder(response.Body).Decode(&responseJSON)
 	reports := responseJSON["items"].([]interface{})
 
-	return parseReportsInfos(platform, reports, collab, reportID)
+	return parseReportsInfosYWH(platform, reports, collab, reportID)
 }
 
-func parseReportsInfos(platform *db.Platform, reports []interface{}, collab bool, reportID float64) map[string]interface{} {
+func parseReportsInfosYWH(platform *db.Platform, reports []interface{}, collab bool, reportID float64) map[string]interface{} {
 	reportInfos := map[string]interface{}{
 		"reward": 0.0,
 		"collab": collab,
@@ -384,14 +384,14 @@ func parseReportsInfos(platform *db.Platform, reports []interface{}, collab bool
 	}
 
 	if reportInfos["severity"] == nil {
-		reportInfos["severity"] = reportSeverity(platform, reportID)
+		reportInfos["severity"] = reportSeverityYWH(platform, reportID)
 	}
 
 	return reportInfos
 }
 
-func reportSeverity(platform *db.Platform, reportID float64) interface{} {
-	response, _ := apiGetRequest(fmt.Sprintf("https://api.yeswehack.com/reports/%d", int(reportID)), platform)
+func reportSeverityYWH(platform *db.Platform, reportID float64) interface{} {
+	response, _ := apiGetRequestYWH(fmt.Sprintf("https://api.yeswehack.com/reports/%d", int(reportID)), platform)
 	if response == nil || response.StatusCode != 200 {
 		return nil
 	}
@@ -405,7 +405,7 @@ func reportSeverity(platform *db.Platform, reportID float64) interface{} {
 	return body["criticity"]
 }
 
-func apiPostRequest(url string, data []byte, platform *db.Platform) (*http.Response, error) {
+func apiPostRequestYWH(url string, data []byte, platform *db.Platform) (*http.Response, error) {
 	req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(data))
 	if err != nil {
 		return nil, err
@@ -416,7 +416,7 @@ func apiPostRequest(url string, data []byte, platform *db.Platform) (*http.Respo
 	return client.Do(req)
 }
 
-func apiGetRequest(url string, platform *db.Platform) (*http.Response, error) {
+func apiGetRequestYWH(url string, platform *db.Platform) (*http.Response, error) {
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err

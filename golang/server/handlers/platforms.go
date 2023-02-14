@@ -24,12 +24,20 @@ func CreatePlatform(env env.Env, user *db.User, w http.ResponseWriter, r *http.R
 	}
 
 	if p.Name == "yeswehack" {
-		username, err := utils.GetUsername(p)
+		username, err := utils.GetUsernameYWH(p)
 		if err != nil {
 			return write.Error(errors.RouteNotFound)
 		}
 
 		p.HunterUsername = username
+	} else if p.Name == "hackerone" {
+		p.HunterUsername = p.Email
+
+		_, err := utils.GetJWTH1(p)
+		if err != nil {
+			return write.Error(errors.RouteNotFound)
+		}
+
 	}
 
 	return write.JSONorErr(env.DB().CreatePlatform(r.Context(), db.CreatePlatformParams{
@@ -86,7 +94,7 @@ func UpdatePlatform(env env.Env, user *db.User, w http.ResponseWriter, r *http.R
 	}
 
 	if p.Name == "yeswehack" {
-		username, err := utils.GetUsername(p)
+		username, err := utils.GetUsernameYWH(p)
 		if err != nil {
 			return write.Error(errors.RouteNotFound)
 		}

@@ -24,7 +24,9 @@ func ReloadStats(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 
 	for _, p := range platform {
 		if p.Name == "yeswehack" {
-			utils.GetReports(&p, false, 0, env, r.Context())
+			utils.GetReportsYWH(&p, false, 0, env, r.Context())
+		} else if p.Name == "hackerone" {
+			utils.GetReportsH1(&p, env, r.Context())
 		}
 	}
 
