@@ -11,20 +11,49 @@ services:
   # back-end api built with golang
   golang-prod:
     restart: always
-    image: registry-host:5000/rubyx/golang-prod:${SHA}
+    build: 
+      context: golang
+      dockerfile: server.Dockerfile
+      target: prod
     ports:
       - "5000:5000"
     env_file: .env
+    depends_on:
+      - postgres-prod
 
   # worker
   worker-prod:
     network_mode: host
-    image: registry-host:5000/rubyx/worker-prod:${SHA}
+    build:
+      context: golang
+      dockerfile: worker.Dockerfile
+      target: prod
     env_file: .env
 
   # front-end built with react
   react-prod:
     restart: always
-    image: registry-host:5000/rubyx/react-prod:${SHA}
+    build: 
+      context: dashboard
+      target: prod
     ports:
       - "3000:3000"
+
+  postgres-prod:
+    build: postgres
+    volumes:
+      - ./golang/sql/schema:/docker-entrypoint-initdb.d/schema
+
+  # nginx is used for ssl termination
+  # you may opt to install nginx _on the host_ for greater resilience
+  nginx-prod:
+    restart: always
+    build: 
+      context: nginx
+      target: prod
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - golang-prod
+      - react-prod
