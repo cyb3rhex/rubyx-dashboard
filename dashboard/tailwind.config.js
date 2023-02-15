@@ -23,7 +23,7 @@ const config = {
       'active',
       'odd',
     ],
-    display: ['responsive', 'dark'],
+    display: ['responsive'],
     textColor: [
       'responsive',
       'focus',
