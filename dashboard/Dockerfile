@@ -8,9 +8,9 @@ CMD echo "getting latest npm modules" \
 FROM node:16-alpine as build
 WORKDIR /root
 COPY ./package*.json ./
-RUN npm ci --cache .npm
+RUN yarn
 COPY . . 
-RUN npm run build -o app
+RUN yarn build -o app
 
 # multistage build...
 # this runs a lil nginx instance to serve the app

@@ -1,8 +1,9 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 const windmill = require('@windmill/react-ui/config')
 
-module.exports = windmill({
-  purge: ['src/**/*.js'],
+const config = {
+  content: ['src/**/*.{js,ts,jsx,tsx}'],
+  darkMode: 'class',
   theme: {
     extend: {
       fontFamily: {
@@ -13,4 +14,35 @@ module.exports = windmill({
       },
     },
   },
-})
+  variants: {
+    backgroundOpacity: ['responsive', 'hover', 'focus'],
+    backgroundColor: [
+      'responsive',
+      'hover',
+      'focus',
+      'active',
+      'odd',
+      'dark',
+    ],
+    display: ['responsive', 'dark'],
+    textColor: [
+      'responsive',
+      'focus',
+      'focus-within',
+      'hover',
+      'active',
+      'dark',
+    ],
+    placeholderColor: ['responsive', 'focus', 'dark'],
+    borderColor: ['responsive', 'hover', 'focus', 'dark'],
+    divideColor: ['responsive', 'dark'],
+    boxShadow: ['responsive', 'hover', 'focus'],
+    margin: ['responsive', 'last'],
+  },
+  plugins: [],
+}
+
+module.exports = {
+  ...windmill(config),
+  ...config,
+}
