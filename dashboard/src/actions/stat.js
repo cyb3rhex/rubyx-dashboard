@@ -10,7 +10,6 @@ export const getStats = () => async (dispatch) => {
   try {
     API.getStats()
       .then((data) => {
-        console.log(data)
         dispatch({
           type: GET_STATS,
           payload: data,

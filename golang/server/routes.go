@@ -64,6 +64,14 @@ func (srv *server) ConfigureRouter() {
 	srv.PUT("/port", handlers.UpdatePort)
 	srv.DELETE("/port/:id", handlers.DeletePort)
 
+	// NOTES
+	srv.GET("/notes", handlers.GetNotes)
+	srv.GET("/notes/id/:id", handlers.GetNote)
+	srv.POST("/notes", handlers.CreateNote)
+	srv.PUT("/notes", handlers.UpdateNote)
+	srv.DELETE("/notes/:id", handlers.DeleteNote)
+	srv.GET("/notes/program/:id", handlers.GetNotesByProgramID)
+
 	// IP
 	srv.GET("/ip", handlers.GetIps)
 	srv.GET("/ip/:id", handlers.GetIp)

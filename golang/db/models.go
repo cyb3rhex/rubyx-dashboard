@@ -94,48 +94,6 @@ func (ns NullProgramType) Value() (driver.Value, error) {
 	return ns.ProgramType, nil
 }
 
-type ReportStatus string
-
-const (
-	ReportStatusDraft     ReportStatus = "draft"
-	ReportStatusPublished ReportStatus = "published"
-)
-
-func (e *ReportStatus) Scan(src interface{}) error {
-	switch s := src.(type) {
-	case []byte:
-		*e = ReportStatus(s)
-	case string:
-		*e = ReportStatus(s)
-	default:
-		return fmt.Errorf("unsupported scan type for ReportStatus: %T", src)
-	}
-	return nil
-}
-
-type NullReportStatus struct {
-	ReportStatus ReportStatus
-	Valid        bool // Valid is true if String is not NULL
-}
-
-// Scan implements the Scanner interface.
-func (ns *NullReportStatus) Scan(value interface{}) error {
-	if value == nil {
-		ns.ReportStatus, ns.Valid = "", false
-		return nil
-	}
-	ns.Valid = true
-	return ns.ReportStatus.Scan(value)
-}
-
-// Value implements the driver Valuer interface.
-func (ns NullReportStatus) Value() (driver.Value, error) {
-	if !ns.Valid {
-		return nil, nil
-	}
-	return ns.ReportStatus, nil
-}
-
 type UserStatus string
 
 const (
@@ -197,6 +155,16 @@ type Ip struct {
 	UpdatedAt   time.Time `json:"updated_at"`
 }
 
+type Note struct {
+	ID        int64     `json:"id"`
+	Title     string    `json:"title"`
+	ProgramID int64     `json:"program_id"`
+	Content   string    `json:"content"`
+	Tag       string    `json:"tag"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
 type Platform struct {
 	ID             int64        `json:"id"`
 	Name           string       `json:"name"`
@@ -232,18 +200,6 @@ type Program struct {
 	Type       ProgramType `json:"type"`
 	CreatedAt  time.Time   `json:"created_at"`
 	UpdatedAt  time.Time   `json:"updated_at"`
-}
-
-type Report struct {
-	ID              int64        `json:"id"`
-	AuthorID        int64        `json:"author_id"`
-	VulnerabilityID int64        `json:"vulnerability_id"`
-	Title           string       `json:"title"`
-	Body            string       `json:"body"`
-	Tag             string       `json:"tag"`
-	Status          ReportStatus `json:"status"`
-	CreatedAt       time.Time    `json:"created_at"`
-	UpdatedAt       time.Time    `json:"updated_at"`
 }
 
 type Reset struct {

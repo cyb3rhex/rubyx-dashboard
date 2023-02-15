@@ -139,6 +139,27 @@ export default class API {
     _delete(`/platform/${id}`)
   )
 
+  // NOTES
+  static getNotes = () => (
+    _get('/notes')
+  )
+
+  static getNotesByProgram = (id) => (
+    _get('/notes/program/' + id)
+  )
+
+  static createNote = (body) => (
+    _post('/notes', body)
+  )
+
+  static updateNote = (body) => (
+    _put('/notes', body)
+  )
+
+  static deleteNote = (id) => (
+    _delete(`/notes/${id}`)
+  )
+
    // PROGRAM
    static getPrograms = () => (
     _get('/program')

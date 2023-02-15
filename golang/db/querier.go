@@ -11,6 +11,7 @@ import (
 type Querier interface {
 	CreateApi(ctx context.Context, arg CreateApiParams) (Api, error)
 	CreateIp(ctx context.Context, arg CreateIpParams) (Ip, error)
+	CreateNote(ctx context.Context, arg CreateNoteParams) (Note, error)
 	CreatePlatform(ctx context.Context, arg CreatePlatformParams) (Platform, error)
 	CreatePort(ctx context.Context, arg CreatePortParams) (Port, error)
 	CreateProgram(ctx context.Context, arg CreateProgramParams) (Program, error)
@@ -24,6 +25,7 @@ type Querier interface {
 	CreateVulnerability(ctx context.Context, arg CreateVulnerabilityParams) (Vulnerability, error)
 	DeleteApiByIDs(ctx context.Context, id int64) error
 	DeleteIpByIDs(ctx context.Context, id int64) error
+	DeleteNote(ctx context.Context, id int64) error
 	DeletePlatformByIDs(ctx context.Context, id int64) error
 	DeletePortByIDs(ctx context.Context, id int64) error
 	DeleteProgramByIDs(ctx context.Context, id int64) error
@@ -39,6 +41,9 @@ type Querier interface {
 	FindApis(ctx context.Context) ([]Api, error)
 	FindIpByIDs(ctx context.Context, id int64) (Ip, error)
 	FindIps(ctx context.Context) ([]Ip, error)
+	FindNoteByID(ctx context.Context, id int64) (Note, error)
+	FindNotes(ctx context.Context) ([]Note, error)
+	FindNotesByProgramID(ctx context.Context, programID int64) ([]Note, error)
 	FindPlatformByIDs(ctx context.Context, id int64) (FindPlatformByIDsRow, error)
 	FindPlatforms(ctx context.Context) ([]FindPlatformsRow, error)
 	FindPortByIDs(ctx context.Context, id int64) (Port, error)
@@ -68,6 +73,7 @@ type Querier interface {
 	GetPlatforms(ctx context.Context) ([]Platform, error)
 	GetScopeByProgramIDAndScope(ctx context.Context, arg GetScopeByProgramIDAndScopeParams) (Scope, error)
 	UpdateIp(ctx context.Context, arg UpdateIpParams) (Ip, error)
+	UpdateNote(ctx context.Context, arg UpdateNoteParams) (Note, error)
 	UpdatePlatform(ctx context.Context, arg UpdatePlatformParams) (Platform, error)
 	UpdatePort(ctx context.Context, arg UpdatePortParams) (Port, error)
 	UpdateProgram(ctx context.Context, arg UpdateProgramParams) (Program, error)

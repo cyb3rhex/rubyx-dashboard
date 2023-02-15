@@ -65,6 +65,21 @@ func (mr *MockQuerierMockRecorder) CreateIp(ctx, arg interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateIp", reflect.TypeOf((*MockQuerier)(nil).CreateIp), ctx, arg)
 }
 
+// CreateNote mocks base method.
+func (m *MockQuerier) CreateNote(ctx context.Context, arg db.CreateNoteParams) (db.Note, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateNote", ctx, arg)
+	ret0, _ := ret[0].(db.Note)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateNote indicates an expected call of CreateNote.
+func (mr *MockQuerierMockRecorder) CreateNote(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNote", reflect.TypeOf((*MockQuerier)(nil).CreateNote), ctx, arg)
+}
+
 // CreatePlatform mocks base method.
 func (m *MockQuerier) CreatePlatform(ctx context.Context, arg db.CreatePlatformParams) (db.Platform, error) {
 	m.ctrl.T.Helper()
@@ -256,6 +271,20 @@ func (m *MockQuerier) DeleteIpByIDs(ctx context.Context, id int64) error {
 func (mr *MockQuerierMockRecorder) DeleteIpByIDs(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteIpByIDs", reflect.TypeOf((*MockQuerier)(nil).DeleteIpByIDs), ctx, id)
+}
+
+// DeleteNote mocks base method.
+func (m *MockQuerier) DeleteNote(ctx context.Context, id int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteNote", ctx, id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteNote indicates an expected call of DeleteNote.
+func (mr *MockQuerierMockRecorder) DeleteNote(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteNote", reflect.TypeOf((*MockQuerier)(nil).DeleteNote), ctx, id)
 }
 
 // DeletePlatformByIDs mocks base method.
@@ -470,6 +499,51 @@ func (m *MockQuerier) FindIps(ctx context.Context) ([]db.Ip, error) {
 func (mr *MockQuerierMockRecorder) FindIps(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindIps", reflect.TypeOf((*MockQuerier)(nil).FindIps), ctx)
+}
+
+// FindNoteByID mocks base method.
+func (m *MockQuerier) FindNoteByID(ctx context.Context, id int64) (db.Note, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindNoteByID", ctx, id)
+	ret0, _ := ret[0].(db.Note)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindNoteByID indicates an expected call of FindNoteByID.
+func (mr *MockQuerierMockRecorder) FindNoteByID(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindNoteByID", reflect.TypeOf((*MockQuerier)(nil).FindNoteByID), ctx, id)
+}
+
+// FindNotes mocks base method.
+func (m *MockQuerier) FindNotes(ctx context.Context) ([]db.Note, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindNotes", ctx)
+	ret0, _ := ret[0].([]db.Note)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindNotes indicates an expected call of FindNotes.
+func (mr *MockQuerierMockRecorder) FindNotes(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindNotes", reflect.TypeOf((*MockQuerier)(nil).FindNotes), ctx)
+}
+
+// FindNotesByProgramID mocks base method.
+func (m *MockQuerier) FindNotesByProgramID(ctx context.Context, programID int64) ([]db.Note, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindNotesByProgramID", ctx, programID)
+	ret0, _ := ret[0].([]db.Note)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindNotesByProgramID indicates an expected call of FindNotesByProgramID.
+func (mr *MockQuerierMockRecorder) FindNotesByProgramID(ctx, programID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindNotesByProgramID", reflect.TypeOf((*MockQuerier)(nil).FindNotesByProgramID), ctx, programID)
 }
 
 // FindPlatformByIDs mocks base method.
@@ -905,6 +979,21 @@ func (m *MockQuerier) UpdateIp(ctx context.Context, arg db.UpdateIpParams) (db.I
 func (mr *MockQuerierMockRecorder) UpdateIp(ctx, arg interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateIp", reflect.TypeOf((*MockQuerier)(nil).UpdateIp), ctx, arg)
+}
+
+// UpdateNote mocks base method.
+func (m *MockQuerier) UpdateNote(ctx context.Context, arg db.UpdateNoteParams) (db.Note, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateNote", ctx, arg)
+	ret0, _ := ret[0].(db.Note)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateNote indicates an expected call of UpdateNote.
+func (mr *MockQuerierMockRecorder) UpdateNote(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateNote", reflect.TypeOf((*MockQuerier)(nil).UpdateNote), ctx, arg)
 }
 
 // UpdatePlatform mocks base method.

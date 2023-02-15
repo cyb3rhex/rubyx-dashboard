@@ -9,6 +9,7 @@ const Program = lazy(() => import('../pages/Program'))
 const Url = lazy(() => import('../pages/Url'))
 const Vulnerability = lazy(() => import('../pages/Vulnerability'))
 const Subdomain = lazy(() => import('../pages/Subdomain'))
+const Notes = lazy(() => import('../pages/Notes'))
 const Ip = lazy(() => import('../pages/Ip'))
 const Stat = lazy(() => import('../pages/Stat'))
 const Cards = lazy(() => import('../pages/Cards'))
@@ -29,6 +30,10 @@ const routes = [
   {
     path: '/dashboard', // the url
     component: Dashboard, // view rendered
+  },
+  {
+    path: '/notes',
+    component: Notes,
   },
   {
     path: '/account',

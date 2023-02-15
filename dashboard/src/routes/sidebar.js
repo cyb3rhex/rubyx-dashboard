@@ -17,6 +17,11 @@ const routes = [
     name: 'Stats',
   },
   {
+    path: '/app/notes',
+    icon: 'SearchIcon',
+    name: 'Notes',
+  },
+  {
     path: '/app/platforms',
     icon: 'CardsIcon',
     name: 'Platforms',
