@@ -12,7 +12,7 @@ import (
 )
 
 func CreatePlatform(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 
@@ -53,7 +53,7 @@ func CreatePlatform(env env.Env, user *db.User, w http.ResponseWriter, r *http.R
 }
 
 func GetPlatform(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 
@@ -74,7 +74,7 @@ func GetPlatform(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 }
 
 func GetPlatforms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 
@@ -82,7 +82,7 @@ func GetPlatforms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Req
 }
 
 func UpdatePlatform(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 
@@ -116,7 +116,7 @@ func UpdatePlatform(env env.Env, user *db.User, w http.ResponseWriter, r *http.R
 }
 
 func DeletePlatform(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 

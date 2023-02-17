@@ -11,7 +11,7 @@ import (
 )
 
 func CreateNote(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 
@@ -31,7 +31,7 @@ func CreateNote(env env.Env, user *db.User, w http.ResponseWriter, r *http.Reque
 }
 
 func GetNotesByProgramID(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 
@@ -44,7 +44,7 @@ func GetNotesByProgramID(env env.Env, user *db.User, w http.ResponseWriter, r *h
 }
 
 func GetNote(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 
@@ -65,7 +65,7 @@ func GetNote(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request)
 }
 
 func GetNotes(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 
@@ -73,7 +73,7 @@ func GetNotes(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request
 }
 
 func UpdateNote(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 
@@ -94,7 +94,7 @@ func UpdateNote(env env.Env, user *db.User, w http.ResponseWriter, r *http.Reque
 }
 
 func DeleteNote(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 

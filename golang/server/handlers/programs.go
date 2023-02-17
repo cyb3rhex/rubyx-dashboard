@@ -12,7 +12,7 @@ import (
 )
 
 func ReloadPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 
@@ -33,7 +33,7 @@ func ReloadPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.R
 }
 
 func CreateProgram(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 
@@ -55,7 +55,7 @@ func CreateProgram(env env.Env, user *db.User, w http.ResponseWriter, r *http.Re
 }
 
 func GetProgram(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 
@@ -76,7 +76,7 @@ func GetProgram(env env.Env, user *db.User, w http.ResponseWriter, r *http.Reque
 }
 
 func GetProgramBySlug(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 
@@ -94,7 +94,7 @@ func GetProgramBySlug(env env.Env, user *db.User, w http.ResponseWriter, r *http
 }
 
 func GetScopeByProgramID(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 
@@ -112,7 +112,7 @@ func GetScopeByProgramID(env env.Env, user *db.User, w http.ResponseWriter, r *h
 }
 
 func GetPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 
@@ -120,7 +120,7 @@ func GetPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 }
 
 func UpdateProgram(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 
@@ -143,7 +143,7 @@ func UpdateProgram(env env.Env, user *db.User, w http.ResponseWriter, r *http.Re
 }
 
 func DeleteProgram(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 
@@ -156,7 +156,7 @@ func DeleteProgram(env env.Env, user *db.User, w http.ResponseWriter, r *http.Re
 }
 
 func DeleteProgramBySlug(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 

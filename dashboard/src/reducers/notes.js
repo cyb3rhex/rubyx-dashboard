@@ -25,46 +25,9 @@ const initialState = {
   notes: null,
 };
 
-export default function (state = initialState, action) {
+export default function reducer(state = initialState, action) {
   switch (action.type) {
     case GET_NOTES:
-      return {
-        ...state,
-        loading: true,
-      };
-    case GET_NOTES_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        notes: action.payload,
-        error: "",
-      };
-    case GET_NOTES_ERROR:
-      return {
-        ...state,
-        loading: false,
-        notes: null,
-        error: action.payload,
-      };
-    case GET_NOTES_BY_PROGRAM_ID:
-      return {
-        ...state,
-        loading: true,
-      };
-    case GET_NOTES_BY_PROGRAM_ID_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        notes: action.payload,
-        error: "",
-      };
-    case GET_NOTES_BY_PROGRAM_ID_ERROR:
-      return {
-        ...state,
-        loading: false,
-        notes: null,
-        error: action.payload,
-      };case GET_NOTES:
       return {
         ...state,
         loading: true,

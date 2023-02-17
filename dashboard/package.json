@@ -13,7 +13,9 @@
     "cz": "git-cz",
     "release": "release-it",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "npx eslint src",
+    "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.0",
@@ -75,7 +77,10 @@
     }
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": {
+      "react-hooks/exhaustive-deps": "off"
+    }
   },
   "browserslist": {
     "production": [

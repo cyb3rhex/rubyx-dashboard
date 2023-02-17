@@ -18,7 +18,7 @@ const routes = [
   },
   {
     path: '/app/notes',
-    icon: 'SearchIcon',
+    icon: 'FormsIcon',
     name: 'Notes',
   },
   {
@@ -28,35 +28,8 @@ const routes = [
   },
   {
     path: '/app/programs',
-    icon: 'FormsIcon',
+    icon: 'SearchIcon',
     name: 'Programs',
-  },
-  {
-    icon: 'PagesIcon',
-    name: 'Data',
-    routes: [
-      // submenu
-      {
-        path: '/app/subdomains',
-        name: 'Subdomains',
-      },
-      {
-        path: '/app/urls',
-        name: 'Urls',
-      },
-      {
-        path: '/app/ips',
-        name: 'IP',
-      },
-      {
-        path: '/app/vulnerabilities',
-        name: 'Vulnerabilities',
-      },
-      {
-        path: '/app/screenshots',
-        name: 'Screenshots',
-      }
-    ],
   },
 ]
 

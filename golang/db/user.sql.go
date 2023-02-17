@@ -10,34 +10,24 @@ import (
 )
 
 const createUser = `-- name: CreateUser :one
-INSERT INTO users (email, salt, pass, status, verification)
-  VALUES (LOWER($1::varchar), $2::varchar, $3::varchar, $4::user_status, $5::varchar) RETURNING id, email, pass, salt, status, verification, created_at, updated_at
+INSERT INTO users (email, salt, pass)
+  VALUES (LOWER($1::varchar), $2::varchar, $3::varchar) RETURNING id, email, pass, salt, created_at, updated_at
 `
 
 type CreateUserParams struct {
-	Email        string     `json:"email"`
-	Salt         string     `json:"salt"`
-	Pass         string     `json:"pass"`
-	Status       UserStatus `json:"status"`
-	Verification string     `json:"verification"`
+	Email string `json:"email"`
+	Salt  string `json:"salt"`
+	Pass  string `json:"pass"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
-	row := q.db.QueryRow(ctx, createUser,
-		arg.Email,
-		arg.Salt,
-		arg.Pass,
-		arg.Status,
-		arg.Verification,
-	)
+	row := q.db.QueryRow(ctx, createUser, arg.Email, arg.Salt, arg.Pass)
 	var i User
 	err := row.Scan(
 		&i.ID,
 		&i.Email,
 		&i.Pass,
 		&i.Salt,
-		&i.Status,
-		&i.Verification,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -45,7 +35,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 }
 
 const findUserByEmail = `-- name: FindUserByEmail :one
-SELECT id, email, pass, salt, status, verification, created_at, updated_at FROM users WHERE email = LOWER($1) LIMIT 1
+SELECT id, email, pass, salt, created_at, updated_at FROM users WHERE email = LOWER($1) LIMIT 1
 `
 
 func (q *Queries) FindUserByEmail(ctx context.Context, lower string) (User, error) {
@@ -56,8 +46,6 @@ func (q *Queries) FindUserByEmail(ctx context.Context, lower string) (User, erro
 		&i.Email,
 		&i.Pass,
 		&i.Salt,
-		&i.Status,
-		&i.Verification,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -65,7 +53,7 @@ func (q *Queries) FindUserByEmail(ctx context.Context, lower string) (User, erro
 }
 
 const findUserByID = `-- name: FindUserByID :one
-SELECT id, email, pass, salt, status, verification, created_at, updated_at FROM users WHERE id = $1 LIMIT 1
+SELECT id, email, pass, salt, created_at, updated_at FROM users WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) FindUserByID(ctx context.Context, id int64) (User, error) {
@@ -76,32 +64,24 @@ func (q *Queries) FindUserByID(ctx context.Context, id int64) (User, error) {
 		&i.Email,
 		&i.Pass,
 		&i.Salt,
-		&i.Status,
-		&i.Verification,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
 	return i, err
 }
 
-const findUserByVerificationCode = `-- name: FindUserByVerificationCode :one
-SELECT id, email, pass, salt, status, verification, created_at, updated_at FROM users WHERE verification = $1 LIMIT 1
+const updateUserEmail = `-- name: UpdateUserEmail :exec
+UPDATE users SET email = $2, updated_at = NOW() WHERE id = $1
 `
 
-func (q *Queries) FindUserByVerificationCode(ctx context.Context, verification string) (User, error) {
-	row := q.db.QueryRow(ctx, findUserByVerificationCode, verification)
-	var i User
-	err := row.Scan(
-		&i.ID,
-		&i.Email,
-		&i.Pass,
-		&i.Salt,
-		&i.Status,
-		&i.Verification,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-	)
-	return i, err
+type UpdateUserEmailParams struct {
+	ID    int64  `json:"id"`
+	Email string `json:"email"`
+}
+
+func (q *Queries) UpdateUserEmail(ctx context.Context, arg UpdateUserEmailParams) error {
+	_, err := q.db.Exec(ctx, updateUserEmail, arg.ID, arg.Email)
+	return err
 }
 
 const updateUserPassword = `-- name: UpdateUserPassword :exec
@@ -116,19 +96,5 @@ type UpdateUserPasswordParams struct {
 
 func (q *Queries) UpdateUserPassword(ctx context.Context, arg UpdateUserPasswordParams) error {
 	_, err := q.db.Exec(ctx, updateUserPassword, arg.ID, arg.Salt, arg.Pass)
-	return err
-}
-
-const updateUserStatus = `-- name: UpdateUserStatus :exec
-UPDATE users SET status = $2, updated_at = NOW() WHERE id = $1
-`
-
-type UpdateUserStatusParams struct {
-	ID     int64      `json:"id"`
-	Status UserStatus `json:"status"`
-}
-
-func (q *Queries) UpdateUserStatus(ctx context.Context, arg UpdateUserStatusParams) error {
-	_, err := q.db.Exec(ctx, updateUserStatus, arg.ID, arg.Status)
 	return err
 }

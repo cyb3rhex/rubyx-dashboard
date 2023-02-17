@@ -26,10 +26,7 @@ func Login(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) h
 
 	u, err := env.DB().FindUserByEmail(r.Context(), req.Email)
 	if err != nil {
-		if isNotFound(err) {
-			return write.Error(errors.FailedLogin)
-		}
-		return write.Error(err)
+		return write.Error(errors.FailedLogin)
 	}
 
 	if !checkPasswordHash(req.Pass, u.Salt, u.Pass) {

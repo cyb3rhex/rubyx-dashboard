@@ -4,9 +4,9 @@ import { getStats, reloadStats } from "../actions/stat";
 import PageTitle from "../components/Typography/PageTitle";
 import ChartCard from "../components/Chart/ChartCard";
 import InfoCard from "../components/Cards/InfoCard";
-import { Doughnut, Line, Bar } from "react-chartjs-2";
+import { Doughnut, Bar } from "react-chartjs-2";
 import ChartLegend from "../components/Chart/ChartLegend";
-import { ChatIcon, CartIcon, MoneyIcon, PeopleIcon } from "../icons";
+import { MoneyIcon, PeopleIcon } from "../icons";
 import RoundIcon from "../components/RoundIcon";
 import { Button } from "@windmill/react-ui";
 import { getPrograms } from "../actions/program";
@@ -14,7 +14,6 @@ import { getPrograms } from "../actions/program";
 function Stat() {
   const dispatch = useDispatch();
   const statState = useSelector((state) => state.stat);
-  const programState = useSelector((state) => state.program);
   const [nReports, setNReports] = useState([]);
   const [bountyPerMonth, setBountyPerMonth] = useState([]);
   const [critical, setCritical] = useState([]);
@@ -36,7 +35,7 @@ function Stat() {
       for (let i = 0; i < 4; i++) {
         critical.push(0);
       }
-      statState.stats.map((item) => {
+      statState.stats.forEach((item) => {
         let date = new Date(item.report_date);
         if (date.getFullYear() === new Date().getFullYear()) {
           nReports[date.getMonth()] += 1;
@@ -69,7 +68,7 @@ function Stat() {
 
   const currentMonth = (stats) => {
     var total = 0;
-    stats.map((item) => {
+    stats.forEach((item) => {
       let date = new Date(item.report_date);
       let now = new Date();
 
@@ -79,6 +78,7 @@ function Stat() {
       ) {
         total += item.reward;
       }
+      return;
     });
     return total;
   };

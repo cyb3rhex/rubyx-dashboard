@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import InfoCard from '../components/Cards/InfoCard'
 import PageTitle from '../components/Typography/PageTitle'
-import { ChatIcon, CartIcon, MoneyIcon, PeopleIcon } from '../icons'
+import { ChatIcon, MoneyIcon, PeopleIcon } from '../icons'
 import RoundIcon from '../components/RoundIcon'
 import { getStats } from '../actions/stat'
 
@@ -18,7 +18,7 @@ function Dashboard() {
 
   const currentMonth = (stats) => {
     var total = 0;
-    stats.map(item => {
+    stats.forEach(item => {
       let date = new Date(item.report_date);
       let now = new Date();
 

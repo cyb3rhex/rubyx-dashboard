@@ -44,15 +44,14 @@ type Querier interface {
 	FindStats(ctx context.Context) ([]Stat, error)
 	FindUserByEmail(ctx context.Context, lower string) (User, error)
 	FindUserByID(ctx context.Context, id int64) (User, error)
-	FindUserByVerificationCode(ctx context.Context, verification string) (User, error)
 	GetPlatforms(ctx context.Context) ([]Platform, error)
 	GetScopeByProgramIDAndScope(ctx context.Context, arg GetScopeByProgramIDAndScopeParams) (Scope, error)
 	UpdateNote(ctx context.Context, arg UpdateNoteParams) (Note, error)
 	UpdatePlatform(ctx context.Context, arg UpdatePlatformParams) (Platform, error)
 	UpdateProgram(ctx context.Context, arg UpdateProgramParams) (Program, error)
 	UpdateStat(ctx context.Context, arg UpdateStatParams) (Stat, error)
+	UpdateUserEmail(ctx context.Context, arg UpdateUserEmailParams) error
 	UpdateUserPassword(ctx context.Context, arg UpdateUserPasswordParams) error
-	UpdateUserStatus(ctx context.Context, arg UpdateUserStatusParams) error
 }
 
 var _ Querier = (*Queries)(nil)

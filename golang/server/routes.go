@@ -36,6 +36,7 @@ func (srv *server) ConfigureRouter() {
 	// USER
 	srv.GET("/user", handlers.Whoami)
 	srv.PUT("/user/password", handlers.UpdatePassword)
+	srv.PUT("/user/email", handlers.UpdateEmail)
 
 	// PLATFORMS
 	srv.GET("/platform", handlers.GetPlatforms)

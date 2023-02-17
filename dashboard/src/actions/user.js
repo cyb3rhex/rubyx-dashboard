@@ -1,5 +1,5 @@
 import API from './api'
-import { LOGIN, LOGIN_ERROR, LOGOUT, CHANGE_PASSWORD, CHANGE_PASSWORD_ERROR } from '../constants/user';
+import { LOGIN, LOGIN_ERROR, LOGOUT, CHANGE_PASSWORD, CHANGE_PASSWORD_ERROR, CHANGE_EMAIL, CHANGE_EMAIL_ERROR } from '../constants/user';
 
 export const login = (email, pass) => async dispatch => {
     try {
@@ -14,6 +14,7 @@ export const login = (email, pass) => async dispatch => {
                 payload: user
             })
         }).catch(err => {
+            console.log(err)
             dispatch({
                 type: LOGIN_ERROR,
                 payload: err
@@ -50,6 +51,32 @@ export const changePassword = (pass) => async dispatch => {
     } catch (err) {
         dispatch({
             type: CHANGE_PASSWORD_ERROR,
+            payload: err
+        })
+    }
+}
+
+export const changeEmail = (email) => async dispatch => {
+    try {
+        var data = {
+            "email": email
+        }
+
+        API.updateEmail(data).then(res => {
+            dispatch({
+                type: CHANGE_EMAIL,
+            })
+        }).catch(err => {
+            dispatch({
+                type: CHANGE_EMAIL_ERROR,
+                payload: err
+            })
+        })
+
+        
+    } catch (err) {
+        dispatch({
+            type: CHANGE_EMAIL_ERROR,
             payload: err
         })
     }

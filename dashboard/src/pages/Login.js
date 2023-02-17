@@ -1,27 +1,34 @@
-import React, { useEffect, useState } from 'react'
-import { login } from '../actions/user'
-import { useHistory } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import { Label, Input, Button } from '@windmill/react-ui'
+import React, { useEffect, useState, useRef } from "react";
+import { login } from "../actions/user";
+import { useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { Label, Input, Button } from "@windmill/react-ui";
 
 function Login() {
-  const [email, setEmail] = useState("")
-  const [pass, setPass] = useState("")
+  const formRef = useRef(null);
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
 
-  const userState = useSelector((state) => state.user)
+  const userState = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const handleLogin = () => {
-    dispatch(login(email, pass))
-  }
+  const handleLogin = (e) => {
+    e.preventDefault();
+    dispatch(login(email, pass));
+  };
+
+  const handleInputKeyPress = (event) => {
+    if (event.key === "Enter" && formRef.current !== null) {
+      handleLogin(event);
+    }
+  };
 
   useEffect(() => {
-    console.log(userState)
     if (userState.token) {
-      history.push("/app/dashboard")
+      history.push("/app/dashboard");
     }
-  }, [userState])
+  }, [userState]);
 
   return (
     <div className="flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900">
@@ -29,27 +36,47 @@ function Login() {
         <div className="flex flex-col overflow-y-auto md:flex-row">
           <main className="flex items-center justify-center p-6 w-full">
             <div className="w-full">
-              <h1 className="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">Login</h1>
-              {userState.error != "" && (<p className='text-red-700'>{userState.error}</p>)}
-              <Label>
-                <span>Email</span>
-                <Input className="mt-1" type="email" placeholder="john@doe.com" value={email} onChange={(e) => setEmail(e.target.value)} />
-              </Label>
+              <form ref={formRef} onSubmit={(e) => handleLogin(e)}>
+                <h1 className="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">
+                  Login
+                </h1>
+                {userState.error !== "" && (
+                  <p className="text-red-700">{userState.error}</p>
+                )}
+                <Label>
+                  <span>Email</span>
+                  <Input
+                    className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    type="email"
+                    placeholder="john@doe.com"
+                    value={email}
+                    onKeyPress={handleInputKeyPress}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </Label>
 
-              <Label className="mt-4">
-                <span>Password</span>
-                <Input className="mt-1" type="password" placeholder="***************" value={pass} onChange={(e) => setPass(e.target.value)} />
-              </Label>
+                <Label className="mt-4">
+                  <span>Password</span>
+                  <Input
+                    className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    type="password"
+                    placeholder="***************"
+                    value={pass}
+                    onKeyPress={handleInputKeyPress}
+                    onChange={(e) => setPass(e.target.value)}
+                  />
+                </Label>
 
-              <Button className="mt-4" block onClick={() => handleLogin()}>
-                Log in
-              </Button>
+                <Button className="mt-4" block onClick={(e) => handleLogin(e)}>
+                  Log in
+                </Button>
+              </form>
             </div>
           </main>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;

@@ -189,7 +189,7 @@ function Platform() {
           <ModalBody>
           <Label className="pt-5">
               <span>Name</span>
-              <Select value={type} onChange={(e) => setName(e.target.value)} className="mt-1">
+              <Select value={type} onChange={(e) => setName(e.target.value)} className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <option value="yeswehack">YesWeHack</option>
                 <option value="hackerone">HackerOne</option>
               </Select>
@@ -197,22 +197,22 @@ function Platform() {
 
             <Label className="pt-5">
               <span>Email</span>
-              <Input className="mt-1" placeholder="" value={email} onChange={(e) => setEmail(e.target.value)} />
+              <Input className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" value={email} onChange={(e) => setEmail(e.target.value)} />
             </Label>
 
             <Label className="pt-5">
               <span>Password</span>
-              <Input className="mt-1" type="password" placeholder="" value={password} onChange={(e) => setPassword(e.target.value)} />
+              <Input className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="password" placeholder="" value={password} onChange={(e) => setPassword(e.target.value)} />
             </Label>
 
             <Label className="pt-5">
               <span>OTP</span>
-              <Input className="mt-1" placeholder="" value={otp} onChange={(e) => setOtp(e.target.value)} />
+              <Input className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" value={otp} onChange={(e) => setOtp(e.target.value)} />
             </Label>
 
             <Label className="pt-5">
               <span>Type</span>
-              <Select value={type} onChange={(e) => setType(e.target.value)} className="mt-1">
+              <Select value={type} onChange={(e) => setType(e.target.value)} className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <option value="private">Private</option>
                 <option value="public">Public</option>
               </Select>

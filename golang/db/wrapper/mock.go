@@ -552,21 +552,6 @@ func (mr *MockQuerierMockRecorder) FindUserByID(ctx, id interface{}) *gomock.Cal
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindUserByID", reflect.TypeOf((*MockQuerier)(nil).FindUserByID), ctx, id)
 }
 
-// FindUserByVerificationCode mocks base method.
-func (m *MockQuerier) FindUserByVerificationCode(ctx context.Context, verification string) (db.User, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindUserByVerificationCode", ctx, verification)
-	ret0, _ := ret[0].(db.User)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindUserByVerificationCode indicates an expected call of FindUserByVerificationCode.
-func (mr *MockQuerierMockRecorder) FindUserByVerificationCode(ctx, verification interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindUserByVerificationCode", reflect.TypeOf((*MockQuerier)(nil).FindUserByVerificationCode), ctx, verification)
-}
-
 // GetPlatforms mocks base method.
 func (m *MockQuerier) GetPlatforms(ctx context.Context) ([]db.Platform, error) {
 	m.ctrl.T.Helper()
@@ -657,6 +642,20 @@ func (mr *MockQuerierMockRecorder) UpdateStat(ctx, arg interface{}) *gomock.Call
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateStat", reflect.TypeOf((*MockQuerier)(nil).UpdateStat), ctx, arg)
 }
 
+// UpdateUserEmail mocks base method.
+func (m *MockQuerier) UpdateUserEmail(ctx context.Context, arg db.UpdateUserEmailParams) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateUserEmail", ctx, arg)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateUserEmail indicates an expected call of UpdateUserEmail.
+func (mr *MockQuerierMockRecorder) UpdateUserEmail(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUserEmail", reflect.TypeOf((*MockQuerier)(nil).UpdateUserEmail), ctx, arg)
+}
+
 // UpdateUserPassword mocks base method.
 func (m *MockQuerier) UpdateUserPassword(ctx context.Context, arg db.UpdateUserPasswordParams) error {
 	m.ctrl.T.Helper()
@@ -669,20 +668,6 @@ func (m *MockQuerier) UpdateUserPassword(ctx context.Context, arg db.UpdateUserP
 func (mr *MockQuerierMockRecorder) UpdateUserPassword(ctx, arg interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUserPassword", reflect.TypeOf((*MockQuerier)(nil).UpdateUserPassword), ctx, arg)
-}
-
-// UpdateUserStatus mocks base method.
-func (m *MockQuerier) UpdateUserStatus(ctx context.Context, arg db.UpdateUserStatusParams) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateUserStatus", ctx, arg)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// UpdateUserStatus indicates an expected call of UpdateUserStatus.
-func (mr *MockQuerierMockRecorder) UpdateUserStatus(ctx, arg interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUserStatus", reflect.TypeOf((*MockQuerier)(nil).UpdateUserStatus), ctx, arg)
 }
 
 // WithTx mocks base method.

@@ -44,11 +44,6 @@ function Program() {
     }
   }, [programState.scope]);
 
-  function openModal() {
-    setEditMode(false);
-    setIsModalOpen(true);
-  }
-
   function closeModal() {
     setIsModalOpen(false);
   }
@@ -123,7 +118,7 @@ function Program() {
   const getPlatformName = (id) => {
     if (platformState && platformState.platforms) {
       var potential = platformState.platforms.find(
-        (item) => item.id == parseInt(id)
+        (item) => item.id === parseInt(id)
       );
       if (potential) {
         return potential.name;
@@ -172,7 +167,7 @@ function Program() {
                       <a
                         className="text-sm truncate text-ellipsis overflow-hidden"
                         href={key.url}
-                        target="_blank"
+                        target="_blank" rel="noreferrer"
                       >
                         {key.name}
                       </a>
@@ -241,7 +236,7 @@ function Program() {
                 <Select
                   value={platform}
                   onChange={(e) => setPlatform(e.target.value)}
-                  className="mt-1"
+                  className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 >
                   <option value="">Select a Platform</option>
                   {platformState.platforms.map((item) => (
@@ -253,7 +248,7 @@ function Program() {
             <Label className="pt-5">
               <span>Name</span>
               <Input
-                className="mt-1"
+                className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -263,7 +258,7 @@ function Program() {
             <Label className="pt-5">
               <span>Url</span>
               <Input
-                className="mt-1"
+                className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
@@ -273,7 +268,7 @@ function Program() {
             <Label className="pt-5">
               <span>VDP</span>
               <Input
-                className="mt-1"
+                className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 type="checkbox"
                 checked={vdp}
                 onChange={(e) => setVdp(e.target.checked)}
@@ -285,7 +280,7 @@ function Program() {
               <Select
                 value={type}
                 onChange={(e) => setType(e.target.value)}
-                className="mt-1"
+                className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
                 <option value="private">Private</option>
                 <option value="public">Public</option>

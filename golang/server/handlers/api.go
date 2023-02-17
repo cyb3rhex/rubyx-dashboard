@@ -11,7 +11,7 @@ import (
 )
 
 func CreateApi(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 
@@ -27,7 +27,7 @@ func CreateApi(env env.Env, user *db.User, w http.ResponseWriter, r *http.Reques
 }
 
 func GetApi(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 
@@ -48,7 +48,7 @@ func GetApi(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) 
 }
 
 func GetApis(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 
@@ -56,7 +56,7 @@ func GetApis(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request)
 }
 
 func DeleteApi(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 

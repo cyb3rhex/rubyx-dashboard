@@ -88,7 +88,7 @@ function Note() {
   const getProgramName = (id) => {
     if (programState && programState.programs) {
       var potential = programState.programs.find(
-        (item) => item.id == parseInt(id)
+        (item) => item.id === parseInt(id)
       );
       if (potential) {
         return potential.name;
@@ -275,7 +275,7 @@ function Note() {
                 <Select
                   value={program}
                   onChange={(e) => setProgram(e.target.value)}
-                  className="mt-1"
+                  className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 >
                   <option value="">Select a Program</option>
                   {programState.programs.map((item) => (
@@ -287,7 +287,7 @@ function Note() {
             <Label className="pt-5">
               <span>Title</span>
               <Input
-                className="mt-1"
+                className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -296,7 +296,7 @@ function Note() {
             <Label className="pt-5">
               <span>Tag</span>
               <Input
-                className="mt-1"
+                className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
                 value={tag}
                 onChange={(e) => setTag(e.target.value)}

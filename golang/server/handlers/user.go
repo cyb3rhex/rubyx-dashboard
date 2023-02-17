@@ -53,7 +53,7 @@ func checkPasswordHash(password, salt, hash string) bool {
 }
 
 func UpdatePassword(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 
@@ -75,6 +75,30 @@ func UpdatePassword(env env.Env, user *db.User, w http.ResponseWriter, r *http.R
 		ID:   user.ID,
 		Pass: u.Pass,
 		Salt: u.Salt,
+	})
+
+	if err != nil {
+		return write.Error(err)
+	}
+
+	return write.Success()
+}
+
+func UpdateEmail(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
+	if user == nil {
+		return write.Error(errors.RouteUnauthorized)
+	}
+
+	decoder := json.NewDecoder(r.Body)
+	u := &db.User{}
+	err := decoder.Decode(&u)
+	if err != nil || u == nil {
+		return write.Error(errors.NoJSONBody)
+	}
+
+	err = env.DB().UpdateUserEmail(r.Context(), db.UpdateUserEmailParams{
+		ID:    user.ID,
+		Email: u.Email,
 	})
 
 	if err != nil {

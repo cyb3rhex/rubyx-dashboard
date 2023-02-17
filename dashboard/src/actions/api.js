@@ -30,6 +30,9 @@ export default class API {
   static updatePassword = (body) => (
     _put('/user/password', body)
   )
+  static updateEmail = (body) => (
+    _put('/user/email', body)
+  )
 
   // SETTINGS
   static getApiKeys = () => (

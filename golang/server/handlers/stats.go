@@ -13,7 +13,7 @@ import (
 )
 
 func ReloadStats(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 
@@ -34,7 +34,7 @@ func ReloadStats(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 }
 
 func CreateStat(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 
@@ -59,7 +59,7 @@ func CreateStat(env env.Env, user *db.User, w http.ResponseWriter, r *http.Reque
 }
 
 func GetStat(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 
@@ -80,7 +80,7 @@ func GetStat(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request)
 }
 
 func GetStats(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 
@@ -88,7 +88,7 @@ func GetStats(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request
 }
 
 func UpdateStat(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 
@@ -114,7 +114,7 @@ func UpdateStat(env env.Env, user *db.User, w http.ResponseWriter, r *http.Reque
 }
 
 func DeleteStat(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user.Status != db.UserStatusActive {
+	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
 	}
 

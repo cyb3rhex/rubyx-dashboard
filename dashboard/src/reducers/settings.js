@@ -13,7 +13,7 @@ const initialState = {
   apikeys: null,
 };
 
-export default function (state = initialState, action) {
+export default function reducer (state = initialState, action) {
   switch (action.type) {
     case CREATE_API_KEY:
       return {

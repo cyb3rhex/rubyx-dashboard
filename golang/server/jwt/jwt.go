@@ -56,18 +56,15 @@ func HandleUserToken(e env.Env, w http.ResponseWriter, r *http.Request) (*db.Use
 	u, err := userFromToken(r)
 
 	// attempt refresh of expired token:
-	if err == errors.ExpiredToken && u.Status == db.UserStatusActive {
+	if err == errors.ExpiredToken {
 		user, fetchError := e.DB().FindUserByEmail(r.Context(), u.Email)
 		if fetchError != nil {
 			return wipeToken(e, w)
 		}
-		if user.Status == db.UserStatusActive {
-			WriteUserToken(w, &user)
-			return &user, nil
-		} else {
-			// their account isn't verified, log them out
-			return wipeToken(e, w)
-		}
+
+		WriteUserToken(w, &user)
+		return &user, nil
+
 	}
 
 	if err != nil {
