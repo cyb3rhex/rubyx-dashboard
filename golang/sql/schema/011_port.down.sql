@@ -1,2 +1,0 @@
-DROP SCHEMA port;
-DROP TABLE port;

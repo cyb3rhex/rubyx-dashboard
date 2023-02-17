@@ -47,27 +47,6 @@ func Link(p string, q *url.Values) *url.URL {
 	return u
 }
 
-// VerifyEmail sends a link that the user can click to verify their email!
-func (m *Mailer) VerifyEmail(to string, code string) error {
-	subject := "Please confirm your email"
-	url := Link(fmt.Sprintf("verify/%s", code), nil)
-	plain := fmt.Sprintf("Thank you for creating an account! Please click the following link to confirm your email address with us: %s", url)
-
-	var content bytes.Buffer
-	p(&content, "Hi,")
-	p(&content, "Please click the button below to confirm your account.")
-	button(&content, &btn{
-		Label: "Confirm My Account",
-		Href:  url.String(),
-	})
-	p(&content, "Thank you for creating an account with us!")
-
-	return m.Send(to, subject, plain, &html{
-		Preview: "Follow this link to verify your email",
-		Content: content,
-	})
-}
-
 // ResetPassword sends a link that the user can click to verify their email!
 func (m *Mailer) ResetPassword(to string, code string) error {
 	subject := "Reset Your Password"

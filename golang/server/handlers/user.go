@@ -9,7 +9,6 @@ import (
 	"github.com/aituglo/rubyx/golang/db"
 	"github.com/aituglo/rubyx/golang/env"
 	"github.com/aituglo/rubyx/golang/errors"
-	"github.com/aituglo/rubyx/golang/server/jwt"
 	"github.com/aituglo/rubyx/golang/server/write"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -53,44 +52,6 @@ func checkPasswordHash(password, salt, hash string) bool {
 	return err == nil
 }
 
-func Signup(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	decoder := json.NewDecoder(r.Body)
-	u := &db.User{}
-	err := decoder.Decode(&u)
-	if err != nil || u == nil {
-		return write.Error(errors.NoJSONBody)
-	}
-
-	// salt and hash it
-	u.Salt = generateRandomString(32)
-	u.Pass, err = hashPassword(u.Pass, u.Salt)
-	if err != nil {
-		return write.Error(err)
-	}
-
-	dbUser, err := env.DB().CreateUser(r.Context(), db.CreateUserParams{
-		Email:        u.Email,
-		Pass:         u.Pass,
-		Salt:         u.Salt,
-		Status:       db.UserStatusUnverified,
-		Verification: generateRandomString(32),
-	})
-
-	if err != nil {
-		if isDupe(err) {
-			return write.Error(errors.AlreadyRegistered)
-		}
-		return write.Error(err)
-	}
-
-	err = env.Mailer().VerifyEmail(dbUser.Email, dbUser.Verification)
-	if err != nil {
-		return write.Error(err)
-	}
-
-	return write.Success()
-}
-
 func UpdatePassword(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
 	if user.Status != db.UserStatusActive {
 		return write.Error(errors.RouteUnauthorized)
@@ -125,41 +86,4 @@ func UpdatePassword(env env.Env, user *db.User, w http.ResponseWriter, r *http.R
 
 func Whoami(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
 	return write.JSON(user)
-}
-
-type verifyRequest struct {
-	Code string
-}
-
-func Verify(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	decoder := json.NewDecoder(r.Body)
-	req := &verifyRequest{}
-
-	err := decoder.Decode(&req)
-	if err != nil || req == nil || req.Code == "" {
-		return write.Error(errors.NoJSONBody)
-	}
-
-	u, err := env.DB().FindUserByVerificationCode(r.Context(), req.Code)
-	if err != nil {
-		return write.Error(err)
-	}
-
-	if u.Status != db.UserStatusUnverified {
-		return write.Error(errors.VerificationExpired)
-	}
-
-	u.Status = db.UserStatusActive
-
-	err = env.DB().UpdateUserStatus(r.Context(), db.UpdateUserStatusParams{
-		ID:     u.ID,
-		Status: u.Status,
-	})
-
-	if err != nil {
-		return write.Error(err)
-	}
-
-	res := jwt.WriteUserToken(w, &u)
-	return write.JSON(&res)
 }

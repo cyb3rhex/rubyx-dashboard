@@ -6,14 +6,8 @@ const MyAccount = lazy(() => import('../pages/MyAccount'))
 const Settings = lazy(() => import('../pages/Settings'))
 const Platform = lazy(() => import('../pages/Platform'))
 const Program = lazy(() => import('../pages/Program'))
-const Url = lazy(() => import('../pages/Url'))
-const Vulnerability = lazy(() => import('../pages/Vulnerability'))
-const Subdomain = lazy(() => import('../pages/Subdomain'))
 const Notes = lazy(() => import('../pages/Notes'))
-const Ip = lazy(() => import('../pages/Ip'))
 const Stat = lazy(() => import('../pages/Stat'))
-const Cards = lazy(() => import('../pages/Cards'))
-const Charts = lazy(() => import('../pages/Charts'))
 const Page404 = lazy(() => import('../pages/404'))
 
 /**
@@ -54,30 +48,6 @@ const routes = [
   {
     path: '/stats',
     component: Stat,
-  },
-  {
-    path: '/vulnerabilities',
-    component: Vulnerability,
-  },
-  {
-    path: '/subdomains',
-    component: Subdomain,
-  },
-  {
-    path: '/urls',
-    component: Url,
-  },
-  {
-    path: '/ips',
-    component: Ip,
-  },
-  {
-    path: '/cards',
-    component: Cards,
-  },
-  {
-    path: '/charts',
-    component: Charts,
   },
   {
     path: '/404',

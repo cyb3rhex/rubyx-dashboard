@@ -34,9 +34,7 @@ func (srv *server) ConfigureRouter() {
 	srv.GET("/reset/:code", handlers.DoReset)
 
 	// USER
-	srv.POST("/user", handlers.Signup)
 	srv.GET("/user", handlers.Whoami)
-	srv.POST("/user/verify", handlers.Verify)
 	srv.PUT("/user/password", handlers.UpdatePassword)
 
 	// PLATFORMS
@@ -57,13 +55,6 @@ func (srv *server) ConfigureRouter() {
 	srv.DELETE("/program/id/:id", handlers.DeleteProgram)
 	srv.DELETE("/program/slug/:name", handlers.DeleteProgramBySlug)
 
-	// PORT
-	srv.GET("/port", handlers.GetPorts)
-	srv.GET("/port/:id", handlers.GetPort)
-	srv.POST("/port", handlers.CreatePort)
-	srv.PUT("/port", handlers.UpdatePort)
-	srv.DELETE("/port/:id", handlers.DeletePort)
-
 	// NOTES
 	srv.GET("/notes", handlers.GetNotes)
 	srv.GET("/notes/id/:id", handlers.GetNote)
@@ -72,46 +63,10 @@ func (srv *server) ConfigureRouter() {
 	srv.DELETE("/notes/:id", handlers.DeleteNote)
 	srv.GET("/notes/program/:id", handlers.GetNotesByProgramID)
 
-	// IP
-	srv.GET("/ip", handlers.GetIps)
-	srv.GET("/ip/:id", handlers.GetIp)
-	srv.POST("/ip", handlers.CreateIp)
-	srv.PUT("/ip", handlers.UpdateIp)
-	srv.DELETE("/ip/:id", handlers.DeleteIp)
-
-	// ROOTDOMAIN
-	srv.GET("/rootdomain", handlers.GetRootDomains)
-	srv.GET("/rootdomain/:id", handlers.GetRootDomain)
-	srv.POST("/rootdomain", handlers.CreateRootDomain)
-	srv.PUT("/rootdomain", handlers.UpdateRootDomain)
-	srv.DELETE("/rootdomain/:id", handlers.DeleteRootDomain)
-
-	// SUBDOMAIN
-	srv.GET("/subdomain", handlers.GetSubdomains)
-	srv.GET("/subdomain/one/:id", handlers.GetSubdomain)
-	srv.GET("/subdomain/program/:id", handlers.GetSubdomainByProgram)
-	srv.POST("/subdomain", handlers.CreateSubdomain)
-	srv.PUT("/subdomain", handlers.UpdateSubdomain)
-	srv.DELETE("/subdomain/:id", handlers.DeleteSubdomain)
-
 	// STATS
 	srv.GET("/stats", handlers.GetStats)
 	srv.GET("/stat/one/:id", handlers.GetStat)
 	srv.GET("/stats/reload", handlers.ReloadStats)
-
-	// URL
-	srv.GET("/url", handlers.GetUrls)
-	srv.GET("/url/one/:id", handlers.GetUrl)
-	srv.POST("/url", handlers.CreateUrl)
-	srv.PUT("/url", handlers.UpdateUrl)
-	srv.DELETE("/url/:id", handlers.DeleteUrl)
-
-	// VULNERABILITY
-	srv.GET("/vulnerability", handlers.GetVulnerabilities)
-	srv.GET("/vulnerability/:id", handlers.GetVulnerability)
-	srv.POST("/vulnerability", handlers.CreateVulnerability)
-	srv.PUT("/vulnerability", handlers.UpdateVulnerability)
-	srv.DELETE("/vulnerability/:id", handlers.DeleteVulnerability)
 
 	// API
 	srv.GET("/api", handlers.GetApis)

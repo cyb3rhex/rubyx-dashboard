@@ -1,4 +1,4 @@
-# RUBYX 
+# Rubyx
 
 ## Requirements
 Install `docker` && `docker-compose`
@@ -12,9 +12,14 @@ git clone https://github.com/aituglo/rubyx.git
 cp .env.example .env
 
 # build and start the containers
-docker-compose up
+docker-compose up --build
+
+# Init the first user
+docker-compose run golang go run initdb.go
 ```
 1) Visit `https://localhost` (*note **https***)
+
+2) You can connect with admin@admin.com:passw0rd
 
 ## Database Helpers
 
@@ -45,6 +50,7 @@ postgres/psql
 Maybe your postgres went sideways from a wonky migration and it's easier to restart from scratch.
 ```bash
 docker-compose down -v && docker-compose up --build --force-recreate
+docker-compose run golang go run initdb.go
 ```
 
 ## Run in Production
