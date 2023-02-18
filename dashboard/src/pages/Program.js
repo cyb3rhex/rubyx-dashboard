@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { createProgram, deleteProgram, getPrograms, reloadPrograms, updateProgram, getScope } from "../actions/program";
+import {
+  createProgram,
+  deleteProgram,
+  getPrograms,
+  reloadPrograms,
+  updateProgram,
+  getScope,
+} from "../actions/program";
 import PageTitle from "../components/Typography/PageTitle";
 import { TrashIcon, EditIcon, SearchIcon, ButtonsIcon } from "../icons";
 import {
@@ -22,6 +29,7 @@ import {
   Input,
 } from "@windmill/react-ui";
 import { getPlatforms } from "../actions/platform";
+import ClipLoader from "react-spinners/ClipLoader";
 
 function Program() {
   const dispatch = useDispatch();
@@ -64,7 +72,7 @@ function Program() {
 
   const handleCreateProgram = () => {
     setIsModalOpen(false);
-    
+
     dispatch(createProgram(parseInt(platform), name, url, type, vdp));
 
     setName("");
@@ -78,7 +86,9 @@ function Program() {
     setIsModalOpen(false);
     setEditMode(false);
 
-    dispatch(updateProgram(parseInt(editId), parseInt(platform), name, url, type, vdp));
+    dispatch(
+      updateProgram(parseInt(editId), parseInt(platform), name, url, type, vdp)
+    );
 
     setName("");
     setType("public");
@@ -140,91 +150,117 @@ function Program() {
 
   return (
     <>
-      <PageTitle>Program</PageTitle>
+      <PageTitle>Programs</PageTitle>
 
       <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
         <div className="py-3">
-          <Button onClick={() => handleReloadPrograms()}>Reload Programs</Button>
+          {programState.loading ? (
+            <ClipLoader
+              color={"#355dad"}
+              loading={true}
+              size={30}
+              aria-label="Loading"
+              data-testid="loader"
+            />
+          ) : (
+            <Button onClick={() => handleReloadPrograms()}>
+              Reload Programs
+            </Button>
+          )}
         </div>
 
         {totalResults > 0 && (
           <div className="overflow-x-auto">
-          <TableContainer className="mb-8 w-full sm:w-auto">
-            <Table>
-              <TableHeader>
-                <tr>
-                  <TableCell>Name</TableCell>
-                  <TableCell className="hidden sm:table-cell">Type</TableCell>
-                  <TableCell>Scope</TableCell>
-                  <TableCell>Platform</TableCell>
-                  <TableCell>Actions</TableCell>
-                </tr>
-              </TableHeader>
-              <TableBody>
-                {dataTable && dataTable.map((key, i) => (
-                  <TableRow key={i}>
-                    <TableCell>
-                      <a
-                        className="text-sm truncate text-ellipsis overflow-hidden"
-                        href={key.url}
-                        target="_blank" rel="noreferrer"
-                      >
-                        {key.name}
-                      </a>
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <span className="text-sm">
-                        {key.type === "public" ? "Public" : "Private"}
-                      </span>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center space-x-4">
-                        <Button layout="link" size="icon" aria-label="Delete">
-                          <ButtonsIcon
-                            onClick={() => handleGetScope(key.id)}
-                            className="w-5 h-5"
-                            aria-hidden="true"
-                          />
-                        </Button>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">
-                        {getPlatformName(key.platform_id)}
-                      </span>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center space-x-4">
-                        <Button layout="link" size="icon" aria-label="Delete">
-                          <TrashIcon
-                            onClick={() => handleDeleteProgram(key.id)}
-                            className="w-5 h-5"
-                            aria-hidden="true"
-                          />
-                        </Button>
-                        <Button layout="link" size="icon" aria-label="Delete">
-                          <EditIcon
-                            onClick={() => handleEditProgram(key)}
-                            className="w-5 h-5"
-                            aria-hidden="true"
-                          />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-            <TableFooter>
-              <Pagination
-                totalResults={totalResults}
-                resultsPerPage={resultsPerPage}
-                onChange={onPageChangeTable}
-                label="Navigation"
-              />
-            </TableFooter>
-          </TableContainer>
-        </div>
+            <TableContainer className="mb-8 w-full sm:w-auto">
+              <Table>
+                <TableHeader>
+                  <tr>
+                    <TableCell>Name</TableCell>
+                    <TableCell className="hidden sm:table-cell">Type</TableCell>
+                    <TableCell>Scope</TableCell>
+                    <TableCell>Platform</TableCell>
+                    <TableCell>Actions</TableCell>
+                  </tr>
+                </TableHeader>
+                <TableBody>
+                  {dataTable &&
+                    dataTable.map((key, i) => (
+                      <TableRow key={i}>
+                        <TableCell>
+                          <a
+                            className="text-sm truncate text-ellipsis overflow-hidden"
+                            href={key.url}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {key.name}
+                          </a>
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          <span className="text-sm">
+                            {key.type === "public" ? "Public" : "Private"}
+                          </span>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center space-x-4">
+                            <Button
+                              layout="link"
+                              size="icon"
+                              aria-label="Delete"
+                            >
+                              <ButtonsIcon
+                                onClick={() => handleGetScope(key.id)}
+                                className="w-5 h-5"
+                                aria-hidden="true"
+                              />
+                            </Button>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <span className="text-sm">
+                            {getPlatformName(key.platform_id)}
+                          </span>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center space-x-4">
+                            <Button
+                              layout="link"
+                              size="icon"
+                              aria-label="Delete"
+                            >
+                              <TrashIcon
+                                onClick={() => handleDeleteProgram(key.id)}
+                                className="w-5 h-5"
+                                aria-hidden="true"
+                              />
+                            </Button>
+                            <Button
+                              layout="link"
+                              size="icon"
+                              aria-label="Delete"
+                            >
+                              <EditIcon
+                                onClick={() => handleEditProgram(key)}
+                                className="w-5 h-5"
+                                aria-hidden="true"
+                              />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+              <TableFooter>
+                <Pagination
+                  totalResults={totalResults}
+                  resultsPerPage={resultsPerPage}
+                  onChange={onPageChangeTable}
+                  label="Navigation"
+                />
+              </TableFooter>
+            </TableContainer>
+          </div>
         )}
 
         <Modal isOpen={isModalOpen} onClose={closeModal}>
@@ -330,41 +366,29 @@ function Program() {
         <Modal isOpen={seeScope} onClose={() => setSeeScope(false)}>
           <ModalHeader>Scope</ModalHeader>
           <ModalBody>
-          <TableContainer className="mb-8">
-            <Table>
-              <TableHeader>
-                <tr>
-                  <TableCell>Scope</TableCell>
-                  <TableCell>Type</TableCell>
-                  <TableCell>Actions</TableCell>
-                </tr>
-              </TableHeader>
-              <TableBody>
-                {programState.scope && programState.scope.map((key, i) => (
-                  <TableRow key={i}>
-                    <TableCell>
-                      <span className="text-sm">{key.scope}</span>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">{key.scope_type}</span>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center space-x-4">
-                        <Button layout="link" size="icon" aria-label="Delete">
-                          <SearchIcon
-                            className="w-5 h-5"
-                            aria-hidden="true"
-                          />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        
-
+            <TableContainer className="mb-8">
+              <Table>
+                <TableHeader>
+                  <tr>
+                    <TableCell>Scope</TableCell>
+                    <TableCell>Type</TableCell>
+                  </tr>
+                </TableHeader>
+                <TableBody>
+                  {programState.scope &&
+                    programState.scope.map((key, i) => (
+                      <TableRow key={i}>
+                        <TableCell>
+                          <span className="text-sm">{key.scope}</span>
+                        </TableCell>
+                        <TableCell>
+                          <span className="text-sm">{key.scope_type}</span>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </ModalBody>
           <ModalFooter>
             <div className="hidden sm:block">
@@ -373,7 +397,12 @@ function Program() {
               </Button>
             </div>
             <div className="block w-full sm:hidden">
-              <Button block size="large" layout="outline" onClick={() => setSeeScope(false)}>
+              <Button
+                block
+                size="large"
+                layout="outline"
+                onClick={() => setSeeScope(false)}
+              >
                 Cancel
               </Button>
             </div>

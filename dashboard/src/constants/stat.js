@@ -1,5 +1,7 @@
 export const GET_STATS = 'GET_STATS';
+export const GET_STATS_SUCCESS = 'GET_STATS_SUCCESS';
 export const GET_STATS_ERROR = 'GET_STATS_ERROR';
 
 export const RELOAD_STAT = 'RELOAD_STAT';
+export const RELOAD_STAT_SUCCESS = 'RELOAD_STAT_SUCCESS';
 export const RELOAD_STAT_ERROR = 'RELOAD_STAT_ERROR';

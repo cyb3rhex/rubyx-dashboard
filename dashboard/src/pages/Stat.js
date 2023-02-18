@@ -10,6 +10,7 @@ import { MoneyIcon, PeopleIcon } from "../icons";
 import RoundIcon from "../components/RoundIcon";
 import { Button } from "@windmill/react-ui";
 import { getPrograms } from "../actions/program";
+import ClipLoader from "react-spinners/ClipLoader";
 
 function Stat() {
   const dispatch = useDispatch();
@@ -194,7 +195,17 @@ function Stat() {
 
       <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
         <div className="py-3">
-          <Button onClick={() => handleReloadStats()}>Reload Stats</Button>
+          {statState.loading ? (
+            <ClipLoader
+              color={"#355dad"}
+              loading={true}
+              size={30}
+              aria-label="Loading"
+              data-testid="loader"
+            />
+          ) : (
+            <Button onClick={() => handleReloadStats()}>Reload Stats</Button>
+          )}
         </div>
 
         <div className="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">

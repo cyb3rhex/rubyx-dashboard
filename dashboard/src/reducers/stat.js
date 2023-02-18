@@ -1,12 +1,14 @@
 import {
   GET_STATS,
+  GET_STATS_SUCCESS,
   GET_STATS_ERROR,
   RELOAD_STAT,
+  RELOAD_STAT_SUCCESS,
   RELOAD_STAT_ERROR,
 } from "../constants/stat";
 
 const initialState = {
-  loading: true,
+  loading: false,
   error: "",
   stats: null,
 };
@@ -14,6 +16,12 @@ const initialState = {
 export default function reducer (state = initialState, action) {
   switch (action.type) {
     case RELOAD_STAT:
+      return {
+        ...state,
+        loading: true,
+        error: "",
+      };
+    case RELOAD_STAT_SUCCESS:
       return {
         ...state,
         loading: false,
@@ -28,6 +36,12 @@ export default function reducer (state = initialState, action) {
         error: action.payload,
       };
     case GET_STATS:
+      return {
+        ...state,
+        loading: true,
+        error: "",
+      };
+    case GET_STATS_SUCCESS:
       return {
         ...state,
         loading: false,

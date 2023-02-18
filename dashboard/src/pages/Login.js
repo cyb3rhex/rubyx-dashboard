@@ -3,6 +3,7 @@ import { login } from "../actions/user";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Label, Input, Button } from "@windmill/react-ui";
+import { toast } from "react-toastify";
 
 function Login() {
   const formRef = useRef(null);

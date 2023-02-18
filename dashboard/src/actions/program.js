@@ -2,19 +2,25 @@ import API from "./api";
 import { slugify } from "../utils/misc";
 import {
   GET_PROGRAM,
+  GET_PROGRAM_SUCCESS,
   GET_PROGRAM_ERROR,
   CREATE_PROGRAM,
+  CREATE_PROGRAM_SUCCESS,
   CREATE_PROGRAM_ERROR,
   DELETE_PROGRAM,
+  DELETE_PROGRAM_SUCCESS,
   DELETE_PROGRAM_ERROR,
   UPDATE_PROGRAM,
+  UPDATE_PROGRAM_SUCCESS,
   UPDATE_PROGRAM_ERROR,
   RELOAD_PROGRAM,
+  RELOAD_PROGRAM_SUCCESS,
   RELOAD_PROGRAM_ERROR,
   GET_SCOPE,
   GET_SCOPE_ERROR,
   GET_SCOPE_SUCCESS,
 } from "../constants/program";
+import {toast} from "react-toastify";
 
 export const getScope = (id) => async (dispatch) => {
   try {
@@ -45,13 +51,22 @@ export const getScope = (id) => async (dispatch) => {
 
 
 export const reloadPrograms = () => async (dispatch) => {
+  dispatch({
+    type: RELOAD_PROGRAM,
+  });
   try {
     API.reloadPrograms()
       .then((res) => {
         API.getPrograms().then((data) => {
           dispatch({
-            type: RELOAD_PROGRAM,
+            type: RELOAD_PROGRAM_SUCCESS,
             payload: data,
+          });
+          toast.success("Programs reloaded !", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeButton: false,
           });
         });
       })
@@ -71,13 +86,17 @@ export const reloadPrograms = () => async (dispatch) => {
 
 
 export const getPrograms = () => async (dispatch) => {
+  dispatch({
+    type: GET_PROGRAM,
+  });
   try {
     API.getPrograms()
       .then((data) => {
         dispatch({
-          type: GET_PROGRAM,
+          type: GET_PROGRAM_SUCCESS,
           payload: data,
         });
+        
       })
       .catch((err) => {
         dispatch({
@@ -94,6 +113,9 @@ export const getPrograms = () => async (dispatch) => {
 };
 
 export const createProgram = (platform_id, name, url, type, vdp) => async (dispatch) => {
+  dispatch({
+    type: CREATE_PROGRAM,
+  });
   try {
     var program = {
       platform_id: platform_id,
@@ -108,8 +130,14 @@ export const createProgram = (platform_id, name, url, type, vdp) => async (dispa
       .then((res) => {
         API.getPrograms().then((data) => {
           dispatch({
-            type: CREATE_PROGRAM,
+            type: CREATE_PROGRAM_SUCCESS,
             payload: data,
+          });
+          toast.success("Program added !", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeButton: false,
           });
         });
       })
@@ -128,6 +156,9 @@ export const createProgram = (platform_id, name, url, type, vdp) => async (dispa
 };
 
 export const updateProgram = (id, platform_id, name, url, type, vdp) => async (dispatch) => {
+  dispatch({
+    type: UPDATE_PROGRAM,
+  });
   try {
     var program = {
       id: id,
@@ -143,8 +174,14 @@ export const updateProgram = (id, platform_id, name, url, type, vdp) => async (d
       .then((res) => {
         API.getPrograms().then((data) => {
           dispatch({
-            type: UPDATE_PROGRAM,
+            type: UPDATE_PROGRAM_SUCCESS,
             payload: data,
+          });
+          toast.success("Program updated !", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeButton: false,
           });
         });
       })
@@ -163,13 +200,22 @@ export const updateProgram = (id, platform_id, name, url, type, vdp) => async (d
 };
 
 export const deleteProgram = (id) => async (dispatch) => {
+  dispatch({
+    type: DELETE_PROGRAM,
+  });
   try {
     API.deleteProgram(id)
       .then((res) => {
         API.getPrograms().then((data) => {
           dispatch({
-            type: DELETE_PROGRAM,
+            type: DELETE_PROGRAM_SUCCESS,
             payload: data,
+          });
+          toast.success("Program deleted !", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeButton: false,
           });
         });
       })

@@ -10,6 +10,7 @@ import {
   UPDATE_PLATFORM,
   UPDATE_PLATFORM_ERROR
 } from "../constants/platform";
+import { toast } from "react-toastify";
 
 export const getPlatforms = () => async (dispatch) => {
   try {
@@ -54,6 +55,13 @@ export const createPlatform = (name, email, password, otp, type) => async (dispa
             type: CREATE_PLATFORM,
             payload: data,
           });
+
+          toast.success("Platform added !", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeButton: false,
+          });
         });
       })
       .catch((err) => {
@@ -89,6 +97,13 @@ export const updatePlatform = (id, name, email, password, otp, type) => async (d
             type: UPDATE_PLATFORM,
             payload: data,
           });
+
+          toast.success("Platform updated !", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeButton: false,
+          });
         });
       })
       .catch((err) => {
@@ -113,6 +128,13 @@ export const deletePlatform = (id) => async (dispatch) => {
           dispatch({
             type: DELETE_PLATFORM,
             payload: data,
+          });
+
+          toast.success("Platform deleted !", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeButton: false,
           });
         });
       })

@@ -4,7 +4,7 @@ import {
   createPlatform,
   deletePlatform,
   getPlatforms,
-  updatePlatform
+  updatePlatform,
 } from "../actions/platform";
 import PageTitle from "../components/Typography/PageTitle";
 import { TrashIcon, EditIcon } from "../icons";
@@ -30,11 +30,11 @@ import {
 function Platform() {
   const dispatch = useDispatch();
   const platformState = useSelector((state) => state.platform);
-  const [name, setName] = useState("yeswehack")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [otp, setOtp] = useState("")
-  const [type, setType] = useState("public")
+  const [name, setName] = useState("yeswehack");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [otp, setOtp] = useState("");
+  const [type, setType] = useState("public");
   const [editId, setEditId] = useState(0);
   const [editMode, setEditMode] = useState(false);
 
@@ -54,7 +54,7 @@ function Platform() {
   }, []);
 
   const handleCreatePlatform = () => {
-    setIsModalOpen(false)
+    setIsModalOpen(false);
 
     dispatch(createPlatform(name, email, password, otp, type));
 
@@ -74,7 +74,9 @@ function Platform() {
     setIsModalOpen(false);
     setEditMode(false);
 
-    dispatch(updatePlatform(parseInt(editId), name, email, password, otp, type));
+    dispatch(
+      updatePlatform(parseInt(editId), name, email, password, otp, type)
+    );
 
     setName("yeswehack");
     setType("public");
@@ -140,37 +142,42 @@ function Platform() {
                 </tr>
               </TableHeader>
               <TableBody>
-                {dataTable && dataTable.map((key, i) => (
-                  <TableRow key={i}>
-                    <TableCell>
-                      <span className="text-sm">{key.name && key.name}</span>
-                    </TableCell>
-                    <TableCell>
-                    <span className="text-sm">{key.hunter_username && key.hunter_username}</span>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">{key.type === "public" ? "Public" : "Private"}</span>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center space-x-4">
-                        <Button layout="link" size="icon" aria-label="Delete">
-                          <TrashIcon
-                            onClick={() => handleDeletePlatform(key.id)}
-                            className="w-5 h-5"
-                            aria-hidden="true"
-                          />
-                        </Button>
-                        <Button layout="link" size="icon" aria-label="Delete">
-                          <EditIcon
-                            onClick={() => handleEditPlatform(key)}
-                            className="w-5 h-5"
-                            aria-hidden="true"
-                          />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {dataTable &&
+                  dataTable.map((key, i) => (
+                    <TableRow key={i}>
+                      <TableCell>
+                        <span className="text-sm">{key.name && key.name}</span>
+                      </TableCell>
+                      <TableCell>
+                        <span className="text-sm">
+                          {key.hunter_username && key.hunter_username}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <span className="text-sm">
+                          {key.type === "public" ? "Public" : "Private"}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center space-x-4">
+                          <Button layout="link" size="icon" aria-label="Delete">
+                            <TrashIcon
+                              onClick={() => handleDeletePlatform(key.id)}
+                              className="w-5 h-5"
+                              aria-hidden="true"
+                            />
+                          </Button>
+                          <Button layout="link" size="icon" aria-label="Delete">
+                            <EditIcon
+                              onClick={() => handleEditPlatform(key)}
+                              className="w-5 h-5"
+                              aria-hidden="true"
+                            />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
             <TableFooter>
@@ -187,32 +194,85 @@ function Platform() {
         <Modal isOpen={isModalOpen} onClose={closeModal}>
           <ModalHeader>Add a Platform</ModalHeader>
           <ModalBody>
-          <Label className="pt-5">
+            <Label className="pt-5">
               <span>Name</span>
-              <Select value={type} onChange={(e) => setName(e.target.value)} className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              <Select
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
                 <option value="yeswehack">YesWeHack</option>
                 <option value="hackerone">HackerOne</option>
               </Select>
             </Label>
 
-            <Label className="pt-5">
-              <span>Email</span>
-              <Input className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" value={email} onChange={(e) => setEmail(e.target.value)} />
-            </Label>
+            {name === "yeswehack" && (
+              <>
+                <Label className="pt-5">
+                  <span>Email</span>
+                  <Input
+                    className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder=""
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </Label>
 
-            <Label className="pt-5">
-              <span>Password</span>
-              <Input className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="password" placeholder="" value={password} onChange={(e) => setPassword(e.target.value)} />
-            </Label>
+                <Label className="pt-5">
+                  <span>Password</span>
+                  <Input
+                    className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    type="password"
+                    placeholder=""
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </Label>
 
-            <Label className="pt-5">
-              <span>OTP</span>
-              <Input className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" value={otp} onChange={(e) => setOtp(e.target.value)} />
-            </Label>
+                <Label className="pt-5">
+                  <span>TOTP Code</span>
+                  <Input
+                    className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder=""
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                  />
+                </Label>
+              </>
+            )}
+
+            {name === "hackerone" && (
+              <>
+                <Label className="pt-5">
+                  <span>Username</span>
+                  <Input
+                    className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder=""
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </Label>
+
+                <Label className="pt-5">
+                  <span>API Key</span>
+                  <Input
+                    className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    type="password"
+                    placeholder=""
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </Label>
+              </>
+            )}
 
             <Label className="pt-5">
               <span>Type</span>
-              <Select value={type} onChange={(e) => setType(e.target.value)} className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              <Select
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+                className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
                 <option value="private">Private</option>
                 <option value="public">Public</option>
               </Select>
@@ -225,7 +285,7 @@ function Platform() {
               </Button>
             </div>
             <div className="hidden sm:block">
-            {editMode ? (
+              {editMode ? (
                 <Button onClick={() => handleUpdatePlatform()}>Update</Button>
               ) : (
                 <Button onClick={() => handleCreatePlatform()}>Add</Button>
@@ -237,7 +297,7 @@ function Platform() {
               </Button>
             </div>
             <div className="block w-full sm:hidden">
-            {editMode ? (
+              {editMode ? (
                 <Button
                   block
                   size="large"

@@ -1,17 +1,23 @@
 import API from "./api";
 import {
   GET_STATS,
+  GET_STATS_SUCCESS,
   GET_STATS_ERROR,
   RELOAD_STAT,
+  RELOAD_STAT_SUCCESS,
   RELOAD_STAT_ERROR,
 } from "../constants/stat";
+import { toast } from "react-toastify";
 
 export const getStats = () => async (dispatch) => {
+  dispatch({
+    type: GET_STATS,
+  });
   try {
     API.getStats()
       .then((data) => {
         dispatch({
-          type: GET_STATS,
+          type: GET_STATS_SUCCESS,
           payload: data,
         });
       })
@@ -30,13 +36,23 @@ export const getStats = () => async (dispatch) => {
 };
 
 export const reloadStats = () => async (dispatch) => {
+  dispatch({
+    type: RELOAD_STAT,
+  });
   try {
     API.reloadStats()
       .then((res) => {
         API.getStats().then((data) => {
           dispatch({
-            type: RELOAD_STAT,
+            type: RELOAD_STAT_SUCCESS,
             payload: data,
+          });
+
+          toast.success("Stats reloaded !", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeButton: false,
           });
         });
       })

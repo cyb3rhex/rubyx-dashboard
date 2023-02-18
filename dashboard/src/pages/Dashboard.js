@@ -8,6 +8,8 @@ import { getStats } from '../actions/stat'
 
 function Dashboard() {
   const statState = useSelector(state => state.stat)
+  const noteState = useSelector(state => state.notes)
+  const programState = useSelector(state => state.program)
   const dispatch = useDispatch()
 
   const totalStat = (stats) => {
@@ -40,14 +42,7 @@ function Dashboard() {
 
       {/* <!-- Cards --> */}
       <div className="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
-        <InfoCard title="Total Subdomains" value="6389">
-          <RoundIcon
-            icon={PeopleIcon}
-            iconColorClass="text-orange-500 dark:text-orange-100"
-            bgColorClass="bg-orange-100 dark:bg-orange-500"
-            className="mr-4"
-          />
-        </InfoCard>
+        
 
         <InfoCard title="Total Bounties balance" value={`$ ${statState.stats ? totalStat(statState.stats) : 0}`}>
           <RoundIcon
@@ -67,7 +62,16 @@ function Dashboard() {
           />
         </InfoCard>
 
-        <InfoCard title="Pending contacts" value="35">
+        <InfoCard title="Programs" value={programState.programs && programState.programs.length}>
+          <RoundIcon
+            icon={PeopleIcon}
+            iconColorClass="text-orange-500 dark:text-orange-100"
+            bgColorClass="bg-orange-100 dark:bg-orange-500"
+            className="mr-4"
+          />
+        </InfoCard>
+
+        <InfoCard title="Notes" value={noteState.notes && noteState.notes.length}>
           <RoundIcon
             icon={ChatIcon}
             iconColorClass="text-teal-500 dark:text-teal-100"
