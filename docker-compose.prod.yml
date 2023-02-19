@@ -13,15 +13,6 @@ services:
     depends_on:
       - postgres
 
-  # worker
-  worker:
-    network_mode: host
-    build:
-      context: golang
-      dockerfile: worker.Dockerfile
-      target: prod
-    env_file: .env
-
   # front-end built with react
   react:
     restart: always
