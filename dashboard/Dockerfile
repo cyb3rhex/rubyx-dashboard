@@ -12,8 +12,6 @@ RUN yarn
 COPY . . 
 RUN yarn build -o app
 
-# multistage build...
-# this runs a lil nginx instance to serve the app
 FROM nginx:alpine as prod
 EXPOSE 3000
 COPY --from=build /root/build /usr/share/nginx/html

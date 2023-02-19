@@ -1,13 +1,5 @@
 version: '3.4'
 services:
-  # prerender container
-  prerender-prod:
-    restart: always
-    build:
-      context: prerender
-    ports:
-      - "4000:3000"
-
   # back-end api built with golang
   golang-prod:
     restart: always
