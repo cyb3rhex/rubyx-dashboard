@@ -12,7 +12,8 @@ services:
       - "5000:5000"
     env_file: .env
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
   # front-end built with react
   react:
@@ -28,6 +29,11 @@ services:
   # postgres is our primary data store
   postgres:
     build: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
     volumes:
       - ./golang/sql/schema:/docker-entrypoint-initdb.d/schema
 

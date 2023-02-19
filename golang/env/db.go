@@ -5,11 +5,16 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
 func Connect() (*pgxpool.Pool, error) {
+	waitTime := 5 * time.Second
+	log.Printf("Waiting %s for database to start", waitTime)
+	time.Sleep(waitTime)
+
 	conn, err := pgxpool.Connect(context.Background(), buildConnectionString())
 	if err != nil {
 		return nil, err
