@@ -1,7 +1,7 @@
 version: '3.4'
 services:
   # back-end api built with golang
-  golang-prod:
+  golang:
     restart: always
     build: 
       context: golang
@@ -11,10 +11,10 @@ services:
       - "5000:5000"
     env_file: .env
     depends_on:
-      - postgres-prod
+      - postgres
 
   # worker
-  worker-prod:
+  worker:
     network_mode: host
     build:
       context: golang
@@ -23,7 +23,7 @@ services:
     env_file: .env
 
   # front-end built with react
-  react-prod:
+  react:
     restart: always
     build: 
       context: dashboard
@@ -31,21 +31,7 @@ services:
     ports:
       - "3000:3000"
 
-  postgres-prod:
+  postgres:
     build: postgres
     volumes:
       - ./golang/sql/schema:/docker-entrypoint-initdb.d/schema
-
-  # nginx is used for ssl termination
-  # you may opt to install nginx _on the host_ for greater resilience
-  nginx-prod:
-    restart: always
-    build: 
-      context: nginx
-      target: prod
-    ports:
-      - "80:80"
-      - "443:443"
-    depends_on:
-      - golang-prod
-      - react-prod
