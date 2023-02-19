@@ -39,7 +39,7 @@ func main() {
 	}
 
 	// Insertion d'un nouvel utilisateur avec le mot de passe et le sel hashés
-	_, err = dbpool.Exec(context.Background(), "INSERT INTO users (email, pass, salt) VALUES ($1, $2, $3, $4, $5)", "admin@admin.com", hashedPassword, salt)
+	_, err = dbpool.Exec(context.Background(), "INSERT INTO users (email, pass, salt) VALUES ($1, $2, $3)", "admin@admin.com", hashedPassword, salt)
 	if err != nil {
 		log.Fatal(err)
 	}
