@@ -154,22 +154,19 @@ func (q *Queries) FindStats(ctx context.Context) ([]Stat, error) {
 
 const updateStat = `-- name: UpdateStat :one
 UPDATE stats
-SET report_id = $2, report_title = $3, severity = $4, reward = $5, currency = $6, collab = $7, report_status = $8, report_date = $9, platform_id = $10, updated_at = NOW()
+SET report_id = $2, report_title = $3, severity = $4, reward = $5, collab = $6, report_status = $7, updated_at = NOW()
 WHERE id = $1
 RETURNING id, report_id, report_title, severity, reward, currency, collab, report_status, report_date, platform_id, created_at, updated_at
 `
 
 type UpdateStatParams struct {
-	ID           int64     `json:"id"`
-	ReportID     string    `json:"report_id"`
-	ReportTitle  string    `json:"report_title"`
-	Severity     string    `json:"severity"`
-	Reward       float32   `json:"reward"`
-	Currency     string    `json:"currency"`
-	Collab       bool      `json:"collab"`
-	ReportStatus string    `json:"report_status"`
-	ReportDate   time.Time `json:"report_date"`
-	PlatformID   int64     `json:"platform_id"`
+	ID           int64   `json:"id"`
+	ReportID     string  `json:"report_id"`
+	ReportTitle  string  `json:"report_title"`
+	Severity     string  `json:"severity"`
+	Reward       float32 `json:"reward"`
+	Collab       bool    `json:"collab"`
+	ReportStatus string  `json:"report_status"`
 }
 
 func (q *Queries) UpdateStat(ctx context.Context, arg UpdateStatParams) (Stat, error) {
@@ -179,11 +176,8 @@ func (q *Queries) UpdateStat(ctx context.Context, arg UpdateStatParams) (Stat, e
 		arg.ReportTitle,
 		arg.Severity,
 		arg.Reward,
-		arg.Currency,
 		arg.Collab,
 		arg.ReportStatus,
-		arg.ReportDate,
-		arg.PlatformID,
 	)
 	var i Stat
 	err := row.Scan(

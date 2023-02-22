@@ -24,8 +24,17 @@ func ReloadStats(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 
 	for _, p := range platform {
 		if p.Name == "yeswehack" {
+			_, err := utils.GetJWTYWH(&p)
+			if err != nil {
+				return write.Error(errors.RouteNotFound)
+			}
 			utils.GetReportsYWH(&p, false, 0, env, r.Context())
+			utils.GetReportsYWH(&p, true, 0, env, r.Context())
 		} else if p.Name == "hackerone" {
+			_, err := utils.GetJWTH1(&p)
+			if err != nil {
+				return write.Error(errors.RouteNotFound)
+			}
 			utils.GetReportsH1(&p, env, r.Context())
 		}
 	}
@@ -105,11 +114,8 @@ func UpdateStat(env env.Env, user *db.User, w http.ResponseWriter, r *http.Reque
 		ReportTitle:  p.ReportTitle,
 		Severity:     p.Severity,
 		Reward:       p.Reward,
-		Currency:     p.Currency,
 		Collab:       p.Collab,
 		ReportStatus: p.ReportStatus,
-		ReportDate:   p.ReportDate,
-		PlatformID:   p.PlatformID,
 	}))
 }
 

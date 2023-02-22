@@ -315,10 +315,11 @@ func parseReportsYWH(reports []interface{}, platform *db.Platform, collab bool, 
 		finalReport["report_title"] = reportMap["title"].(string)
 		finalReport["report_status"] = reportMap["status"].(map[string]interface{})["workflow_state"].(string)
 		finalReport["currency"] = reportMap["currency"].(string)
+		finalReport["report_id"] = reportMap["local_id"].(string)
 
 		currentReport, err := env.DB().FindStatByReportID(ctx, reportMap["local_id"].(string))
 		if err != nil {
-			finalReport["report_id"] = reportMap["local_id"].(string)
+
 			reportDate, err := time.Parse("2006-01-02T15:04:05-07:00", reportMap["created_at"].(string))
 			if err != nil {
 				fmt.Println(err)
@@ -337,7 +338,15 @@ func parseReportsYWH(reports []interface{}, platform *db.Platform, collab bool, 
 			})
 
 		} else {
-			fmt.Println(currentReport)
+			env.DB().UpdateStat(ctx, db.UpdateStatParams{
+				ID:           currentReport.ID,
+				ReportID:     finalReport["report_id"].(string),
+				ReportTitle:  finalReport["report_title"].(string),
+				Severity:     finalReport["severity"].(string),
+				Reward:       float32(finalReport["reward"].(float64)),
+				Collab:       finalReport["collab"].(bool),
+				ReportStatus: finalReport["report_status"].(string),
+			})
 		}
 	}
 }

@@ -5,7 +5,7 @@ RETURNING *;
 
 -- name: UpdateStat :one
 UPDATE stats
-SET report_id = $2, report_title = $3, severity = $4, reward = $5, currency = $6, collab = $7, report_status = $8, report_date = $9, platform_id = $10, updated_at = NOW()
+SET report_id = $2, report_title = $3, severity = $4, reward = $5, collab = $6, report_status = $7, updated_at = NOW()
 WHERE id = $1
 RETURNING *;
 

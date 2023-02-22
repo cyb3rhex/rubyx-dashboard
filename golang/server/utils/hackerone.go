@@ -238,10 +238,17 @@ func parseReportsH1(reports []interface{}, platform *db.Platform, env env.Env, c
 			})
 
 		} else {
-			finalReport["report_date"] = currentReport.ReportDate.Format("2006-01-02")
-			finalReport["severity"] = currentReport.Severity
+			finalReport["severity"] = reportMap["relationships"].(map[string]interface{})["severity"].(map[string]interface{})["data"].(map[string]interface{})["attributes"].(map[string]interface{})["rating"].(string)
 
-			fmt.Println(currentReport)
+			env.DB().UpdateStat(ctx, db.UpdateStatParams{
+				ID:           currentReport.ID,
+				ReportID:     finalReport["report_id"].(string),
+				ReportTitle:  finalReport["report_title"].(string),
+				Severity:     finalReport["severity"].(string),
+				Reward:       float32(finalReport["reward"].(float64)),
+				Collab:       finalReport["collab"].(bool),
+				ReportStatus: finalReport["report_status"].(string),
+			})
 		}
 
 	}
