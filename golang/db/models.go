@@ -102,6 +102,16 @@ type Api struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
+type Ip struct {
+	ID          int64     `json:"id"`
+	ProgramID   int64     `json:"program_id"`
+	SubdomainID int64     `json:"subdomain_id"`
+	Tag         string    `json:"tag"`
+	Ip          string    `json:"ip"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
+}
+
 type Note struct {
 	ID        int64     `json:"id"`
 	Title     string    `json:"title"`
@@ -126,6 +136,16 @@ type Platform struct {
 	UpdatedAt      time.Time    `json:"updated_at"`
 }
 
+type Port struct {
+	ID        int64     `json:"id"`
+	IpID      int64     `json:"ip_id"`
+	Port      int32     `json:"port"`
+	Tag       string    `json:"tag"`
+	Service   string    `json:"service"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
 type Program struct {
 	ID         int64       `json:"id"`
 	PlatformID int64       `json:"platform_id"`
@@ -143,6 +163,29 @@ type Reset struct {
 	UserID    int64     `json:"user_id"`
 	Code      string    `json:"code"`
 	CreatedAt time.Time `json:"created_at"`
+}
+
+type Rootdomain struct {
+	ID        int64     `json:"id"`
+	ProgramID int64     `json:"program_id"`
+	Wildcard  bool      `json:"wildcard"`
+	Inscope   bool      `json:"inscope"`
+	Tag       string    `json:"tag"`
+	Url       string    `json:"url"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
+type Scan struct {
+	ID        string    `json:"id"`
+	Command   string    `json:"command"`
+	Param     string    `json:"param"`
+	Status    string    `json:"status"`
+	StartTime time.Time `json:"start_time"`
+	EndTime   time.Time `json:"end_time"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Output    string    `json:"output"`
 }
 
 type Scope struct {
@@ -169,11 +212,50 @@ type Stat struct {
 	UpdatedAt    time.Time `json:"updated_at"`
 }
 
+type Subdomain struct {
+	ID            int64     `json:"id"`
+	ProgramID     int64     `json:"program_id"`
+	Url           string    `json:"url"`
+	Title         string    `json:"title"`
+	BodyHash      string    `json:"body_hash"`
+	Tag           string    `json:"tag"`
+	StatusCode    int32     `json:"status_code"`
+	Technologies  string    `json:"technologies"`
+	ContentLength int32     `json:"content_length"`
+	CreatedAt     time.Time `json:"created_at"`
+	UpdatedAt     time.Time `json:"updated_at"`
+}
+
+type Url struct {
+	ID            int64     `json:"id"`
+	SubdomainID   int64     `json:"subdomain_id"`
+	Url           string    `json:"url"`
+	Tag           string    `json:"tag"`
+	Title         string    `json:"title"`
+	BodyHash      string    `json:"body_hash"`
+	StatusCode    int32     `json:"status_code"`
+	Technologies  string    `json:"technologies"`
+	ContentLength int32     `json:"content_length"`
+	CreatedAt     time.Time `json:"created_at"`
+	UpdatedAt     time.Time `json:"updated_at"`
+}
+
 type User struct {
 	ID        int64     `json:"id"`
 	Email     string    `json:"email"`
 	Pass      string    `json:"pass"`
 	Salt      string    `json:"salt"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
+type Vulnerability struct {
+	ID        int64     `json:"id"`
+	ProgramID int64     `json:"program_id"`
+	UrlID     int64     `json:"url_id"`
+	Tag       string    `json:"tag"`
+	Type      string    `json:"type"`
+	Severity  string    `json:"severity"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }

@@ -64,10 +64,58 @@ func (srv *server) ConfigureRouter() {
 	srv.DELETE("/notes/:id", handlers.DeleteNote)
 	srv.GET("/notes/program/:id", handlers.GetNotesByProgramID)
 
+	// PORT
+	srv.GET("/port", handlers.GetPorts)
+	srv.GET("/port/:id", handlers.GetPort)
+	srv.POST("/port", handlers.CreatePort)
+	srv.PUT("/port", handlers.UpdatePort)
+	srv.DELETE("/port/:id", handlers.DeletePort)
+
+	// IP
+	srv.GET("/ip", handlers.GetIps)
+	srv.GET("/ip/:id", handlers.GetIp)
+	srv.POST("/ip", handlers.CreateIp)
+	srv.PUT("/ip", handlers.UpdateIp)
+	srv.DELETE("/ip/:id", handlers.DeleteIp)
+
+	// ROOTDOMAIN
+	srv.GET("/rootdomain", handlers.GetRootDomains)
+	srv.GET("/rootdomain/:id", handlers.GetRootDomain)
+	srv.POST("/rootdomain", handlers.CreateRootDomain)
+	srv.PUT("/rootdomain", handlers.UpdateRootDomain)
+	srv.DELETE("/rootdomain/:id", handlers.DeleteRootDomain)
+
+	// SUBDOMAIN
+	srv.GET("/subdomain", handlers.GetSubdomains)
+	srv.GET("/subdomain/one/:id", handlers.GetSubdomain)
+	srv.GET("/subdomain/program/:id", handlers.GetSubdomainByProgram)
+	srv.POST("/subdomain", handlers.CreateSubdomain)
+	srv.PUT("/subdomain", handlers.UpdateSubdomain)
+	srv.DELETE("/subdomain/:id", handlers.DeleteSubdomain)
+
+	// URL
+	srv.GET("/url", handlers.GetUrls)
+	srv.GET("/url/one/:id", handlers.GetUrl)
+	srv.POST("/url", handlers.CreateUrl)
+	srv.PUT("/url", handlers.UpdateUrl)
+	srv.DELETE("/url/:id", handlers.DeleteUrl)
+
+	// VULNERABILITY
+	srv.GET("/vulnerability", handlers.GetVulnerabilities)
+	srv.GET("/vulnerability/:id", handlers.GetVulnerability)
+	srv.POST("/vulnerability", handlers.CreateVulnerability)
+	srv.PUT("/vulnerability", handlers.UpdateVulnerability)
+	srv.DELETE("/vulnerability/:id", handlers.DeleteVulnerability)
+
 	// STATS
 	srv.GET("/stats", handlers.GetStats)
 	srv.GET("/stat/one/:id", handlers.GetStat)
 	srv.GET("/stats/reload", handlers.ReloadStats)
+
+	// SCAN
+	srv.POST("/scans", handlers.LaunchScan)
+	srv.GET("/scans", handlers.GetScans)
+	srv.DELETE("/scan/:id", handlers.DeleteScan)
 
 	// API
 	srv.GET("/api", handlers.GetApis)

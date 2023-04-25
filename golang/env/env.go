@@ -3,6 +3,7 @@ package env
 import (
 	"github.com/aituglo/rubyx/golang/db/wrapper"
 	"github.com/aituglo/rubyx/golang/mail"
+	"github.com/aituglo/rubyx/golang/scan"
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
@@ -10,13 +11,19 @@ type Env interface {
 	DB() wrapper.Querier
 	Close()
 	Mailer() *mail.Mailer
+	Queue() *scan.ScanQueue
 }
 
 // default impl
 type env struct {
+	queue   *scan.ScanQueue
 	db      *pgxpool.Pool
 	querier wrapper.Querier
 	mail    *mail.Mailer
+}
+
+func (e *env) Queue() *scan.ScanQueue {
+	return e.queue
 }
 
 func (e *env) DB() wrapper.Querier {
@@ -37,9 +44,16 @@ func New() (Env, error) {
 		return nil, err
 	}
 
+	querier := wrapper.NewQuerier(db)
+
+	scanQueue := scan.NewScanQueue(100)
+
+	scan.StartScanWorkers(querier, scanQueue, 5)
+
 	return &env{
+		queue:   scanQueue,
 		db:      db,
-		querier: wrapper.NewQuerier(db),
+		querier: querier,
 		mail:    mail.New(),
 	}, nil
 }
@@ -61,5 +75,9 @@ func (e *mock) DB() wrapper.Querier {
 func (e *mock) Close() {}
 
 func (e *mock) Mailer() *mail.Mailer {
+	return nil
+}
+
+func (e *mock) Queue() *scan.ScanQueue {
 	return nil
 }

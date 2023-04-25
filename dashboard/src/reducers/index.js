@@ -4,7 +4,12 @@ import settings from "./settings";
 import program from "./program";
 import platform from "./platform";
 import stat from "./stat";
+import vulnerability from "./vulnerability";
+import subdomain from "./subdomain";
+import url from "./url";
+import ip from "./ip";
 import notes from "./notes";
+import scan from "./scan";
 
 export default combineReducers({
   user,
@@ -12,5 +17,10 @@ export default combineReducers({
   platform,
   program,
   stat,
+  vulnerability,
+  subdomain,
+  url,
+  ip,
   notes,
+  scan,
 });

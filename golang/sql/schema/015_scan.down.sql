@@ -1,0 +1,2 @@
+DROP SCHEMA scans;
+DROP TABLE scans;

@@ -47,6 +47,88 @@ export default class API {
     _delete(`/api/${id}`)
   )
 
+  // SUBDOMAIN
+  static getSubdomains = () => (
+    _get('/subdomain')
+  )
+
+  static createSubdomain = (body) => (
+    _post('/subdomain', body)
+  )
+
+  static updateSubdomain = (body) => (
+    _put('/subdomain', body)
+  )
+
+  static deleteSubdomain = (id) => (
+    _delete(`/subdomain/${id}`)
+  )
+
+  // IP
+  static getIps = () => (
+    _get('/ip')
+  )
+
+  static createIp = (body) => (
+    _post('/ip', body)
+  )
+
+  static updateIp = (body) => (
+    _put('/ip', body)
+  )
+
+  static deleteIp = (id) => (
+    _delete(`/ip/${id}`)
+  )
+
+  // URL
+  static getUrls = () => (
+    _get('/url')
+  )
+
+  static createUrl = (body) => (
+    _post('/url', body)
+  )
+
+  static updateUrl = (body) => (
+    _put('/url', body)
+  )
+
+  static deleteUrl = (id) => (
+    _delete(`/url/${id}`)
+  )
+
+  // VULNERABILITY
+  static getVulnerabilities = () => (
+    _get('/vulnerability')
+  )
+
+  static createVulnerability = (body) => (
+    _post('/vulnerability', body)
+  )
+
+  static updateVulnerability = (body) => (
+    _put('/vulnerability', body)
+  )
+
+  static deleteVulnerability = (id) => (
+    _delete(`/vulnerability/${id}`)
+  )
+
+  // SCAN
+  static getScans = () => (
+    _get('/scans')
+  )
+
+  static createScan = (body) => (
+    _post('/scans', body)
+  )
+
+  static deleteScan = (id) => (
+    _delete(`/scan/${id}`)
+  )
+  
+
   // STAT
   static getStats = () => (
     _get('/stats')
