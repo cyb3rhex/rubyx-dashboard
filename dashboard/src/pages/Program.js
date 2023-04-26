@@ -26,8 +26,8 @@ import {
   Pagination,
   Label,
   Select,
-  Input,
 } from "@windmill/react-ui";
+import Input from "../components/Input";
 import { getPlatforms } from "../actions/platform";
 import ClipLoader from "react-spinners/ClipLoader";
 

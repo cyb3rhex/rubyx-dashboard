@@ -2,7 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import { login } from "../actions/user";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { Label, Input, Button } from "@windmill/react-ui";
+import Input from "../components/Input";
+import { Label, Button } from "@windmill/react-ui";
 import { toast } from "react-toastify";
 
 function Login() {

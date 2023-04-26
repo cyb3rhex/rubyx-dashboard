@@ -24,8 +24,8 @@ import {
   Pagination,
   Label,
   Select,
-  Input,
 } from "@windmill/react-ui";
+import Input from "../components/Input";
 
 function Platform() {
   const dispatch = useDispatch();

@@ -7,6 +7,7 @@ import {
 } from "../actions/scan";
 import PageTitle from "../components/Typography/PageTitle";
 import { TrashIcon } from "../icons";
+import Input from "../components/Input";
 import {
   Table,
   TableHeader,
@@ -22,8 +23,8 @@ import {
   Button,
   Pagination,
   Label,
-  Input,
 } from "@windmill/react-ui";
+
 
 function ScanPage() {
   const dispatch = useDispatch();
@@ -151,6 +152,7 @@ function ScanPage() {
               className="mt-1"
               type="text"
               value={command}
+              placeholder="Enter a command"
               onChange={(e) => setCommand(e.target.value)}
             />
           </Label>

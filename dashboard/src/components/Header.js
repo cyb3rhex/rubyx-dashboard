@@ -14,11 +14,11 @@ import {
   OutlineLogoutIcon,
 } from "../icons";
 import {
-  Input,
   Dropdown,
   DropdownItem,
   WindmillContext,
 } from "@windmill/react-ui";
+import Input from "../components/Input";
 
 function Header() {
   const dispatch = useDispatch();

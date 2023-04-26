@@ -3,7 +3,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { changePassword, changeEmail } from '../actions/user'
 import PageTitle from '../components/Typography/PageTitle'
 import SectionTitle from '../components/Typography/SectionTitle'
-import { Input, Label } from '@windmill/react-ui'
+import Input from "../components/Input";
+import {  Label } from '@windmill/react-ui'
 import { Button } from '@windmill/react-ui'
 
 function MyAccount() {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-
-import { Label, Input, Button } from '@windmill/react-ui'
+import Input from "../components/Input";
+import { Label, Button } from '@windmill/react-ui'
 
 function ForgotPassword() {
   return (
