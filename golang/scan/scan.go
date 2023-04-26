@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"os/exec"
+	"strings"
 	"time"
 
 	"github.com/aituglo/rubyx/golang/db"
@@ -14,6 +15,7 @@ type ScanTask struct {
 	ID        string
 	Command   string
 	Param     []string
+	Type      string
 	Status    string
 	StartTime time.Time
 	EndTime   time.Time
@@ -53,11 +55,20 @@ func ExecuteScan(task *ScanTask, querier wrapper.Querier) {
 	task.Status = "running"
 	task.StartTime = time.Now()
 
+	_, updateErr := querier.UpdateScan(context.Background(), db.UpdateScanParams{
+		ID:        task.ID,
+		Status:    task.Status,
+		StartTime: task.StartTime,
+	})
+	if updateErr != nil {
+		log.Printf("Error when updating task: %v\n", updateErr)
+	}
+
 	cmd := exec.Command(task.Command, task.Param...)
 	output, err := cmd.CombinedOutput()
 
 	if err != nil {
-		log.Printf("Erreur lors de l'exécution de la commande: %v\n", err)
+		log.Printf("Error when executing the command: %v\n", err)
 		task.Status = "failed"
 	} else {
 		task.Status = "completed"
@@ -65,9 +76,26 @@ func ExecuteScan(task *ScanTask, querier wrapper.Querier) {
 
 	task.EndTime = time.Now()
 
-	log.Println(string(output))
+	log.Println(task)
 
-	_, updateErr := querier.UpdateScan(context.Background(), db.UpdateScanParams{
+	switch task.Type {
+	case "passive":
+		for _, line := range strings.Split(string(output), "\n") {
+			program_id := CheckScope(line, querier)
+			if program_id != -1 {
+				_, createErr := querier.CreateSubdomain(context.Background(), db.CreateSubdomainParams{
+					ProgramID: program_id,
+					Url:       line,
+				})
+				if createErr != nil {
+					log.Printf("Error when adding a subdomain to the database: %v\n", createErr)
+				}
+			}
+		}
+	default:
+	}
+
+	_, updateErr = querier.UpdateScan(context.Background(), db.UpdateScanParams{
 		ID:        task.ID,
 		Status:    task.Status,
 		StartTime: task.StartTime,
@@ -75,7 +103,7 @@ func ExecuteScan(task *ScanTask, querier wrapper.Querier) {
 		Output:    string(output),
 	})
 	if updateErr != nil {
-		log.Printf("Erreur lors de la mise à jour de la tâche de scan dans la base de données: %v\n", updateErr)
+		log.Printf("Error when updating task: %v\n", updateErr)
 	}
 
 }

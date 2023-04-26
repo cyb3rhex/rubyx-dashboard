@@ -11,9 +11,9 @@ import (
 )
 
 const createScan = `-- name: CreateScan :one
-INSERT INTO scans (id, command, param, status, output)
-VALUES ($1, $2, $3, $4, $5)
-RETURNING id, command, param, status, start_time, end_time, created_at, updated_at, output
+INSERT INTO scans (id, command, param, status, type, output)
+VALUES ($1, $2, $3, $4, $5, $6)
+RETURNING id, command, param, type, status, start_time, end_time, created_at, updated_at, output
 `
 
 type CreateScanParams struct {
@@ -21,6 +21,7 @@ type CreateScanParams struct {
 	Command string `json:"command"`
 	Param   string `json:"param"`
 	Status  string `json:"status"`
+	Type    string `json:"type"`
 	Output  string `json:"output"`
 }
 
@@ -30,6 +31,7 @@ func (q *Queries) CreateScan(ctx context.Context, arg CreateScanParams) (Scan, e
 		arg.Command,
 		arg.Param,
 		arg.Status,
+		arg.Type,
 		arg.Output,
 	)
 	var i Scan
@@ -37,6 +39,7 @@ func (q *Queries) CreateScan(ctx context.Context, arg CreateScanParams) (Scan, e
 		&i.ID,
 		&i.Command,
 		&i.Param,
+		&i.Type,
 		&i.Status,
 		&i.StartTime,
 		&i.EndTime,
@@ -57,7 +60,7 @@ func (q *Queries) DeleteScanByIDs(ctx context.Context, id string) error {
 }
 
 const findScanByID = `-- name: FindScanByID :one
-SELECT id, command, param, status, start_time, end_time, created_at, updated_at, output FROM scans WHERE id = $1 LIMIT 1
+SELECT id, command, param, type, status, start_time, end_time, created_at, updated_at, output FROM scans WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) FindScanByID(ctx context.Context, id string) (Scan, error) {
@@ -67,6 +70,7 @@ func (q *Queries) FindScanByID(ctx context.Context, id string) (Scan, error) {
 		&i.ID,
 		&i.Command,
 		&i.Param,
+		&i.Type,
 		&i.Status,
 		&i.StartTime,
 		&i.EndTime,
@@ -78,7 +82,7 @@ func (q *Queries) FindScanByID(ctx context.Context, id string) (Scan, error) {
 }
 
 const findScans = `-- name: FindScans :many
-SELECT id, command, param, status, start_time, end_time, created_at, updated_at, output FROM scans
+SELECT id, command, param, type, status, start_time, end_time, created_at, updated_at, output FROM scans
 `
 
 func (q *Queries) FindScans(ctx context.Context) ([]Scan, error) {
@@ -94,6 +98,7 @@ func (q *Queries) FindScans(ctx context.Context) ([]Scan, error) {
 			&i.ID,
 			&i.Command,
 			&i.Param,
+			&i.Type,
 			&i.Status,
 			&i.StartTime,
 			&i.EndTime,
@@ -115,7 +120,7 @@ const updateScan = `-- name: UpdateScan :one
 UPDATE scans
 SET status = $2, start_time = $3, end_time = $4, output = $5, updated_at = now()
 WHERE id = $1
-RETURNING id, command, param, status, start_time, end_time, created_at, updated_at, output
+RETURNING id, command, param, type, status, start_time, end_time, created_at, updated_at, output
 `
 
 type UpdateScanParams struct {
@@ -139,6 +144,7 @@ func (q *Queries) UpdateScan(ctx context.Context, arg UpdateScanParams) (Scan, e
 		&i.ID,
 		&i.Command,
 		&i.Param,
+		&i.Type,
 		&i.Status,
 		&i.StartTime,
 		&i.EndTime,

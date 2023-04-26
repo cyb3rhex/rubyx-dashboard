@@ -13,6 +13,11 @@ import (
 	"github.com/google/uuid"
 )
 
+type ScanStruct struct {
+	Domain string `json:"domain"`
+	Type   string `json:"type"`
+}
+
 // Handler pour lancer un scan
 func LaunchScan(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
 	// Vérifiez les autorisations, décodez les paramètres, etc.
@@ -21,20 +26,29 @@ func LaunchScan(env env.Env, user *db.User, w http.ResponseWriter, r *http.Reque
 	}
 
 	decoder := json.NewDecoder(r.Body)
-	p := &db.Scan{}
+	p := &ScanStruct{}
 	err := decoder.Decode(p)
 	if err != nil || p == nil {
 		return write.Error(errors.NoJSONBody)
 	}
 
-	cmd := strings.Split(p.Command, " ")
+	var cmd string
+
+	switch p.Type {
+	case "passive":
+		cmd = "subfinder -d " + p.Domain + " -silent"
+	default:
+	}
+
+	command := strings.Split(cmd, " ")
 
 	// Créez une nouvelle tâche de scan
 	task := &scan.ScanTask{
 		ID:      uuid.New().String(),
-		Command: cmd[0],
-		Param:   cmd[1:],
+		Command: command[0],
+		Param:   command[1:],
 		Status:  "queued",
+		Type:    p.Type,
 		Output:  "",
 	}
 
@@ -45,6 +59,7 @@ func LaunchScan(env env.Env, user *db.User, w http.ResponseWriter, r *http.Reque
 		ID:      task.ID,
 		Command: task.Command,
 		Param:   strings.Join(task.Param, " "),
+		Type:    task.Type,
 		Status:  task.Status,
 	}))
 

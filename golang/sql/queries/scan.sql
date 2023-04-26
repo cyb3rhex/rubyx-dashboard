@@ -1,6 +1,6 @@
 -- name: CreateScan :one
-INSERT INTO scans (id, command, param, status, output)
-VALUES ($1, $2, $3, $4, $5)
+INSERT INTO scans (id, command, param, status, type, output)
+VALUES ($1, $2, $3, $4, $5, $6)
 RETURNING *;
 
 -- name: FindScans :many

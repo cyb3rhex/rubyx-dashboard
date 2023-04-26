@@ -180,6 +180,7 @@ type Scan struct {
 	ID        string    `json:"id"`
 	Command   string    `json:"command"`
 	Param     string    `json:"param"`
+	Type      string    `json:"type"`
 	Status    string    `json:"status"`
 	StartTime time.Time `json:"start_time"`
 	EndTime   time.Time `json:"end_time"`

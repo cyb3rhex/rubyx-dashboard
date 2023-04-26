@@ -4,6 +4,7 @@ CREATE TABLE scans (
   id VARCHAR PRIMARY KEY,
   command VARCHAR NOT NULL,
   param VARCHAR NOT NULL,
+  type VARCHAR NOT NULL,
   status VARCHAR NOT NULL,
   start_time TIMESTAMP NOT NULL DEFAULT now(),
   end_time TIMESTAMP NOT NULL DEFAULT now(),

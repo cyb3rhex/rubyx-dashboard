@@ -11,7 +11,7 @@ import (
 )
 
 func Connect() (*pgxpool.Pool, error) {
-	waitTime := 5 * time.Second
+	waitTime := 1 * time.Second
 	log.Printf("Waiting %s for database to start", waitTime)
 	time.Sleep(waitTime)
 

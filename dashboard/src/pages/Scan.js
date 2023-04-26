@@ -23,13 +23,15 @@ import {
   Button,
   Pagination,
   Label,
+  Select
 } from "@windmill/react-ui";
 
 
 function ScanPage() {
   const dispatch = useDispatch();
   const scanState = useSelector((state) => state.scan);
-  const [command, setCommand] = useState("");
+  const [domain, setDomain] = useState("");
+  const [scanType, setScanType] = useState("passive");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -48,9 +50,9 @@ function ScanPage() {
   const handleCreateScan = () => {
     setIsModalOpen(false);
 
-    dispatch(createScan(command));
+    dispatch(createScan(domain, scanType));
 
-    setCommand("");
+    setDomain("");
   };
 
   const handleDeleteScan = (id) => {
@@ -147,15 +149,25 @@ function ScanPage() {
       <ModalBody>
         <div className="px-4 py-3">
           <Label>
-            <span>Command</span>
+            <span>Domain</span>
             <Input
               className="mt-1"
               type="text"
-              value={command}
-              placeholder="Enter a command"
-              onChange={(e) => setCommand(e.target.value)}
+              value={domain}
+              placeholder="Enter a domain"
+              onChange={(e) => setDomain(e.target.value)}
             />
           </Label>
+          <Label className="pt-5">
+                <span>Type</span>
+                <Select
+                  value={scanType}
+                  onChange={(e) => setScanType(e.target.value)}
+                  className="mt-1"
+                >
+                  <option value="passive">Passive Subdomain</option>
+                </Select>
+              </Label>
         </div>
       </ModalBody>
       <ModalFooter>

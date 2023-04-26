@@ -51,6 +51,7 @@ type Querier interface {
 	FindPortByIDs(ctx context.Context, id int64) (Port, error)
 	FindPorts(ctx context.Context) ([]Port, error)
 	FindProgramByIDs(ctx context.Context, id int64) (Program, error)
+	FindProgramByScope(ctx context.Context, scope string) (int64, error)
 	FindProgramBySlug(ctx context.Context, slug string) (Program, error)
 	FindPrograms(ctx context.Context) ([]Program, error)
 	FindResetByCode(ctx context.Context, code string) (Reset, error)

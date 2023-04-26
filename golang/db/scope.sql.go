@@ -42,6 +42,17 @@ func (q *Queries) DeleteScopeByID(ctx context.Context, id int64) error {
 	return err
 }
 
+const findProgramByScope = `-- name: FindProgramByScope :one
+SELECT program_id FROM scopes WHERE scope LIKE $1 LIMIT 1
+`
+
+func (q *Queries) FindProgramByScope(ctx context.Context, scope string) (int64, error) {
+	row := q.db.QueryRow(ctx, findProgramByScope, scope)
+	var program_id int64
+	err := row.Scan(&program_id)
+	return program_id, err
+}
+
 const findScopeByID = `-- name: FindScopeByID :one
 SELECT id, scope, scope_type, program_id, created_at, updated_at FROM scopes WHERE id = $1 LIMIT 1
 `

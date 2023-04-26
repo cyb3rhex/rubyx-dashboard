@@ -650,6 +650,21 @@ func (mr *MockQuerierMockRecorder) FindProgramByIDs(ctx, id interface{}) *gomock
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindProgramByIDs", reflect.TypeOf((*MockQuerier)(nil).FindProgramByIDs), ctx, id)
 }
 
+// FindProgramByScope mocks base method.
+func (m *MockQuerier) FindProgramByScope(ctx context.Context, scope string) (int64, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindProgramByScope", ctx, scope)
+	ret0, _ := ret[0].(int64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindProgramByScope indicates an expected call of FindProgramByScope.
+func (mr *MockQuerierMockRecorder) FindProgramByScope(ctx, scope interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindProgramByScope", reflect.TypeOf((*MockQuerier)(nil).FindProgramByScope), ctx, scope)
+}
+
 // FindProgramBySlug mocks base method.
 func (m *MockQuerier) FindProgramBySlug(ctx context.Context, slug string) (db.Program, error) {
 	m.ctrl.T.Helper()

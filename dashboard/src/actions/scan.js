@@ -29,15 +29,15 @@ export const getScans = () => async (dispatch) => {
   }
 };
 
-export const createScan = (command) => async (dispatch) => {
+export const createScan = (domain, scanType) => async (dispatch) => {
   dispatch({
     type: CREATE_SCAN,
   });
   try {
     const scan = {
-      command: command,
+      domain: domain,
+      type: scanType,
     };
-
     await API.createScan(scan);
     const data = await API.getScans();
     dispatch({
