@@ -167,6 +167,7 @@ function ScanPage() {
                 >
                   <option value="passive">Passive Subdomain</option>
                   <option value="full">Full ( Subdomain + Enumeration )</option>
+                  <option value="nuclei">Nuclei ( one domain )</option>
                 </Select>
               </Label>
         </div>

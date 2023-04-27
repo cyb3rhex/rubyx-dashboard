@@ -127,6 +127,34 @@ func ExecuteScan(task *ScanTask, querier wrapper.Querier) {
 			}
 
 		}
+	case "nuclei":
+		for _, line := range strings.Split(string(output), "\n") {
+			if line != "" {
+				nucleiParsed, err := ParseNuclei(line, querier)
+				if err != nil {
+					log.Printf("Error when parsing nuclei output: %v\n", err)
+				}
+
+				domain, err := ExtractDomain(nucleiParsed.MatchedAt)
+				if err != nil {
+					log.Printf("Error when extracting domain: %v\n", err)
+				}
+				program_id := CheckScope(domain, querier)
+
+				_, createErr := querier.CreateVulnerability(context.Background(), db.CreateVulnerabilityParams{
+					ProgramID: program_id,
+					Url:       nucleiParsed.MatchedAt,
+					Severity:  nucleiParsed.Info.Severity,
+					Type:      nucleiParsed.Info.Name,
+					Tag:       strings.Join(nucleiParsed.Info.Tags, ","),
+				})
+				if createErr != nil {
+					log.Printf("Error when adding a subdomain to the database: %v\n", createErr)
+				}
+
+			}
+
+		}
 	default:
 	}
 

@@ -50,7 +50,14 @@ func LaunchScan(env env.Env, user *db.User, w http.ResponseWriter, r *http.Reque
 			log.Println(err)
 		}
 		log.Println("Domain: " + domain + " Ports: " + scanPorts)
-		cmd = "subfinder -d " + domain + " -silent | wappaGo -ports 80,443 -screenshot /tmp/screenshots"
+		cmd = "subfinder -d " + domain + " -silent | wappaGo -ports " + scanPorts + " -screenshot /tmp/screenshots"
+	case "nuclei":
+		domain, err := scan.ExtractDomain(p.Domain)
+		if err != nil {
+			log.Println(err)
+		}
+		log.Println("Domain: " + domain)
+		cmd = "nuclei -u " + domain + " -t /rubyx-data/nuclei -silent -jsonl"
 	default:
 	}
 

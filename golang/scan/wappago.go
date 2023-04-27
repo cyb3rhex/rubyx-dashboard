@@ -46,8 +46,6 @@ func ParseWappaGo(result string, querier wrapper.Querier) (WappaGo, error) {
 		return parsed, err
 	}
 
-	log.Println(parsed.Infos.Technologies)
-
 	if parsed.Infos.Screenshot != "" {
 
 		filePath := "/tmp/screenshots/" + parsed.Infos.Screenshot

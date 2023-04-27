@@ -233,7 +233,7 @@ type User struct {
 type Vulnerability struct {
 	ID        int64     `json:"id"`
 	ProgramID int64     `json:"program_id"`
-	UrlID     int64     `json:"url_id"`
+	Url       string    `json:"url"`
 	Tag       string    `json:"tag"`
 	Type      string    `json:"type"`
 	Severity  string    `json:"severity"`
