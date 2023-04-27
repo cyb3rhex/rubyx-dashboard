@@ -46,20 +46,12 @@ const routes = [
         name: 'Subdomains',
       },
       {
-        path: '/app/urls',
-        name: 'Urls',
-      },
-      {
-        path: '/app/ips',
-        name: 'IP',
-      },
-      {
         path: '/app/vulnerabilities',
         name: 'Vulnerabilities',
       },
       {
-        path: '/app/screenshots',
-        name: 'Screenshots',
+        path: '/app/files',
+        name: 'Files',
       }
     ],
   },

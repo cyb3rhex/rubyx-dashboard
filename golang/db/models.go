@@ -102,16 +102,6 @@ type Api struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-type Ip struct {
-	ID          int64     `json:"id"`
-	ProgramID   int64     `json:"program_id"`
-	SubdomainID int64     `json:"subdomain_id"`
-	Tag         string    `json:"tag"`
-	Ip          string    `json:"ip"`
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
-}
-
 type Note struct {
 	ID        int64     `json:"id"`
 	Title     string    `json:"title"`
@@ -136,16 +126,6 @@ type Platform struct {
 	UpdatedAt      time.Time    `json:"updated_at"`
 }
 
-type Port struct {
-	ID        int64     `json:"id"`
-	IpID      int64     `json:"ip_id"`
-	Port      int32     `json:"port"`
-	Tag       string    `json:"tag"`
-	Service   string    `json:"service"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-}
-
 type Program struct {
 	ID         int64       `json:"id"`
 	PlatformID int64       `json:"platform_id"`
@@ -163,17 +143,6 @@ type Reset struct {
 	UserID    int64     `json:"user_id"`
 	Code      string    `json:"code"`
 	CreatedAt time.Time `json:"created_at"`
-}
-
-type Rootdomain struct {
-	ID        int64     `json:"id"`
-	ProgramID int64     `json:"program_id"`
-	Wildcard  bool      `json:"wildcard"`
-	Inscope   bool      `json:"inscope"`
-	Tag       string    `json:"tag"`
-	Url       string    `json:"url"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
 }
 
 type Scan struct {
@@ -194,6 +163,14 @@ type Scope struct {
 	Scope     string    `json:"scope"`
 	ScopeType string    `json:"scope_type"`
 	ProgramID int64     `json:"program_id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
+type Setting struct {
+	ID        int64     `json:"id"`
+	Key       string    `json:"key"`
+	Value     string    `json:"value"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
@@ -220,6 +197,9 @@ type Subdomain struct {
 	Title         string    `json:"title"`
 	BodyHash      string    `json:"body_hash"`
 	Tag           string    `json:"tag"`
+	Ip            string    `json:"ip"`
+	Port          string    `json:"port"`
+	Screenshot    string    `json:"screenshot"`
 	StatusCode    int32     `json:"status_code"`
 	Technologies  string    `json:"technologies"`
 	ContentLength int32     `json:"content_length"`

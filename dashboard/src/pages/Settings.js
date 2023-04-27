@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { createApiKey, deleteApiKey, getApiKeys } from "../actions/settings";
+import {
+  createApiKey,
+  deleteApiKey,
+  getApiKeys,
+  getDataRepoUrl,
+  setDataRepoUrl,
+  pullRubyxData,
+} from "../actions/settings";
 import PageTitle from "../components/Typography/PageTitle";
 import { TrashIcon } from "../icons";
 import SectionTitle from "../components/Typography/SectionTitle";
+import Input from "../components/Input";
 import {
   Table,
   TableHeader,
@@ -18,11 +26,12 @@ import {
 
 function Settings() {
   const dispatch = useDispatch();
+  const [dataRepoUrl, setRepoUrl] = useState("");
   const settingsState = useSelector((state) => state.settings);
 
   useEffect(() => {
     dispatch(getApiKeys());
-    console.log(settingsState);
+    dispatch(getDataRepoUrl());
   }, []);
 
   const handleCreateApiKey = () => {
@@ -32,6 +41,18 @@ function Settings() {
   const handleDeleteApiKey = (id) => {
     dispatch(deleteApiKey(id));
   };
+
+  const handleSetDataRepoUrl = () => {
+    dispatch(setDataRepoUrl({ url: dataRepoUrl }));
+  };
+
+  const handlePullRubyxData = () => {
+    dispatch(pullRubyxData());
+  };
+
+  useEffect(() => {
+    setRepoUrl(settingsState.dataRepoUrl);
+  }, [settingsState.dataRepoUrl]);
 
   const [pageTable, setPageTable] = useState(1);
 
@@ -113,6 +134,27 @@ function Settings() {
             </TableFooter>
           </TableContainer>
         )}
+      </div>
+
+      <SectionTitle>Rubyx Data</SectionTitle>
+
+      <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+        <div className="py-3">
+          <div className="py-3">
+            <Input
+              type="text"
+              placeholder="Data Repo Url"
+              value={dataRepoUrl}
+              onChange={(e) => setRepoUrl(e.target.value)}
+            />
+
+            <Button onClick={() => handleSetDataRepoUrl()}>
+              Set Data Repo Url
+            </Button>
+          </div>
+
+          <Button onClick={() => handlePullRubyxData()}>Pull Rubyx Data</Button>
+        </div>
       </div>
     </>
   );

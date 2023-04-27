@@ -119,6 +119,7 @@ function Subdomain() {
   };
 
   useEffect(() => {
+    console.log(subdomainState.subdomains)
     setDataTable(
       subdomainState.subdomains &&
         subdomainState.subdomains.slice(
@@ -144,9 +145,11 @@ function Subdomain() {
                 <tr>
                   <TableCell>Subdomain</TableCell>
                   <TableCell>Program</TableCell>
-                  <TableCell>Title</TableCell>
+                  <TableCell>Ports</TableCell>
                   <TableCell>Status Code</TableCell>
                   <TableCell>Content Length</TableCell>
+                  <TableCell>Technology</TableCell>
+                  <TableCell>Screenshot</TableCell>
                   <TableCell>Actions</TableCell>
                 </tr>
               </TableHeader>
@@ -155,7 +158,8 @@ function Subdomain() {
                   dataTable.map((key, i) => (
                     <TableRow key={i}>
                       <TableCell>
-                        <span className="text-sm">{key.url}</span>
+                        <span className="text-sm"><a href={key.url} target="__blank">{key.url}</a></span><br/>
+                        <span className="text-sm">Title: {key.title}</span>
                       </TableCell>
                       <TableCell>
                         <span className="text-sm">
@@ -163,13 +167,19 @@ function Subdomain() {
                         </span>
                       </TableCell>
                       <TableCell>
-                        <span className="text-sm">{key.title}</span>
+                        <span className="text-sm">{key.port}</span>
                       </TableCell>
                       <TableCell>
-                        <span className="text-sm">{key.status_code}</span>
+                        <span className="text-sm">{key.statuscode}</span>
                       </TableCell>
                       <TableCell>
                         <span className="text-sm">{key.content_length}</span>
+                      </TableCell>
+                      <TableCell>
+                        <span className="text-sm">{key.technologies}</span>
+                      </TableCell>
+                      <TableCell>
+                      <img src={`data:image/png;base64,${key.screenshot}`} alt="preview" />
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center space-x-4">

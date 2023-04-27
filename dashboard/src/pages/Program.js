@@ -8,6 +8,9 @@ import {
   updateProgram,
   getScope,
 } from "../actions/program";
+import {
+  createScan,
+} from "../actions/scan";
 import PageTitle from "../components/Typography/PageTitle";
 import { TrashIcon, EditIcon, SearchIcon, ButtonsIcon } from "../icons";
 import {
@@ -43,8 +46,12 @@ function Program() {
   const [editId, setEditId] = useState(0);
   const [editMode, setEditMode] = useState(false);
 
+  const [domain, setDomain] = useState("");
+  const [scanType, setScanType] = useState("passive");
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [seeScope, setSeeScope] = useState(false);
+  const [launchScan, setLaunchScan] = useState(false);
 
   useEffect(() => {
     if (programState.scope) {
@@ -55,6 +62,19 @@ function Program() {
   function closeModal() {
     setIsModalOpen(false);
   }
+
+  const handleCreateScan = () => {
+    setLaunchScan(false);
+
+    dispatch(createScan(domain, scanType));
+
+    setDomain("");
+  };
+
+  const handleSetScan = (url) => {
+    setDomain(url);
+    setLaunchScan(true);
+  };
 
   const handleGetScope = (id) => {
     dispatch(getScope(id));
@@ -206,7 +226,7 @@ function Program() {
                             <Button
                               layout="link"
                               size="icon"
-                              aria-label="Delete"
+                              aria-label="See Scope"
                             >
                               <ButtonsIcon
                                 onClick={() => handleGetScope(key.id)}
@@ -372,6 +392,7 @@ function Program() {
                   <tr>
                     <TableCell>Scope</TableCell>
                     <TableCell>Type</TableCell>
+                    <TableCell>Actions</TableCell>
                   </tr>
                 </TableHeader>
                 <TableBody>
@@ -383,6 +404,19 @@ function Program() {
                         </TableCell>
                         <TableCell>
                           <span className="text-sm">{key.scope_type}</span>
+                        </TableCell>
+                        <TableCell>
+                        <Button
+                              layout="link"
+                              size="icon"
+                              aria-label="Scan"
+                            >
+                              <ButtonsIcon
+                                onClick={() => handleSetScan(key.scope)}
+                                className="w-5 h-5"
+                                aria-hidden="true"
+                              />
+                            </Button>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -406,6 +440,39 @@ function Program() {
                 Cancel
               </Button>
             </div>
+          </ModalFooter>
+        </Modal>
+
+        <Modal isOpen={launchScan} onClose={() => setLaunchScan(false)}>
+          <ModalHeader>Scan this target</ModalHeader>
+          <ModalBody>
+            <div className="px-4 py-3">
+              <Label>
+                <span>Domain</span>
+                <Input
+                  className="mt-1"
+                  type="text"
+                  value={domain}
+                  placeholder="Enter a domain"
+                  onChange={(e) => setDomain(e.target.value)}
+                />
+              </Label>
+              <Label className="pt-5">
+                <span>Type</span>
+                <Select
+                  value={scanType}
+                  onChange={(e) => setScanType(e.target.value)}
+                  className="mt-1"
+                >
+                  <option value="passive">Passive Subdomain</option>
+                </Select>
+              </Label>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <Button className="w-full sm:w-auto" onClick={handleCreateScan}>
+              Add Scan
+            </Button>
           </ModalFooter>
         </Modal>
       </div>

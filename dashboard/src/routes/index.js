@@ -5,14 +5,13 @@ const Dashboard = lazy(() => import('../pages/Dashboard'))
 const MyAccount = lazy(() => import('../pages/MyAccount'))
 const Settings = lazy(() => import('../pages/Settings'))
 const Platform = lazy(() => import('../pages/Platform'))
-const Url = lazy(() => import('../pages/Url'))
 const Program = lazy(() => import('../pages/Program'))
 const Vulnerability = lazy(() => import('../pages/Vulnerability'))
 const Subdomain = lazy(() => import('../pages/Subdomain'))
 const Notes = lazy(() => import('../pages/Notes'))
-const Ip = lazy(() => import('../pages/Ip'))
 const Stat = lazy(() => import('../pages/Stat'))
 const Page404 = lazy(() => import('../pages/404'))
+const Files = lazy(() => import('../pages/Files'))
 const Scan = lazy(() => import('../pages/Scan'))
 
 /**
@@ -63,16 +62,12 @@ const routes = [
     component: Subdomain,
   },
   {
-    path: '/urls',
-    component: Url,
-  },
-  {
-    path: '/ips',
-    component: Ip,
-  },
-  {
     path: '/scan',
     component: Scan,
+  },
+  {
+    path: '/files',
+    component: Files,
   },
   {
     path: '/404',

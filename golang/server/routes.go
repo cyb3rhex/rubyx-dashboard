@@ -56,6 +56,11 @@ func (srv *server) ConfigureRouter() {
 	srv.DELETE("/program/id/:id", handlers.DeleteProgram)
 	srv.DELETE("/program/slug/:name", handlers.DeleteProgramBySlug)
 
+	// SETTINGS
+	srv.GET("/settings/data_repo_url", handlers.GetRepoDataUrl)
+	srv.POST("/settings/data_repo_url", handlers.SetRepoDataUrl)
+	srv.GET("/settings/pull_rubyx_data", handlers.PullRubyxData)
+
 	// NOTES
 	srv.GET("/notes", handlers.GetNotes)
 	srv.GET("/notes/id/:id", handlers.GetNote)
@@ -63,27 +68,6 @@ func (srv *server) ConfigureRouter() {
 	srv.PUT("/notes", handlers.UpdateNote)
 	srv.DELETE("/notes/:id", handlers.DeleteNote)
 	srv.GET("/notes/program/:id", handlers.GetNotesByProgramID)
-
-	// PORT
-	srv.GET("/port", handlers.GetPorts)
-	srv.GET("/port/:id", handlers.GetPort)
-	srv.POST("/port", handlers.CreatePort)
-	srv.PUT("/port", handlers.UpdatePort)
-	srv.DELETE("/port/:id", handlers.DeletePort)
-
-	// IP
-	srv.GET("/ip", handlers.GetIps)
-	srv.GET("/ip/:id", handlers.GetIp)
-	srv.POST("/ip", handlers.CreateIp)
-	srv.PUT("/ip", handlers.UpdateIp)
-	srv.DELETE("/ip/:id", handlers.DeleteIp)
-
-	// ROOTDOMAIN
-	srv.GET("/rootdomain", handlers.GetRootDomains)
-	srv.GET("/rootdomain/:id", handlers.GetRootDomain)
-	srv.POST("/rootdomain", handlers.CreateRootDomain)
-	srv.PUT("/rootdomain", handlers.UpdateRootDomain)
-	srv.DELETE("/rootdomain/:id", handlers.DeleteRootDomain)
 
 	// SUBDOMAIN
 	srv.GET("/subdomain", handlers.GetSubdomains)

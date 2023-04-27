@@ -47,6 +47,18 @@ export default class API {
     _delete(`/api/${id}`)
   )
 
+  static pullRubyxData = () => (
+    _get('/settings/pull_rubyx_data')
+  )
+
+  static getDataRepoUrl = () => (
+    _get('/settings/data_repo_url')
+  )
+
+  static setDataRepoUrl = (body) => (
+    _post('/settings/data_repo_url', body)
+  )
+
   // SUBDOMAIN
   static getSubdomains = () => (
     _get('/subdomain')
@@ -64,39 +76,6 @@ export default class API {
     _delete(`/subdomain/${id}`)
   )
 
-  // IP
-  static getIps = () => (
-    _get('/ip')
-  )
-
-  static createIp = (body) => (
-    _post('/ip', body)
-  )
-
-  static updateIp = (body) => (
-    _put('/ip', body)
-  )
-
-  static deleteIp = (id) => (
-    _delete(`/ip/${id}`)
-  )
-
-  // URL
-  static getUrls = () => (
-    _get('/url')
-  )
-
-  static createUrl = (body) => (
-    _post('/url', body)
-  )
-
-  static updateUrl = (body) => (
-    _put('/url', body)
-  )
-
-  static deleteUrl = (id) => (
-    _delete(`/url/${id}`)
-  )
 
   // VULNERABILITY
   static getVulnerabilities = () => (

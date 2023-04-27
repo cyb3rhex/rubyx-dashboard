@@ -166,6 +166,7 @@ function ScanPage() {
                   className="mt-1"
                 >
                   <option value="passive">Passive Subdomain</option>
+                  <option value="full">Full ( Subdomain + Enumeration )</option>
                 </Select>
               </Label>
         </div>

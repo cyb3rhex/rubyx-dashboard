@@ -64,7 +64,9 @@ func ExecuteScan(task *ScanTask, querier wrapper.Querier) {
 		log.Printf("Error when updating task: %v\n", updateErr)
 	}
 
-	cmd := exec.Command(task.Command, task.Param...)
+	command := task.Command + " " + strings.Join(task.Param, " ")
+
+	cmd := exec.Command("bash", "-c", command)
 	output, err := cmd.CombinedOutput()
 
 	if err != nil {
@@ -75,8 +77,6 @@ func ExecuteScan(task *ScanTask, querier wrapper.Querier) {
 	}
 
 	task.EndTime = time.Now()
-
-	log.Println(task)
 
 	switch task.Type {
 	case "passive":
@@ -91,6 +91,41 @@ func ExecuteScan(task *ScanTask, querier wrapper.Querier) {
 					log.Printf("Error when adding a subdomain to the database: %v\n", createErr)
 				}
 			}
+		}
+	case "full":
+		for _, line := range strings.Split(string(output), "\n") {
+			if line != "" {
+				urlInfos, err := ParseWappaGo(line, querier)
+				if err != nil {
+					log.Printf("Error when parsing wappaGo output: %v\n", err)
+				}
+				domain, err := ExtractDomain(urlInfos.Url)
+				if err != nil {
+					log.Printf("Error when extracting domain: %v\n", err)
+				}
+				program_id := CheckScope(domain, querier)
+				var technologies string
+				for _, technology := range urlInfos.Infos.Technologies {
+					technologies += technology.Name + ","
+				}
+				log.Println(urlInfos.Infos.Technologies)
+				log.Println(technologies)
+				_, createErr := querier.CreateSubdomain(context.Background(), db.CreateSubdomainParams{
+					ProgramID:     program_id,
+					Url:           urlInfos.Url,
+					Ip:            urlInfos.Infos.IP,
+					Title:         urlInfos.Infos.Title,
+					Screenshot:    urlInfos.Infos.Screenshot,
+					Technologies:  technologies,
+					Port:          strings.Join(urlInfos.Infos.Ports, ","),
+					ContentLength: int32(urlInfos.Infos.ContentLength),
+					StatusCode:    int32(urlInfos.Infos.StatusCode),
+				})
+				if createErr != nil {
+					log.Printf("Error when adding a subdomain to the database: %v\n", createErr)
+				}
+			}
+
 		}
 	default:
 	}
