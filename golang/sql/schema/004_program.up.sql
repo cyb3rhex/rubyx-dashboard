@@ -8,8 +8,8 @@ CREATE TYPE program_type AS ENUM (
 CREATE TABLE program (
   id bigserial PRIMARY KEY,
   platform_id bigserial NOT NULL,
-  name varchar(60) NOT NULL,
-  slug varchar(60) NOT NULL UNIQUE,
+  name varchar(200) NOT NULL,
+  slug varchar(200) NOT NULL UNIQUE,
   vdp boolean NOT NULL,
   tag text NOT NULL,
   url text NOT NULL,

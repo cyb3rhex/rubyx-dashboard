@@ -1,60 +1,51 @@
-/**
- * ⚠ These are used just to render the Sidebar!
- * You can include any link here, local or external.
- *
- * If you're looking to actual Router routes, go to
- * `routes/index.js`
- */
+import React from "react";
+import { SiHackerone } from "react-icons/si";
+import { BiMoney, BiBug, BiSearch, BiListUl, BiHomeAlt } from "react-icons/bi";
+import { TbNotes } from "react-icons/tb";
+import { AiOutlineSecurityScan } from "react-icons/ai";
+
+
 const routes = [
   {
-    path: '/app/dashboard', // the url
-    icon: 'HomeIcon', // the component being exported from icons/index.js
-    name: 'Dashboard', // name that appear in Sidebar
+    label: "Dashboard",
+    href: "/app/dashboard",
+    icon: <BiHomeAlt className="w-6 h-6" />,
   },
   {
-    path: '/app/scan',
-    icon: 'HomeIcon',
-    name: 'Scan',
+    label: "Scan",
+    href: "/app/scan",
+    icon: <AiOutlineSecurityScan className="w-6 h-6" />,
   },
   {
-    path: '/app/stats',
-    icon: 'MoneyIcon',
-    name: 'Stats',
+    label: "Stats",
+    href: "/app/stats",
+    icon: <BiMoney className="w-6 h-6" />,
   },
   {
-    path: '/app/notes',
-    icon: 'FormsIcon',
-    name: 'Notes',
+    label: "Notes",
+    href: "/app/notes",
+    icon: <TbNotes className="w-6 h-6" />,
   },
   {
-    path: '/app/platforms',
-    icon: 'CardsIcon',
-    name: 'Platforms',
+    label: "Platforms",
+    href: "/app/platforms",
+    icon: <SiHackerone className="w-6 h-6" />,
   },
   {
-    path: '/app/programs',
-    icon: 'SearchIcon',
-    name: 'Programs',
+    label: "Programs",
+    href: "/app/programs",
+    icon: <BiSearch className="w-6 h-6" />,
   },
   {
-    icon: 'PagesIcon',
-    name: 'Data',
-    routes: [
-      // submenu
-      {
-        path: '/app/subdomains',
-        name: 'Subdomains',
-      },
-      {
-        path: '/app/vulnerabilities',
-        name: 'Vulnerabilities',
-      },
-      {
-        path: '/app/files',
-        name: 'Files',
-      }
-    ],
+    label: "Subdomains",
+    href: "/app/subdomains",
+    icon: <BiListUl className="w-6 h-6" />,
   },
-]
+  {
+    label: "Vulnerabilities",
+    href: "/app/vulnerabilities",
+    icon: <BiBug className="w-6 h-6" />,
+  }
+];
 
-export default routes
+export default routes;

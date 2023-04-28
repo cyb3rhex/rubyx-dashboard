@@ -86,11 +86,11 @@ function ScanPage() {
       <PageTitle>Scans</PageTitle>
 
       <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-        <div className="py-3">
-          <Button onClick={openModal}>Add a Scan</Button>
+        <div className="py-3 flex items-center justify-end space-x-4">
+          <Button onClick={openModal}>Add</Button>
         </div>
 
-        {totalResults > 0 && (
+        {totalResults > 0 ? (
           <TableContainer className="mb-8">
             <Table>
               <TableHeader>
@@ -142,6 +142,10 @@ function ScanPage() {
           />
         </TableFooter>
       </TableContainer>
+    ) : (
+      <div className="flex items-center justify-center">
+        <span className="text-sm">No data to display</span>
+      </div>
     )}
 
     <Modal isOpen={isModalOpen} onClose={closeModal}>

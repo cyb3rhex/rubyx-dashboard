@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import './assets/css/tailwind.output.css'
 import 'react-toastify/dist/ReactToastify.css';
 import App from './App'
-import { SidebarProvider } from './context/SidebarContext'
+import theme from './components/theme'
 import ThemedSuspense from './components/ThemedSuspense'
 import { Windmill } from '@windmill/react-ui'
 import * as serviceWorker from './serviceWorker'
@@ -14,13 +14,11 @@ import * as serviceWorker from './serviceWorker'
 // }
 
 ReactDOM.render(
-  <SidebarProvider>
     <Suspense fallback={<ThemedSuspense />}>
-      <Windmill usePreferences>
+      <Windmill usePreferences theme={theme}>
         <App />
       </Windmill>
-    </Suspense>
-  </SidebarProvider>,
+    </Suspense>,
   document.getElementById('root')
 )
 

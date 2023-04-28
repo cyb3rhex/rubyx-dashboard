@@ -1,22 +1,23 @@
-import React, { useContext, Suspense, useEffect, lazy } from 'react'
+import React, { Suspense, useEffect, lazy, useState } from 'react'
 import { useSelector } from 'react-redux'
+import classNames from 'classnames';
 import { useHistory } from 'react-router-dom'
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom'
 import routes from '../routes'
 
-import Sidebar from '../components/Sidebar'
-import Header from '../components/Header'
+import Sidebar from '../components/Sidebar/Sidebar'
+import Navbar from '../components/Sidebar/Navbar'
 import Main from '../containers/Main'
 import ThemedSuspense from '../components/ThemedSuspense'
-import { SidebarContext } from '../context/SidebarContext'
 
 const Page404 = lazy(() => import('../pages/404'))
 
 function Layout() {
+  const [collapsed, setSidebarCollapsed] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(true);
+
   const userState = useSelector((state) => state.user)
   const history = useHistory()
-  const { isSidebarOpen, closeSidebar } = useContext(SidebarContext)
-  let location = useLocation()
 
   useEffect(() => {
     if(!userState.token){
@@ -24,18 +25,25 @@ function Layout() {
     }
   }, [userState])
 
-  useEffect(() => {
-    closeSidebar()
-  }, [location])
 
   return (
     <div
-      className={`flex h-screen bg-gray-50 dark:bg-gray-900 ${isSidebarOpen && 'overflow-hidden'}`}
+      className={classNames({
+        "grid bg-zinc-100 min-h-screen": true,
+        "grid-cols-sidebar": !collapsed,
+        "grid-cols-sidebar-collapsed": collapsed,
+        "transition-[grid-template-columns] duration-300 ease-in-out": true,
+      })}
     >
-      <Sidebar />
-
+      <Sidebar
+        collapsed={collapsed}
+        setCollapsed={setSidebarCollapsed}
+        shown={showSidebar}
+      />
+      <div>
+      <Navbar onMenuButtonClick={() => setShowSidebar((prev) => !prev)} />
       <div className="flex flex-col flex-1 w-full">
-        <Header />
+      
         <Main>
           <Suspense fallback={<ThemedSuspense />}>
             <Switch>
@@ -55,6 +63,8 @@ function Layout() {
           </Suspense>
         </Main>
       </div>
+      </div>
+      
     </div>
   )
 }

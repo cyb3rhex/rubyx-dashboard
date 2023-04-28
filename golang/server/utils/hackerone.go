@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -58,6 +59,7 @@ func UpdateProgramsH1(platform *db.Platform, pageID int, env env.Env, ctx contex
 	if err != nil {
 		return
 	}
+	log.Println(programsInfos.NextPage)
 	if programsInfos == nil {
 		return
 	}
@@ -69,7 +71,7 @@ func UpdateProgramsH1(platform *db.Platform, pageID int, env env.Env, ctx contex
 }
 
 func GetProgramsInfosH1(platform *db.Platform, pageID int) *ProgramsInfosH1 {
-	response, err := apiRequestH1(platform, fmt.Sprintf("https://api.hackerone.com/v1/hackers/programs?page%%5Bnumber%%5D=%d", pageID))
+	response, err := apiRequestH1(platform, fmt.Sprintf("https://api.hackerone.com/v1/hackers/programs?page[number]=%d", pageID))
 	if err != nil {
 		return nil
 	}
@@ -85,9 +87,12 @@ func GetProgramsInfosH1(platform *db.Platform, pageID int) *ProgramsInfosH1 {
 	if err != nil {
 		return nil
 	}
-	next, _ := jsonBody["links"].(map[string]interface{})["next"].(bool)
-	programs, _ := jsonBody["data"].([]interface{})
-	return &ProgramsInfosH1{NextPage: next, Programs: programs}
+	log.Println(jsonBody["links"].(map[string]interface{})["next"])
+	if jsonBody["links"].(map[string]interface{})["next"] != "" {
+		return &ProgramsInfosH1{NextPage: true, Programs: jsonBody["data"].([]interface{})}
+	} else {
+		return &ProgramsInfosH1{NextPage: false, Programs: jsonBody["data"].([]interface{})}
+	}
 }
 
 func ParseProgramsH1(programs []interface{}, platform *db.Platform, env env.Env, ctx context.Context) {
@@ -100,7 +105,7 @@ func ParseProgramsH1(programs []interface{}, platform *db.Platform, env env.Env,
 		}
 
 		slug := programMap["attributes"].(map[string]interface{})["handle"].(string)
-		name := programMap["attributes"].(map[string]interface{})["handle"].(string)
+		name := programMap["attributes"].(map[string]interface{})["name"].(string)
 		vdp := !programMap["attributes"].(map[string]interface{})["offers_bounties"].(bool)
 
 		_, err := env.DB().FindProgramBySlug(ctx, slug)

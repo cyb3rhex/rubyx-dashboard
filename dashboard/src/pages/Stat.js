@@ -11,6 +11,7 @@ import RoundIcon from "../components/RoundIcon";
 import { Button } from "@windmill/react-ui";
 import { getPrograms } from "../actions/program";
 import ClipLoader from "react-spinners/ClipLoader";
+import { TbReload } from "react-icons/tb"
 
 function Stat() {
   const dispatch = useDispatch();
@@ -194,7 +195,7 @@ function Stat() {
       <PageTitle>Stats</PageTitle>
 
       <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-        <div className="py-3">
+        <div className="py-3  flex items-center justify-end space-x-4">
           {statState.loading ? (
             <ClipLoader
               color={"#355dad"}
@@ -204,7 +205,7 @@ function Stat() {
               data-testid="loader"
             />
           ) : (
-            <Button onClick={() => handleReloadStats()}>Reload Stats</Button>
+            <Button onClick={() => handleReloadStats()}><TbReload className="w-5 h-5" /></Button>
           )}
         </div>
 

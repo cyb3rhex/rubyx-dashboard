@@ -63,7 +63,6 @@ func LaunchScan(env env.Env, user *db.User, w http.ResponseWriter, r *http.Reque
 
 	command := strings.Split(cmd, " ")
 
-	// Créez une nouvelle tâche de scan
 	task := &scan.ScanTask{
 		ID:      uuid.New().String(),
 		Command: command[0],
@@ -73,7 +72,6 @@ func LaunchScan(env env.Env, user *db.User, w http.ResponseWriter, r *http.Reque
 		Output:  "",
 	}
 
-	// Ajoutez la tâche à la file d'attente
 	env.Queue().AddToQueue(task)
 
 	return write.JSONorErr(env.DB().CreateScan(r.Context(), db.CreateScanParams{

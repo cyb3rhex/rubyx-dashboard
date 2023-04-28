@@ -32,6 +32,8 @@ import {
 } from "@windmill/react-ui";
 import Input from "../components/Input";
 import { getPlatforms } from "../actions/platform";
+import { AiFillSecurityScan } from "react-icons/ai";
+import { TbReload } from "react-icons/tb";
 import ClipLoader from "react-spinners/ClipLoader";
 
 function Program() {
@@ -173,7 +175,7 @@ function Program() {
       <PageTitle>Programs</PageTitle>
 
       <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-        <div className="py-3">
+        <div className="py-3 flex items-center justify-end space-x-4">
           {programState.loading ? (
             <ClipLoader
               color={"#355dad"}
@@ -183,13 +185,13 @@ function Program() {
               data-testid="loader"
             />
           ) : (
-            <Button onClick={() => handleReloadPrograms()}>
-              Reload Programs
+            <Button className="bg-blue-900" onClick={() => handleReloadPrograms()}>
+              <TbReload className="w-5 h-5" />
             </Button>
           )}
         </div>
 
-        {totalResults > 0 && (
+        {totalResults > 0 ? (
           <div className="overflow-x-auto">
             <TableContainer className="mb-8 w-full sm:w-auto">
               <Table>
@@ -222,17 +224,13 @@ function Program() {
                           </span>
                         </TableCell>
                         <TableCell>
-                          <div className="flex items-center space-x-4">
+                          <div className="flex items-center justify-center space-x-4">
                             <Button
                               layout="link"
                               size="icon"
                               aria-label="See Scope"
                             >
-                              <ButtonsIcon
-                                onClick={() => handleGetScope(key.id)}
-                                className="w-5 h-5"
-                                aria-hidden="true"
-                              />
+                              <AiFillSecurityScan onClick={() => handleGetScope(key.id)} className="w-5 h-5" />
                             </Button>
                           </div>
                         </TableCell>
@@ -280,6 +278,10 @@ function Program() {
                 />
               </TableFooter>
             </TableContainer>
+          </div>
+        ) : (
+          <div className="flex items-center justify-center">
+            <span className="text-sm">No data to display</span>
           </div>
         )}
 
@@ -406,18 +408,17 @@ function Program() {
                           <span className="text-sm">{key.scope_type}</span>
                         </TableCell>
                         <TableCell>
+                        <div className="flex items-center justify-center space-x-4">
                         <Button
                               layout="link"
                               size="icon"
                               aria-label="Scan"
                             >
-                              <ButtonsIcon
-                                onClick={() => handleSetScan(key.scope)}
-                                className="w-5 h-5"
-                                aria-hidden="true"
-                              />
+                              <AiFillSecurityScan onClick={() => handleSetScan(key.scope)} className="w-5 h-5" />
                             </Button>
+                                </div>
                         </TableCell>
+                    
                       </TableRow>
                     ))}
                 </TableBody>

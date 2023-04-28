@@ -134,11 +134,11 @@ function Subdomain() {
       <PageTitle>Subdomains</PageTitle>
 
       <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-        <div className="py-3">
-          <Button onClick={openModal}>Add a Subdomain</Button>
+        <div className="py-3 flex items-center justify-end space-x-4">
+          <Button onClick={openModal}>Add</Button>
         </div>
 
-        {totalResults > 0 && (
+        {totalResults > 0 ? (
           <TableContainer className="mb-8">
             <Table>
               <TableHeader>
@@ -212,6 +212,10 @@ function Subdomain() {
               />
             </TableFooter>
           </TableContainer>
+        ) : (
+          <div className="flex items-center justify-center">
+            <span className="text-sm">No data to display</span>
+          </div>
         )}
 
         <Modal isOpen={isModalOpen} onClose={closeModal}>
@@ -223,7 +227,7 @@ function Subdomain() {
                 <Select
                   value={program}
                   onChange={(e) => setProgram(e.target.value)}
-                  className="mt-1"
+                  className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 >
                   <option value="">Select a Program</option>
                   {programState.programs.map((item) => (

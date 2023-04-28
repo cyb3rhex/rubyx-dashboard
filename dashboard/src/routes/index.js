@@ -11,7 +11,6 @@ const Subdomain = lazy(() => import('../pages/Subdomain'))
 const Notes = lazy(() => import('../pages/Notes'))
 const Stat = lazy(() => import('../pages/Stat'))
 const Page404 = lazy(() => import('../pages/404'))
-const Files = lazy(() => import('../pages/Files'))
 const Scan = lazy(() => import('../pages/Scan'))
 
 /**
@@ -64,10 +63,6 @@ const routes = [
   {
     path: '/scan',
     component: Scan,
-  },
-  {
-    path: '/files',
-    component: Files,
   },
   {
     path: '/404',

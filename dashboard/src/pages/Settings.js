@@ -22,6 +22,7 @@ import {
   TableContainer,
   Button,
   Pagination,
+  Label
 } from "@windmill/react-ui";
 
 function Settings() {
@@ -139,22 +140,26 @@ function Settings() {
       <SectionTitle>Rubyx Data</SectionTitle>
 
       <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-        <div className="py-3">
-          <div className="py-3">
-            <Input
-              type="text"
-              placeholder="Data Repo Url"
-              value={dataRepoUrl}
-              onChange={(e) => setRepoUrl(e.target.value)}
-            />
-
-            <Button onClick={() => handleSetDataRepoUrl()}>
-              Set Data Repo Url
-            </Button>
-          </div>
-
+      <div className="py-3">
           <Button onClick={() => handlePullRubyxData()}>Pull Rubyx Data</Button>
         </div>
+        <Label>
+          <span>Url of Rubyx Data</span>
+          <Input
+            type="text"
+            placeholder="Data Repo Url"
+            value={dataRepoUrl}
+            onChange={(e) => setRepoUrl(e.target.value)}
+          />
+        </Label>
+
+        <div className="py-3">
+          <Button onClick={() => handleSetDataRepoUrl()}>
+            Set Data Repo Url
+          </Button>
+        </div>
+
+      
       </div>
     </>
   );

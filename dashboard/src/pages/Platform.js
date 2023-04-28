@@ -14,14 +14,12 @@ import {
   TableCell,
   TableBody,
   TableRow,
-  TableFooter,
   TableContainer,
   Modal,
   ModalHeader,
   ModalBody,
   ModalFooter,
   Button,
-  Pagination,
   Label,
   Select,
 } from "@windmill/react-ui";
@@ -97,40 +95,16 @@ function Platform() {
     setIsModalOpen(true);
   };
 
-  const [pageTable, setPageTable] = useState(1);
-
-  const [dataTable, setDataTable] = useState([]);
-
-  // pagination setup
-  const resultsPerPage = 10;
-  const totalResults = platformState.platforms
-    ? platformState.platforms.length
-    : 0;
-
-  function onPageChangeTable(p) {
-    setPageTable(p);
-  }
-
-  useEffect(() => {
-    setDataTable(
-      platformState.platforms &&
-        platformState.platforms.slice(
-          (pageTable - 1) * resultsPerPage,
-          pageTable * resultsPerPage
-        )
-    );
-  }, [pageTable, platformState]);
-
   return (
     <>
-      <PageTitle>Platform</PageTitle>
+      <PageTitle>Bug Bounty Platforms</PageTitle>
 
       <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-        <div className="py-3">
-          <Button onClick={openModal}>Add a Platform</Button>
+        <div className="py-3 flex items-center justify-end space-x-4">
+          <Button onClick={openModal}>Add</Button>
         </div>
 
-        {totalResults > 0 && (
+        {platformState.platforms && platformState.platforms.length > 0 ? (
           <TableContainer className="mb-8">
             <Table>
               <TableHeader>
@@ -142,8 +116,8 @@ function Platform() {
                 </tr>
               </TableHeader>
               <TableBody>
-                {dataTable &&
-                  dataTable.map((key, i) => (
+                {platformState.platforms &&
+                  platformState.platforms.map((key, i) => (
                     <TableRow key={i}>
                       <TableCell>
                         <span className="text-sm">{key.name && key.name}</span>
@@ -180,15 +154,11 @@ function Platform() {
                   ))}
               </TableBody>
             </Table>
-            <TableFooter>
-              <Pagination
-                totalResults={totalResults}
-                resultsPerPage={resultsPerPage}
-                onChange={onPageChangeTable}
-                label="Navigation"
-              />
-            </TableFooter>
           </TableContainer>
+        )  : (
+          <div className="flex items-center justify-center">
+            <span className="text-sm">No data to display</span>
+          </div>
         )}
 
         <Modal isOpen={isModalOpen} onClose={closeModal}>
