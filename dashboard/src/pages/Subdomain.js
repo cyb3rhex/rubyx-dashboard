@@ -56,9 +56,7 @@ function Subdomain() {
   const handleCreateSubdomain = () => {
     setIsModalOpen(false);
 
-    dispatch(
-      createSubdomain(parseInt(program), url)
-    );
+    dispatch(createSubdomain(parseInt(program), url));
 
     setUrl("");
     setProgram(0);
@@ -68,13 +66,7 @@ function Subdomain() {
     setIsModalOpen(false);
     setEditMode(false);
 
-    dispatch(
-      updateSubdomain(
-        parseInt(editId),
-        parseInt(program),
-        url
-      )
-    );
+    dispatch(updateSubdomain(parseInt(editId), parseInt(program), url));
 
     setUrl("");
     setProgram(0);
@@ -99,7 +91,9 @@ function Subdomain() {
 
   // pagination setup
   const resultsPerPage = 10;
-  const totalResults = subdomainState.subdomains ? subdomainState.subdomains.length : 0;
+  const totalResults = subdomainState.subdomains
+    ? subdomainState.subdomains.length
+    : 0;
 
   function onPageChangeTable(p) {
     setPageTable(p);
@@ -119,7 +113,7 @@ function Subdomain() {
   };
 
   useEffect(() => {
-    console.log(subdomainState.subdomains)
+    console.log(subdomainState.subdomains);
     setDataTable(
       subdomainState.subdomains &&
         subdomainState.subdomains.slice(
@@ -158,7 +152,12 @@ function Subdomain() {
                   dataTable.map((key, i) => (
                     <TableRow key={i}>
                       <TableCell>
-                        <span className="text-sm"><a href={key.url} target="__blank">{key.url}</a></span><br/>
+                        <span className="text-sm">
+                          <a href={key.url} target="__blank">
+                            {key.url}
+                          </a>
+                        </span>
+                        <br />
                         <span className="text-sm">Title: {key.title}</span>
                       </TableCell>
                       <TableCell>
@@ -179,7 +178,18 @@ function Subdomain() {
                         <span className="text-sm">{key.technologies}</span>
                       </TableCell>
                       <TableCell>
-                      <img src={`data:image/png;base64,${key.screenshot}`} alt="preview" />
+                        {key.screenshot !== "" ? (
+                          <img
+                            src={`data:image/png;base64,${key.screenshot}`}
+                            style={{width: "200px", height: "100px"}}
+                            alt="preview"
+                          />
+                        ) : (
+                          <img
+                            src={require("../assets/img/default_picture.png")}
+                            alt="preview"
+                          />
+                        )}
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center space-x-4">

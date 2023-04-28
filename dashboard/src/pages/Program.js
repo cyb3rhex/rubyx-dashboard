@@ -8,9 +8,7 @@ import {
   updateProgram,
   getScope,
 } from "../actions/program";
-import {
-  createScan,
-} from "../actions/scan";
+import { createScan } from "../actions/scan";
 import PageTitle from "../components/Typography/PageTitle";
 import { TrashIcon, EditIcon, SearchIcon, ButtonsIcon } from "../icons";
 import {
@@ -40,6 +38,8 @@ function Program() {
   const dispatch = useDispatch();
   const programState = useSelector((state) => state.program);
   const platformState = useSelector((state) => state.platform);
+  const [allPrograms, setAllPrograms] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
   const [type, setType] = useState("public");
@@ -54,12 +54,6 @@ function Program() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [seeScope, setSeeScope] = useState(false);
   const [launchScan, setLaunchScan] = useState(false);
-
-  useEffect(() => {
-    if (programState.scope) {
-      console.log(programState.scope);
-    }
-  }, [programState.scope]);
 
   function closeModal() {
     setIsModalOpen(false);
@@ -141,7 +135,7 @@ function Program() {
 
   // pagination setup
   const resultsPerPage = 30;
-  const totalResults = programState.programs ? programState.programs.length : 0;
+  const totalResults = allPrograms ? allPrograms.length : 0;
 
   function onPageChangeTable(p) {
     setPageTable(p);
@@ -160,35 +154,67 @@ function Program() {
     }
   };
 
+  const handleFilterSearch = (e) => {
+    setSearchTerm(e.target.value);
+    if (e.target.value === "") {
+      setAllPrograms(programState.programs);
+    }
+    setAllPrograms(
+      programState.programs.filter((program) =>
+        program.name.toLowerCase().includes(e.target.value.toLowerCase())
+      )
+    );
+  };
+
+  useEffect(() => {
+    setAllPrograms(programState.programs);
+  }, [programState]);
+
   useEffect(() => {
     setDataTable(
-      programState.programs &&
-        programState.programs.slice(
+      allPrograms &&
+        allPrograms.slice(
           (pageTable - 1) * resultsPerPage,
           pageTable * resultsPerPage
         )
     );
-  }, [pageTable, programState]);
+  }, [pageTable, allPrograms]);
 
   return (
     <>
       <PageTitle>Programs</PageTitle>
 
       <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-        <div className="py-3 flex items-center justify-end space-x-4">
-          {programState.loading ? (
-            <ClipLoader
-              color={"#355dad"}
-              loading={true}
-              size={30}
-              aria-label="Loading"
-              data-testid="loader"
-            />
-          ) : (
-            <Button className="bg-blue-900" onClick={() => handleReloadPrograms()}>
-              <TbReload className="w-5 h-5" />
-            </Button>
-          )}
+        <div className="flex justify-between">
+          <div className="flex-1 lg:mr-32">
+            <div className="py-3 relative w-full max-w-xl mr-6 focus-within:text-purple-500">
+              <Input
+                className="pl-10 text-gray-700"
+                placeholder="Search for programs"
+                aria-label="Search"
+                onChange={(e) => handleFilterSearch(e)}
+              />
+            </div>
+          </div>
+
+          <div className="py-3 justify-end space-x-4">
+            {programState.loading ? (
+              <ClipLoader
+                color={"#355dad"}
+                loading={true}
+                size={30}
+                aria-label="Loading"
+                data-testid="loader"
+              />
+            ) : (
+              <Button
+                className="bg-blue-900"
+                onClick={() => handleReloadPrograms()}
+              >
+                <TbReload className="w-5 h-5" />
+              </Button>
+            )}
+          </div>
         </div>
 
         {totalResults > 0 ? (
@@ -230,7 +256,10 @@ function Program() {
                               size="icon"
                               aria-label="See Scope"
                             >
-                              <AiFillSecurityScan onClick={() => handleGetScope(key.id)} className="w-5 h-5" />
+                              <AiFillSecurityScan
+                                onClick={() => handleGetScope(key.id)}
+                                className="w-5 h-5"
+                              />
                             </Button>
                           </div>
                         </TableCell>
@@ -388,42 +417,56 @@ function Program() {
         <Modal isOpen={seeScope} onClose={() => setSeeScope(false)}>
           <ModalHeader>Scope</ModalHeader>
           <ModalBody>
-            <TableContainer className="mb-8">
-              <Table>
-                <TableHeader>
-                  <tr>
-                    <TableCell>Scope</TableCell>
-                    <TableCell>Type</TableCell>
-                    <TableCell>Actions</TableCell>
-                  </tr>
-                </TableHeader>
-                <TableBody>
-                  {programState.scope &&
-                    programState.scope.map((key, i) => (
-                      <TableRow key={i}>
-                        <TableCell>
-                          <span className="text-sm">{key.scope}</span>
-                        </TableCell>
-                        <TableCell>
-                          <span className="text-sm">{key.scope_type}</span>
-                        </TableCell>
-                        <TableCell>
-                        <div className="flex items-center justify-center space-x-4">
-                        <Button
-                              layout="link"
-                              size="icon"
-                              aria-label="Scan"
-                            >
-                              <AiFillSecurityScan onClick={() => handleSetScan(key.scope)} className="w-5 h-5" />
-                            </Button>
-                                </div>
-                        </TableCell>
-                    
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+            {programState.loadingScope ? (
+              <div className="flex items-center justify-center">
+                <ClipLoader
+                  color={"#355dad"}
+                  loading={true}
+                  size={30}
+                  aria-label="Loading"
+                  data-testid="loader"
+                />
+              </div>
+            ) : (
+              <TableContainer className="mb-8">
+                <Table>
+                  <TableHeader>
+                    <tr>
+                      <TableCell>Scope</TableCell>
+                      <TableCell>Type</TableCell>
+                      <TableCell>Actions</TableCell>
+                    </tr>
+                  </TableHeader>
+                  <TableBody>
+                    {programState.scope &&
+                      programState.scope.map((key, i) => (
+                        <TableRow key={i}>
+                          <TableCell>
+                            <span className="text-sm">{key.scope}</span>
+                          </TableCell>
+                          <TableCell>
+                            <span className="text-sm">{key.scope_type}</span>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center justify-center space-x-4">
+                              <Button
+                                layout="link"
+                                size="icon"
+                                aria-label="Scan"
+                              >
+                                <AiFillSecurityScan
+                                  onClick={() => handleSetScan(key.scope)}
+                                  className="w-5 h-5"
+                                />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
           </ModalBody>
           <ModalFooter>
             <div className="hidden sm:block">

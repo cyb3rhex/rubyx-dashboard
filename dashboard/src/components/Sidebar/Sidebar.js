@@ -16,7 +16,7 @@ const Sidebar = ({
   return (
     <div
       className={classNames({
-        "bg-sky-800 text-zinc-50 fixed md:static md:translate-x-0 z-20": true,
+        "bg-sky-800 text-zinc-50 md:static md:translate-x-0 z-20 sticky top-0": true,
         "transition-all duration-300 ease-in-out": true,
         "w-[300px]": !collapsed,
         "w-16": collapsed,
@@ -25,7 +25,7 @@ const Sidebar = ({
     >
       <div
         className={classNames({
-          "flex flex-col justify-between h-screen md:h-full sticky inset-0": true,
+          "flex flex-col justify-between sticky inset-0": true,
         })}
       >
         {/* logo and collapse button */}
@@ -37,13 +37,17 @@ const Sidebar = ({
           })}
         >
           {!collapsed && (
-            <img
-              src={require("../../assets/img/logo_white.png")}
-              height={36}
-              width={36}
-              alt="Logo"
-              className="rounded-full"
-            />
+            <div className="flex items-center space-x-4">
+              
+                <img
+                  src={require("../../assets/img/logo_white.png")}
+                  height={36}
+                  width={36}
+                  alt="Logo"
+                  className="rounded-full"
+                />
+             <div className="text-xl font-semibold">Rubyx</div>
+            </div>
           )}
           <button
             className="grid place-content-center hover:bg-sky-900 w-10 h-10 rounded-full opacity-0 md:opacity-100"

@@ -20,6 +20,7 @@ import {
 } from "../constants/program";
 
 const initialState = {
+  loadingScope: true,
   loading: true,
   error: "",
   programs: null,
@@ -31,20 +32,20 @@ export default function reducer (state = initialState, action) {
     case GET_SCOPE:
       return {
         ...state,
-        loading: false,
+        loadingScope: true,
         error: "",
       };
     case GET_SCOPE_SUCCESS:
       return {
         ...state,
-        loading: false,
+        loadingScope: false,
         scope: action.payload,
         error: "",
       };
     case GET_SCOPE_ERROR:
       return {
         ...state,
-        loading: false,
+        loadingScope: false,
         scope: null,
         error: action.payload,
       };

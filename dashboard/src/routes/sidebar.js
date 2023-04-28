@@ -2,29 +2,29 @@ import React from "react";
 import { SiHackerone } from "react-icons/si";
 import { BiMoney, BiBug, BiSearch, BiListUl, BiHomeAlt } from "react-icons/bi";
 import { TbNotes } from "react-icons/tb";
-import { AiOutlineSecurityScan } from "react-icons/ai";
-
+import { AiFillSecurityScan, AiFillHome } from "react-icons/ai";
+import { FaPencilAlt, FaSearch, FaList, FaBug, FaMoneyBill, FaHome } from "react-icons/fa";
 
 const routes = [
   {
     label: "Dashboard",
     href: "/app/dashboard",
-    icon: <BiHomeAlt className="w-6 h-6" />,
+    icon: <FaHome className="w-6 h-6" />,
   },
   {
     label: "Scan",
     href: "/app/scan",
-    icon: <AiOutlineSecurityScan className="w-6 h-6" />,
+    icon: <AiFillSecurityScan className="w-6 h-6" />,
   },
   {
     label: "Stats",
     href: "/app/stats",
-    icon: <BiMoney className="w-6 h-6" />,
+    icon: <FaMoneyBill className="w-6 h-6" />,
   },
   {
     label: "Notes",
     href: "/app/notes",
-    icon: <TbNotes className="w-6 h-6" />,
+    icon: <FaPencilAlt className="w-6 h-6" />,
   },
   {
     label: "Platforms",
@@ -34,17 +34,17 @@ const routes = [
   {
     label: "Programs",
     href: "/app/programs",
-    icon: <BiSearch className="w-6 h-6" />,
+    icon: <FaSearch className="w-6 h-6" />,
   },
   {
     label: "Subdomains",
     href: "/app/subdomains",
-    icon: <BiListUl className="w-6 h-6" />,
+    icon: <FaList className="w-6 h-6" />,
   },
   {
     label: "Vulnerabilities",
     href: "/app/vulnerabilities",
-    icon: <BiBug className="w-6 h-6" />,
+    icon: <FaBug className="w-6 h-6" />,
   }
 ];
 
