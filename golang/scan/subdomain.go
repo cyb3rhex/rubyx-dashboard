@@ -1,13 +1,17 @@
 package scan
 
 import (
+	"bytes"
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"regexp"
 	"strings"
 
 	"github.com/aituglo/rubyx/golang/db/wrapper"
+	"github.com/projectdiscovery/subfinder/v2/pkg/resolve"
+	"github.com/projectdiscovery/subfinder/v2/pkg/runner"
 )
 
 // Special cases for TLDs like .co.uk
@@ -16,6 +20,32 @@ var specialCases = map[string]struct{}{
 	"com.au": {},
 	"com.br": {},
 	"com.sg": {},
+}
+
+func ScanSubdomains(input string) ([]string, error) {
+	runnerInstance, err := runner.NewRunner(&runner.Options{
+		Threads:            10,
+		Timeout:            30,
+		MaxEnumerationTime: 10,
+		Resolvers:          resolve.DefaultResolvers,
+		Silent:             true,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	buf := bytes.Buffer{}
+	err = runnerInstance.EnumerateSingleDomain(input, []io.Writer{&buf})
+	if err != nil {
+		return nil, err
+	}
+
+	data, err := io.ReadAll(&buf)
+	if err != nil {
+		return nil, err
+	}
+
+	return strings.Split(string(data), "\n"), nil
 }
 
 func ExtractDomain(input string) (string, error) {

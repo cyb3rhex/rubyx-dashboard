@@ -1,4 +1,5 @@
 .cache
+.pki
 # exclude the built app from check-ins
 app
 serverbin

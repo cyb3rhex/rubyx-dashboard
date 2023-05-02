@@ -11,25 +11,25 @@ import (
 )
 
 const createScan = `-- name: CreateScan :one
-INSERT INTO scans (id, command, param, status, type, output)
+INSERT INTO scans (id, domain, params, status, type, output)
 VALUES ($1, $2, $3, $4, $5, $6)
-RETURNING id, command, param, type, status, start_time, end_time, created_at, updated_at, output
+RETURNING id, domain, params, type, status, start_time, end_time, created_at, updated_at, output
 `
 
 type CreateScanParams struct {
-	ID      string `json:"id"`
-	Command string `json:"command"`
-	Param   string `json:"param"`
-	Status  string `json:"status"`
-	Type    string `json:"type"`
-	Output  string `json:"output"`
+	ID     string `json:"id"`
+	Domain string `json:"domain"`
+	Params string `json:"params"`
+	Status string `json:"status"`
+	Type   string `json:"type"`
+	Output string `json:"output"`
 }
 
 func (q *Queries) CreateScan(ctx context.Context, arg CreateScanParams) (Scan, error) {
 	row := q.db.QueryRow(ctx, createScan,
 		arg.ID,
-		arg.Command,
-		arg.Param,
+		arg.Domain,
+		arg.Params,
 		arg.Status,
 		arg.Type,
 		arg.Output,
@@ -37,8 +37,8 @@ func (q *Queries) CreateScan(ctx context.Context, arg CreateScanParams) (Scan, e
 	var i Scan
 	err := row.Scan(
 		&i.ID,
-		&i.Command,
-		&i.Param,
+		&i.Domain,
+		&i.Params,
 		&i.Type,
 		&i.Status,
 		&i.StartTime,
@@ -60,7 +60,7 @@ func (q *Queries) DeleteScanByIDs(ctx context.Context, id string) error {
 }
 
 const findScanByID = `-- name: FindScanByID :one
-SELECT id, command, param, type, status, start_time, end_time, created_at, updated_at, output FROM scans WHERE id = $1 LIMIT 1
+SELECT id, domain, params, type, status, start_time, end_time, created_at, updated_at, output FROM scans WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) FindScanByID(ctx context.Context, id string) (Scan, error) {
@@ -68,8 +68,8 @@ func (q *Queries) FindScanByID(ctx context.Context, id string) (Scan, error) {
 	var i Scan
 	err := row.Scan(
 		&i.ID,
-		&i.Command,
-		&i.Param,
+		&i.Domain,
+		&i.Params,
 		&i.Type,
 		&i.Status,
 		&i.StartTime,
@@ -82,7 +82,7 @@ func (q *Queries) FindScanByID(ctx context.Context, id string) (Scan, error) {
 }
 
 const findScans = `-- name: FindScans :many
-SELECT id, command, param, type, status, start_time, end_time, created_at, updated_at, output FROM scans
+SELECT id, domain, params, type, status, start_time, end_time, created_at, updated_at, output FROM scans
 `
 
 func (q *Queries) FindScans(ctx context.Context) ([]Scan, error) {
@@ -96,8 +96,8 @@ func (q *Queries) FindScans(ctx context.Context) ([]Scan, error) {
 		var i Scan
 		if err := rows.Scan(
 			&i.ID,
-			&i.Command,
-			&i.Param,
+			&i.Domain,
+			&i.Params,
 			&i.Type,
 			&i.Status,
 			&i.StartTime,
@@ -120,7 +120,7 @@ const updateScan = `-- name: UpdateScan :one
 UPDATE scans
 SET status = $2, start_time = $3, end_time = $4, output = $5, updated_at = now()
 WHERE id = $1
-RETURNING id, command, param, type, status, start_time, end_time, created_at, updated_at, output
+RETURNING id, domain, params, type, status, start_time, end_time, created_at, updated_at, output
 `
 
 type UpdateScanParams struct {
@@ -142,8 +142,8 @@ func (q *Queries) UpdateScan(ctx context.Context, arg UpdateScanParams) (Scan, e
 	var i Scan
 	err := row.Scan(
 		&i.ID,
-		&i.Command,
-		&i.Param,
+		&i.Domain,
+		&i.Params,
 		&i.Type,
 		&i.Status,
 		&i.StartTime,

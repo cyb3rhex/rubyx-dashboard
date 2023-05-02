@@ -3,8 +3,6 @@ package scan
 import (
 	"context"
 	"log"
-	"os/exec"
-	"strings"
 	"time"
 
 	"github.com/aituglo/rubyx/golang/db"
@@ -12,14 +10,19 @@ import (
 )
 
 type ScanTask struct {
-	ID        string
-	Command   string
-	Param     []string
-	Type      string
-	Status    string
-	StartTime time.Time
-	EndTime   time.Time
-	Output    string
+	ID                string
+	Domain            string
+	Subdomain         bool
+	PortScan          bool
+	VulnerabilityScan bool
+	DirectoryScan     bool
+	Screenshot        bool
+	NucleiSeverity    string
+	Type              string
+	Status            string
+	StartTime         time.Time
+	EndTime           time.Time
+	Output            string
 }
 
 type ScanQueue struct {
@@ -64,106 +67,35 @@ func ExecuteScan(task *ScanTask, querier wrapper.Querier) {
 		log.Printf("Error when updating task: %v\n", updateErr)
 	}
 
-	command := task.Command + " " + strings.Join(task.Param, " ")
+	var subdomains []string
+	var err error
 
-	cmd := exec.Command("bash", "-c", command)
-	output, err := cmd.CombinedOutput()
+	if task.Subdomain {
+		subdomains, err = ScanSubdomains(task.Domain)
+		if err != nil {
+			log.Printf("Error when scanning subdomains: %v\n", err)
+			task.Status = "error"
+		}
 
-	if err != nil {
-		log.Printf("Error when executing the command: %v\n", err)
-		task.Status = "failed"
-	} else {
-		task.Status = "completed"
+		LaunchWappaGo(task, subdomains, querier)
 	}
+
+	if task.VulnerabilityScan {
+		for _, subdomain := range subdomains {
+			LaunchNuclei(task, subdomain, querier)
+		}
+	}
+
+	task.Status = "completed"
 
 	task.EndTime = time.Now()
-
-	switch task.Type {
-	case "passive":
-		for _, line := range strings.Split(string(output), "\n") {
-			program_id := CheckScope(line, querier)
-			if program_id != -1 {
-				_, createErr := querier.CreateSubdomain(context.Background(), db.CreateSubdomainParams{
-					ProgramID: program_id,
-					Url:       line,
-				})
-				if createErr != nil {
-					log.Printf("Error when adding a subdomain to the database: %v\n", createErr)
-				}
-			}
-		}
-	case "full":
-		for _, line := range strings.Split(string(output), "\n") {
-			if line != "" {
-				urlInfos, err := ParseWappaGo(line, querier)
-				if err != nil {
-					log.Printf("Error when parsing wappaGo output: %v\n", err)
-				}
-				domain, err := ExtractDomain(urlInfos.Url)
-				if err != nil {
-					log.Printf("Error when extracting domain: %v\n", err)
-				}
-				program_id := CheckScope(domain, querier)
-				var technologies string
-				for _, technology := range urlInfos.Infos.Technologies {
-					technologies += technology.Name + ","
-				}
-				log.Println(urlInfos.Infos.Technologies)
-				log.Println(technologies)
-				_, createErr := querier.CreateSubdomain(context.Background(), db.CreateSubdomainParams{
-					ProgramID:     program_id,
-					Url:           urlInfos.Url,
-					Ip:            urlInfos.Infos.IP,
-					Title:         urlInfos.Infos.Title,
-					Screenshot:    urlInfos.Infos.Screenshot,
-					Technologies:  technologies,
-					Port:          strings.Join(urlInfos.Infos.Ports, ","),
-					ContentLength: int32(urlInfos.Infos.ContentLength),
-					StatusCode:    int32(urlInfos.Infos.StatusCode),
-				})
-				if createErr != nil {
-					log.Printf("Error when adding a subdomain to the database: %v\n", createErr)
-				}
-			}
-
-		}
-	case "nuclei":
-		for _, line := range strings.Split(string(output), "\n") {
-			if line != "" {
-				nucleiParsed, err := ParseNuclei(line, querier)
-				if err != nil {
-					log.Printf("Error when parsing nuclei output: %v\n", err)
-				}
-
-				domain, err := ExtractDomain(nucleiParsed.MatchedAt)
-				if err != nil {
-					log.Printf("Error when extracting domain: %v\n", err)
-				}
-				program_id := CheckScope(domain, querier)
-
-				_, createErr := querier.CreateVulnerability(context.Background(), db.CreateVulnerabilityParams{
-					ProgramID: program_id,
-					Url:       nucleiParsed.MatchedAt,
-					Severity:  nucleiParsed.Info.Severity,
-					Type:      nucleiParsed.Info.Name,
-					Tag:       strings.Join(nucleiParsed.Info.Tags, ","),
-				})
-				if createErr != nil {
-					log.Printf("Error when adding a subdomain to the database: %v\n", createErr)
-				}
-
-			}
-
-		}
-	default:
-	}
 
 	_, updateErr = querier.UpdateScan(context.Background(), db.UpdateScanParams{
 		ID:        task.ID,
 		Status:    task.Status,
 		StartTime: task.StartTime,
 		EndTime:   task.EndTime,
-		Output:    string(output),
+		Output:    "",
 	})
 	if updateErr != nil {
 		log.Printf("Error when updating task: %v\n", updateErr)

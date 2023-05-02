@@ -147,8 +147,8 @@ type Reset struct {
 
 type Scan struct {
 	ID        string    `json:"id"`
-	Command   string    `json:"command"`
-	Param     string    `json:"param"`
+	Domain    string    `json:"domain"`
+	Params    string    `json:"params"`
 	Type      string    `json:"type"`
 	Status    string    `json:"status"`
 	StartTime time.Time `json:"start_time"`

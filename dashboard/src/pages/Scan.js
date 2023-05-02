@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  createScan,
   getScans,
   deleteScan
 } from "../actions/scan";
 import PageTitle from "../components/Typography/PageTitle";
+import Scan from "../components/ScanModal";
 import { TrashIcon } from "../icons";
-import Input from "../components/Input";
 import {
   Table,
   TableHeader,
@@ -16,22 +15,14 @@ import {
   TableRow,
   TableFooter,
   TableContainer,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
   Pagination,
-  Label,
-  Select
 } from "@windmill/react-ui";
 
 
 function ScanPage() {
   const dispatch = useDispatch();
   const scanState = useSelector((state) => state.scan);
-  const [domain, setDomain] = useState("");
-  const [scanType, setScanType] = useState("passive");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -39,21 +30,9 @@ function ScanPage() {
     setIsModalOpen(true);
   }
 
-  function closeModal() {
-    setIsModalOpen(false);
-  }
-
   useEffect(() => {
     dispatch(getScans());
   }, []);
-
-  const handleCreateScan = () => {
-    setIsModalOpen(false);
-
-    dispatch(createScan(domain, scanType));
-
-    setDomain("");
-  };
 
   const handleDeleteScan = (id) => {
     dispatch(deleteScan(id));
@@ -95,7 +74,7 @@ function ScanPage() {
             <Table>
               <TableHeader>
                 <tr>
-                  <TableCell>Command</TableCell>
+                  <TableCell>Domain</TableCell>
                   <TableCell>Status</TableCell>
                   <TableCell>Start Time</TableCell>
                   <TableCell>End Time</TableCell>
@@ -107,7 +86,7 @@ function ScanPage() {
                   dataTable.map((scan, i) => (
                     <TableRow key={i}>
                       <TableCell>
-                        <span className="text-sm">{scan.command}</span>
+                        <span className="text-sm">{scan.domain}</span>
                   </TableCell>
                   <TableCell>
                     <span className="text-sm">{scan.status}</span>
@@ -148,43 +127,7 @@ function ScanPage() {
       </div>
     )}
 
-    <Modal isOpen={isModalOpen} onClose={closeModal}>
-      <ModalHeader>Add a Scan</ModalHeader>
-      <ModalBody>
-        <div className="px-4 py-3">
-          <Label>
-            <span>Domain</span>
-            <Input
-              className="mt-1"
-              type="text"
-              value={domain}
-              placeholder="Enter a domain"
-              onChange={(e) => setDomain(e.target.value)}
-            />
-          </Label>
-          <Label className="pt-5">
-                <span>Type</span>
-                <Select
-                  value={scanType}
-                  onChange={(e) => setScanType(e.target.value)}
-                  className="mt-1"
-                >
-                  <option value="passive">Passive Subdomain</option>
-                  <option value="full">Full ( Subdomain + Enumeration )</option>
-                  <option value="nuclei">Nuclei ( one domain )</option>
-                </Select>
-              </Label>
-        </div>
-      </ModalBody>
-      <ModalFooter>
-        <Button
-          className="w-full sm:w-auto"
-          onClick={handleCreateScan}
-        >
-          Add Scan
-        </Button>
-      </ModalFooter>
-    </Modal>
+    <Scan isOpen={isModalOpen} setOpen={setIsModalOpen} defaultDomain={""}/>
   </div>
 </>
 );

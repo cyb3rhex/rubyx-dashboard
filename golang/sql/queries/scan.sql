@@ -1,5 +1,5 @@
 -- name: CreateScan :one
-INSERT INTO scans (id, command, param, status, type, output)
+INSERT INTO scans (id, domain, params, status, type, output)
 VALUES ($1, $2, $3, $4, $5, $6)
 RETURNING *;
 

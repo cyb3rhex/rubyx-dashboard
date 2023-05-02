@@ -416,7 +416,8 @@ function Program() {
 
         <Modal isOpen={seeScope} onClose={() => setSeeScope(false)}>
           <ModalHeader>Scope</ModalHeader>
-          <ModalBody>
+          <ModalBody className="overflow-y-auto p-4">
+          
             {programState.loadingScope ? (
               <div className="flex items-center justify-center">
                 <ClipLoader
@@ -467,6 +468,7 @@ function Program() {
                 </Table>
               </TableContainer>
             )}
+                 
           </ModalBody>
           <ModalFooter>
             <div className="hidden sm:block">
@@ -484,6 +486,7 @@ function Program() {
                 Cancel
               </Button>
             </div>
+       
           </ModalFooter>
         </Modal>
 

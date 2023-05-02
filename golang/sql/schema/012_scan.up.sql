@@ -2,8 +2,8 @@ CREATE SCHEMA scans;
 
 CREATE TABLE scans (
   id VARCHAR PRIMARY KEY,
-  command VARCHAR NOT NULL,
-  param VARCHAR NOT NULL,
+  domain VARCHAR NOT NULL,
+  params VARCHAR NOT NULL,
   type VARCHAR NOT NULL,
   status VARCHAR NOT NULL,
   start_time TIMESTAMP NOT NULL DEFAULT now(),

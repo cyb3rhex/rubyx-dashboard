@@ -131,9 +131,10 @@ function Subdomain() {
         <div className="py-3 flex items-center justify-end space-x-4">
           <Button onClick={openModal}>Add</Button>
         </div>
-
-        {totalResults > 0 ? (
-          <TableContainer className="mb-8">
+        
+        <div>
+        {totalResults > 0 ? (  
+          <TableContainer className="mb-8 w-1">
             <Table>
               <TableHeader>
                 <tr>
@@ -158,7 +159,7 @@ function Subdomain() {
                           </a>
                         </span>
                         <br />
-                        <span className="text-sm">Title: {key.title}</span>
+                        <span class="bg-sky-700 text-white text-xs font-medium mr-2 px-4 py-1 rounded dark:bg-blue-900 dark:text-blue-300">{key.title}</span>
                       </TableCell>
                       <TableCell>
                         <span className="text-sm">
@@ -169,13 +170,15 @@ function Subdomain() {
                         <span className="text-sm">{key.port}</span>
                       </TableCell>
                       <TableCell>
-                        <span className="text-sm">{key.statuscode}</span>
+                        <span className="text-sm">{key.status_code}</span>
                       </TableCell>
                       <TableCell>
                         <span className="text-sm">{key.content_length}</span>
                       </TableCell>
                       <TableCell>
-                        <span className="text-sm">{key.technologies}</span>
+                        {key.technologies != "" && key.technologies.split(",").map((tech, i) => (
+                          <span class="bg-sky-700 text-white text-xs font-medium mr-2 px-2 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{tech}</span>
+                        ))}
                       </TableCell>
                       <TableCell>
                         {key.screenshot !== "" ? (
@@ -222,11 +225,13 @@ function Subdomain() {
               />
             </TableFooter>
           </TableContainer>
+          
         ) : (
           <div className="flex items-center justify-center">
             <span className="text-sm">No data to display</span>
           </div>
         )}
+        </div>
 
         <Modal isOpen={isModalOpen} onClose={closeModal}>
           <ModalHeader>Add a Subdomain</ModalHeader>
