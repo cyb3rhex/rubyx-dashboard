@@ -28,6 +28,8 @@ import {
 import ClipLoader from "react-spinners/ClipLoader";
 import Input from "../components/Input";
 import { getPrograms } from "../actions/program";
+import { Select as TWSelect, initTE } from "tw-elements";
+
 
 function Subdomain() {
   const dispatch = useDispatch();
@@ -37,7 +39,7 @@ function Subdomain() {
   const [program, setProgram] = useState();
   const [editId, setEditId] = useState(0);
   const [editMode, setEditMode] = useState(false);
-
+  const [allTechnologies, setAllTechnologies] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isScreenshotModalOpen, setIsScreenshotModalOpen] = useState(false);
   const [screenshot, setScreenshot] = useState("");
@@ -71,6 +73,7 @@ function Subdomain() {
   }
 
   useEffect(() => {
+    initTE({ Select: TWSelect });
     dispatch(getPrograms());
     dispatch(getSubdomains(1, resultsPerPage));
   }, []);
@@ -145,6 +148,19 @@ function Subdomain() {
       <PageTitle>Subdomains</PageTitle>
 
       <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+
+        <div>
+        <select
+  data-te-select-init
+    data-te-select-placeholder="Example placeholder"
+    multiple>
+    <option value="1">One</option>
+    <option value="2">Two</option>
+    <option value="3">Three</option>
+    <option value="4">Four</option>
+    <option value="5">Five</option>
+  </select>
+        </div>
         <div className="py-3 flex items-center justify-end space-x-4">
           <Button onClick={openModal}>Add</Button>
         </div>

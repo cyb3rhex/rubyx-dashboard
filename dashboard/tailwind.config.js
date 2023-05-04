@@ -196,6 +196,7 @@ module.exports = {
     "src/**/*.js",
     "node_modules/@windmill/react-ui/lib/defaultTheme.js",
     "node_modules/@windmill/react-ui/dist/index.js",
+    "node_modules/tw-elements/dist/js/**/*.js"
   ],
   safelist: ["bg-sky-800", "bg-sky-900"],
   theme: {
@@ -257,5 +258,5 @@ module.exports = {
     boxShadow: ["responsive", "hover", "focus", "dark:focus"],
     margin: ["responsive", "last"],
   },
-  plugins: [customFormsPlugin, multiThemePlugin],
+  plugins: [customFormsPlugin, multiThemePlugin, require("tw-elements/dist/plugin.cjs")],
 };
