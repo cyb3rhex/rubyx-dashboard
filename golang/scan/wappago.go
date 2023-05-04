@@ -18,6 +18,7 @@ func LaunchWappaGo(task *ScanTask, subdomains []string, querier wrapper.Querier)
 	log.Printf("Launching WappaGo for %s\n", task.Domain)
 
 	options := structure.WrapperOptions{}
+	options.FollowRedirect = true
 
 	if task.Screenshot {
 		options.Screenshot = "/tmp/screenshots"

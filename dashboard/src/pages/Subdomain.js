@@ -90,7 +90,7 @@ function Subdomain() {
   const [dataTable, setDataTable] = useState([]);
 
   // pagination setup
-  const resultsPerPage = 10;
+  const resultsPerPage = 30;
   const totalResults = subdomainState.subdomains
     ? subdomainState.subdomains.length
     : 0;
@@ -131,106 +131,125 @@ function Subdomain() {
         <div className="py-3 flex items-center justify-end space-x-4">
           <Button onClick={openModal}>Add</Button>
         </div>
-        
+
         <div>
-        {totalResults > 0 ? (  
-          <TableContainer className="mb-8 w-1">
-            <Table>
-              <TableHeader>
-                <tr>
-                  <TableCell>Subdomain</TableCell>
-                  <TableCell>Program</TableCell>
-                  <TableCell>Ports</TableCell>
-                  <TableCell>Status Code</TableCell>
-                  <TableCell>Content Length</TableCell>
-                  <TableCell>Technology</TableCell>
-                  <TableCell>Screenshot</TableCell>
-                  <TableCell>Actions</TableCell>
-                </tr>
-              </TableHeader>
-              <TableBody>
-                {dataTable &&
-                  dataTable.map((key, i) => (
-                    <TableRow key={i}>
-                      <TableCell>
-                        <span className="text-sm">
-                          <a href={key.url} target="__blank">
-                            {key.url}
-                          </a>
-                        </span>
-                        <br />
-                        <span class="bg-sky-700 text-white text-xs font-medium mr-2 px-4 py-1 rounded dark:bg-blue-900 dark:text-blue-300">{key.title}</span>
-                      </TableCell>
-                      <TableCell>
-                        <span className="text-sm">
-                          {getProgramName(key.program_id)}
-                        </span>
-                      </TableCell>
-                      <TableCell>
-                        <span className="text-sm">{key.port}</span>
-                      </TableCell>
-                      <TableCell>
-                        <span className="text-sm">{key.status_code}</span>
-                      </TableCell>
-                      <TableCell>
-                        <span className="text-sm">{key.content_length}</span>
-                      </TableCell>
-                      <TableCell>
-                        {key.technologies != "" && key.technologies.split(",").map((tech, i) => (
-                          <span class="bg-sky-700 text-white text-xs font-medium mr-2 px-2 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{tech}</span>
-                        ))}
-                      </TableCell>
-                      <TableCell>
-                        {key.screenshot !== "" ? (
-                          <img
-                            src={`data:image/png;base64,${key.screenshot}`}
-                            style={{width: "200px", height: "100px"}}
-                            alt="preview"
-                          />
-                        ) : (
-                          <img
-                            src={require("../assets/img/default_picture.png")}
-                            alt="preview"
-                          />
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center space-x-4">
-                          <Button layout="link" size="icon" aria-label="Delete">
-                            <TrashIcon
-                              onClick={() => handleDeleteSubdomain(key.id)}
-                              className="w-5 h-5"
-                              aria-hidden="true"
+          {totalResults > 0 ? (
+            <TableContainer className="mb-8 w-1">
+              <Table>
+                <TableHeader>
+                  <tr>
+                    <TableCell>Subdomain</TableCell>
+                    <TableCell>Program</TableCell>
+                    <TableCell>Ports</TableCell>
+                    <TableCell>Status Code</TableCell>
+                    <TableCell>Content Length</TableCell>
+                    <TableCell>Technology</TableCell>
+                    <TableCell>Screenshot</TableCell>
+                    <TableCell>Actions</TableCell>
+                  </tr>
+                </TableHeader>
+                <TableBody>
+                  {dataTable &&
+                    dataTable.map((key, i) => (
+                      <TableRow key={i}>
+                        <TableCell>
+                          <span className="text-sm">
+                            <a href={key.url} target="__blank">
+                              {key.url}
+                            </a>
+                          </span>
+                          <br />
+                          {key.title != "" && (
+                            <span class="bg-sky-700 text-white text-xs font-medium mr-2 px-4 py-1 rounded dark:bg-blue-900 dark:text-blue-300">
+                              {key.title}
+                            </span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <span className="text-sm">
+                            {getProgramName(key.program_id)}
+                          </span>
+                        </TableCell>
+                        <TableCell>
+                          <span className="text-sm">{key.port}</span>
+                        </TableCell>
+                        <TableCell>
+                          <span className="text-sm">{key.status_code}</span>
+                        </TableCell>
+                        <TableCell>
+                          <span className="text-sm">{key.content_length}</span>
+                        </TableCell>
+                        <TableCell>
+                          {key.technologies != "" &&
+                            key.technologies
+                              .split(",")
+                              .map(
+                                (tech, i) =>
+                                  tech !== "" && (
+                                    <span class="bg-sky-700 text-white text-xs font-medium mr-2 px-2 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+                                      {tech}
+                                    </span>
+                                  )
+                              )}
+                        </TableCell>
+                        <TableCell>
+                          {key.screenshot !== "" ? (
+                            <img
+                              src={`data:image/png;base64,${key.screenshot}`}
+                              style={{ width: "200px", height: "100px" }}
+                              alt="preview"
                             />
-                          </Button>
-                          <Button layout="link" size="icon" aria-label="Delete">
-                            <EditIcon
-                              onClick={() => handleEditSubdomain(key)}
-                              className="w-5 h-5"
-                              aria-hidden="true"
+                          ) : (
+                            <img
+                              src={require("../assets/img/default_picture.png")}
+                              alt="preview"
                             />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-            <TableFooter>
-              <Pagination
-                totalResults={totalResults}
-                resultsPerPage={resultsPerPage}
-                onChange={onPageChangeTable}
-                label="Navigation"
-              />
-            </TableFooter>
-          </TableContainer>
-          
-        ) : (
-          <div className="flex items-center justify-center">
-            <span className="text-sm">No data to display</span>
-          </div>
-        )}
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center space-x-4">
+                            <Button
+                              layout="link"
+                              size="icon"
+                              aria-label="Delete"
+                            >
+                              <TrashIcon
+                                onClick={() => handleDeleteSubdomain(key.id)}
+                                className="w-5 h-5"
+                                aria-hidden="true"
+                              />
+                            </Button>
+                            <Button
+                              layout="link"
+                              size="icon"
+                              aria-label="Delete"
+                            >
+                              <EditIcon
+                                onClick={() => handleEditSubdomain(key)}
+                                className="w-5 h-5"
+                                aria-hidden="true"
+                              />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+              <TableFooter>
+                <Pagination
+                  totalResults={totalResults}
+                  resultsPerPage={resultsPerPage}
+                  onChange={onPageChangeTable}
+                  label="Navigation"
+                />
+              </TableFooter>
+            </TableContainer>
+          ) : (
+            <div className="flex items-center justify-center">
+              <span className="text-sm">No data to display</span>
+            </div>
+          )}
         </div>
 
         <Modal isOpen={isModalOpen} onClose={closeModal}>

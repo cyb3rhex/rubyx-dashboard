@@ -25,6 +25,26 @@ function Layout() {
     }
   }, [userState])
 
+  const [screenSize, setScreenSize] = useState(getCurrentDimension());
+
+  function getCurrentDimension(){
+    return {
+        width: window.innerWidth,
+        height: window.innerHeight
+    }
+  }
+
+  useEffect(() => {
+      const updateDimension = () => {
+          setScreenSize(getCurrentDimension())
+      }
+      window.addEventListener('resize', updateDimension);
+  
+  
+      return(() => {
+          window.removeEventListener('resize', updateDimension);
+      })
+  }, [screenSize])
 
   return (
     <div
@@ -40,10 +60,9 @@ function Layout() {
         setCollapsed={setSidebarCollapsed}
         shown={showSidebar}
       />
-      <div>
+
+      <div className="" style={{width: screenSize.width < 774 ? screenSize.width : collapsed ? screenSize.width - 64 : screenSize.width - 300}}>
       <Navbar onMenuButtonClick={() => setShowSidebar((prev) => !prev)} />
-      <div className="flex flex-col flex-1 w-full">
-      
         <Main>
           <Suspense fallback={<ThemedSuspense />}>
             <Switch>
@@ -63,8 +82,6 @@ function Layout() {
           </Suspense>
         </Main>
       </div>
-      </div>
-      
     </div>
   )
 }

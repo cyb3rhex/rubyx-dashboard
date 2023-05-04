@@ -25,7 +25,7 @@ func ReloadPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.R
 		if p.Name == "yeswehack" {
 			utils.UpdateProgramsYWH(&p, 0, env, r.Context())
 		} else if p.Name == "hackerone" {
-			utils.UpdateProgramsH1(&p, 0, env, r.Context())
+			utils.UpdateProgramsH1(&p, 0, env)
 		}
 	}
 

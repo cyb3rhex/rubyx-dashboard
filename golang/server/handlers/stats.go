@@ -35,7 +35,7 @@ func ReloadStats(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 			if err != nil {
 				return write.Error(errors.RouteNotFound)
 			}
-			utils.GetReportsH1(&p, env, r.Context())
+			utils.GetReportsH1(&p, env)
 		}
 	}
 

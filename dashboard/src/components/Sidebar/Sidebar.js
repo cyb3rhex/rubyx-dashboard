@@ -16,16 +16,18 @@ const Sidebar = ({
   return (
     <div
       className={classNames({
-        "bg-sky-800 text-zinc-50 md:static md:translate-x-0 z-20 sticky top-0": true,
-        "transition-all duration-300 ease-in-out": true,
-        "w-[300px]": !collapsed,
-        "w-16": collapsed,
-        "-translate-x-full": !shown,
+        "bg-sky-800 text-zinc-50 fixed md:static md:translate-x-0 z-20":
+        true,
+      "transition-all duration-300 ease-in-out": true,
+      "w-[300px]": !collapsed,
+      "w-16": collapsed,
+      "-translate-x-full": !shown,
       })}
+      style={{height: "100%"}}
     >
       <div
         className={classNames({
-          "flex flex-col justify-between sticky inset-0": true,
+          "flex flex-col justify-between sticky inset-0 w-full": true,
         })}
       >
         {/* logo and collapse button */}

@@ -47,7 +47,7 @@ func GetUsernameH1(platform *db.Platform) (string, error) {
 	return platform.HunterUsername, err
 }
 
-func UpdateProgramsH1(platform *db.Platform, pageID int, env env.Env, ctx context.Context) {
+func UpdateProgramsH1(platform *db.Platform, pageID int, env env.Env) {
 	jwt, err := GetJWTH1(platform)
 	if err != nil {
 		return
@@ -63,11 +63,10 @@ func UpdateProgramsH1(platform *db.Platform, pageID int, env env.Env, ctx contex
 	if programsInfos == nil {
 		return
 	}
-	ParseProgramsH1(programsInfos.Programs, platform, env, ctx)
+	ParseProgramsH1(programsInfos.Programs, platform, env)
 	if programsInfos.NextPage {
-		UpdateProgramsH1(platform, pageID+1, env, ctx)
+		UpdateProgramsH1(platform, pageID+1, env)
 	}
-
 }
 
 func GetProgramsInfosH1(platform *db.Platform, pageID int) *ProgramsInfosH1 {
@@ -95,7 +94,7 @@ func GetProgramsInfosH1(platform *db.Platform, pageID int) *ProgramsInfosH1 {
 	}
 }
 
-func ParseProgramsH1(programs []interface{}, platform *db.Platform, env env.Env, ctx context.Context) {
+func ParseProgramsH1(programs []interface{}, platform *db.Platform, env env.Env) {
 	for _, program := range programs {
 		programMap := program.(map[string]interface{})
 		submissionState := programMap["attributes"].(map[string]interface{})["submission_state"].(string)
@@ -108,10 +107,10 @@ func ParseProgramsH1(programs []interface{}, platform *db.Platform, env env.Env,
 		name := programMap["attributes"].(map[string]interface{})["name"].(string)
 		vdp := !programMap["attributes"].(map[string]interface{})["offers_bounties"].(bool)
 
-		_, err := env.DB().FindProgramBySlug(ctx, slug)
+		_, err := env.DB().FindProgramBySlug(context.Background(), slug)
 		if err != nil {
 
-			env.DB().CreateProgram(ctx, db.CreateProgramParams{
+			env.DB().CreateProgram(context.Background(), db.CreateProgramParams{
 				Name:       name,
 				Slug:       slug,
 				Vdp:        vdp,
@@ -122,17 +121,17 @@ func ParseProgramsH1(programs []interface{}, platform *db.Platform, env env.Env,
 			})
 		}
 
-		UpdateScopesH1(platform, slug, env, ctx)
+		UpdateScopesH1(platform, slug, env)
 	}
 }
 
-func UpdateScopesH1(platform *db.Platform, slug string, env env.Env, ctx context.Context) {
+func UpdateScopesH1(platform *db.Platform, slug string, env env.Env) {
 	scopeInfos := GetScopeInfosH1(platform, slug)
 	if scopeInfos == nil || len(scopeInfos) == 0 {
 		return
 	}
 
-	ParseScopesH1(scopeInfos, slug, platform, env, ctx)
+	ParseScopesH1(scopeInfos, slug, platform, env)
 }
 
 func GetScopeInfosH1(platform *db.Platform, slug string) []interface{} {
@@ -152,8 +151,8 @@ func GetScopeInfosH1(platform *db.Platform, slug string) []interface{} {
 	return data["relationships"].(map[string]interface{})["structured_scopes"].(map[string]interface{})["data"].([]interface{})
 }
 
-func ParseScopesH1(scopes []interface{}, slug string, platform *db.Platform, env env.Env, ctx context.Context) {
-	program, err := env.DB().FindProgramBySlug(ctx, slug)
+func ParseScopesH1(scopes []interface{}, slug string, platform *db.Platform, env env.Env) {
+	program, err := env.DB().FindProgramBySlug(context.Background(), slug)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -171,11 +170,11 @@ func ParseScopesH1(scopes []interface{}, slug string, platform *db.Platform, env
 			continue
 		}
 
-		if _, err := env.DB().GetScopeByProgramIDAndScope(ctx, db.GetScopeByProgramIDAndScopeParams{
+		if _, err := env.DB().GetScopeByProgramIDAndScope(context.Background(), db.GetScopeByProgramIDAndScopeParams{
 			ProgramID: program.ID,
 			Scope:     endpoint,
 		}); err != nil {
-			if _, err := env.DB().CreateScope(ctx, db.CreateScopeParams{
+			if _, err := env.DB().CreateScope(context.Background(), db.CreateScopeParams{
 				Scope:     endpoint,
 				ScopeType: scopeType,
 				ProgramID: program.ID,
@@ -186,7 +185,7 @@ func ParseScopesH1(scopes []interface{}, slug string, platform *db.Platform, env
 	}
 }
 
-func GetReportsH1(platform *db.Platform, env env.Env, ctx context.Context) {
+func GetReportsH1(platform *db.Platform, env env.Env) {
 	response, _ := apiRequestH1(platform, "https://api.hackerone.com/v1/hackers/me/reports")
 	if response.StatusCode != 200 {
 		fmt.Println(response.StatusCode)
@@ -196,10 +195,10 @@ func GetReportsH1(platform *db.Platform, env env.Env, ctx context.Context) {
 	data := make(map[string]interface{})
 	json.NewDecoder(response.Body).Decode(&data)
 
-	parseReportsH1(data["data"].([]interface{}), platform, env, ctx)
+	parseReportsH1(data["data"].([]interface{}), platform, env)
 }
 
-func parseReportsH1(reports []interface{}, platform *db.Platform, env env.Env, ctx context.Context) {
+func parseReportsH1(reports []interface{}, platform *db.Platform, env env.Env) {
 	for _, report := range reports {
 		reportMap := report.(map[string]interface{})
 
@@ -219,7 +218,7 @@ func parseReportsH1(reports []interface{}, platform *db.Platform, env env.Env, c
 
 		finalReport["currency"] = "USD"
 
-		currentReport, err := env.DB().FindStatByReportID(ctx, finalReport["report_id"].(string))
+		currentReport, err := env.DB().FindStatByReportID(context.Background(), finalReport["report_id"].(string))
 		if err != nil {
 			reportDate, err := time.Parse("2006-01-02T15:04:05Z", reportMap["attributes"].(map[string]interface{})["created_at"].(string))
 			if err != nil {
@@ -230,7 +229,7 @@ func parseReportsH1(reports []interface{}, platform *db.Platform, env env.Env, c
 
 			finalReport["platform_id"] = platform.ID
 
-			env.DB().CreateStat(ctx, db.CreateStatParams{
+			env.DB().CreateStat(context.Background(), db.CreateStatParams{
 				ReportID:     finalReport["report_id"].(string),
 				ReportTitle:  finalReport["report_title"].(string),
 				Severity:     finalReport["severity"].(string),
@@ -245,7 +244,7 @@ func parseReportsH1(reports []interface{}, platform *db.Platform, env env.Env, c
 		} else {
 			finalReport["severity"] = reportMap["relationships"].(map[string]interface{})["severity"].(map[string]interface{})["data"].(map[string]interface{})["attributes"].(map[string]interface{})["rating"].(string)
 
-			env.DB().UpdateStat(ctx, db.UpdateStatParams{
+			env.DB().UpdateStat(context.Background(), db.UpdateStatParams{
 				ID:           currentReport.ID,
 				ReportID:     finalReport["report_id"].(string),
 				ReportTitle:  finalReport["report_title"].(string),

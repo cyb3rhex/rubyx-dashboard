@@ -37,7 +37,11 @@ const Navbar = (props) => {
 
   return (
     <nav
-      className="bg-white text-zinc-500 flex items-center justify-between px-6 mx-auto  w-screen md:w-full sticky z-10  shadow-sm h-[73px] top-0"
+      className={classNames({
+        "bg-white text-zinc-500": true, // colors
+        "flex items-center": true, // layout
+        "w-screen md:w-full sticky z-10 px-4 shadow-sm h-[73px] top-0 ": true, //positioning & styling
+      })}
     >
       <div className="font-bold text-lg">Rubyx</div>
       <div className="flex-grow"></div>
