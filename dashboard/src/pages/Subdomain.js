@@ -38,6 +38,8 @@ function Subdomain() {
   const [editMode, setEditMode] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isScreenshotModalOpen, setIsScreenshotModalOpen] = useState(false);
+  const [screenshot, setScreenshot] = useState("");
 
   function openModal() {
     setEditMode(false);
@@ -46,6 +48,16 @@ function Subdomain() {
 
   function closeModal() {
     setIsModalOpen(false);
+  }
+
+  function openScreenshotModal(image) {
+    setScreenshot(image);
+    setIsScreenshotModalOpen(true);
+  }
+
+  function closeScreenshotModal() {
+    setScreenshot("");
+    setIsScreenshotModalOpen(false);
   }
 
   useEffect(() => {
@@ -123,6 +135,27 @@ function Subdomain() {
     );
   }, [pageTable, subdomainState]);
 
+  const [screenSize, setScreenSize] = useState(getCurrentDimension());
+
+  function getCurrentDimension(){
+    return {
+        width: window.innerWidth,
+        height: window.innerHeight
+    }
+  }
+
+  useEffect(() => {
+      const updateDimension = () => {
+          setScreenSize(getCurrentDimension())
+      }
+      window.addEventListener('resize', updateDimension);
+  
+  
+      return(() => {
+          window.removeEventListener('resize', updateDimension);
+      })
+  }, [screenSize])
+
   return (
     <>
       <PageTitle>Subdomains</PageTitle>
@@ -195,7 +228,13 @@ function Subdomain() {
                         <TableCell>
                           {key.screenshot !== "" ? (
                             <img
+                              onClick={() =>
+                                openScreenshotModal(
+                                  `data:image/png;base64,${key.screenshot}`
+                                )
+                              }
                               src={`data:image/png;base64,${key.screenshot}`}
+                              className="cursor-pointer"
                               style={{ width: "200px", height: "100px" }}
                               alt="preview"
                             />
@@ -251,6 +290,12 @@ function Subdomain() {
             </div>
           )}
         </div>
+
+        <Modal isOpen={isScreenshotModalOpen} onClose={closeScreenshotModal}>
+          <ModalBody style={{maxHeight: screenSize.height - 300}}>
+            <img src={screenshot} alt="preview" className="object-fill h-48 w-96 p-3"/>
+          </ModalBody>
+        </Modal>
 
         <Modal isOpen={isModalOpen} onClose={closeModal}>
           <ModalHeader>Add a Subdomain</ModalHeader>
