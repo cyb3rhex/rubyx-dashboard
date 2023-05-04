@@ -1,6 +1,7 @@
 import API from "./api";
 import {
   GET_SUBDOMAIN,
+  GET_SUBDOMAIN_SUCCESS,
   GET_SUBDOMAIN_ERROR,
   CREATE_SUBDOMAIN,
   CREATE_SUBDOMAIN_ERROR,
@@ -10,12 +11,15 @@ import {
   UPDATE_SUBDOMAIN_ERROR
 } from "../constants/subdomain";
 
-export const getSubdomains = () => async (dispatch) => {
+export const getSubdomains = (page, resultsPerPage) => async (dispatch) => {
+  dispatch({
+    type: GET_SUBDOMAIN,
+  });
   try {
-    API.getSubdomains()
+    API.getSubdomains(page, resultsPerPage)
       .then((data) => {
         dispatch({
-          type: GET_SUBDOMAIN,
+          type: GET_SUBDOMAIN_SUCCESS,
           payload: data,
         });
       })

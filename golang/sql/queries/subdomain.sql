@@ -10,8 +10,11 @@ SELECT * FROM subdomain WHERE id = $1 LIMIT 1;
 -- name: FindSubdomainByProgram :many
 SELECT * FROM subdomain WHERE program_id = $1;
 
+-- name: CountSubdomains :one
+SELECT COUNT(*) FROM subdomain;
+
 -- name: FindSubdomains :many
-SELECT * FROM subdomain;
+SELECT * FROM subdomain LIMIT $1 OFFSET $2;
 
 -- name: DeleteSubdomainByIDs :exec
 DELETE FROM subdomain WHERE id = $1;

@@ -9,6 +9,17 @@ import (
 	"context"
 )
 
+const countSubdomains = `-- name: CountSubdomains :one
+SELECT COUNT(*) FROM subdomain
+`
+
+func (q *Queries) CountSubdomains(ctx context.Context) (int64, error) {
+	row := q.db.QueryRow(ctx, countSubdomains)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const createSubdomain = `-- name: CreateSubdomain :one
 INSERT INTO subdomain (program_id, url, title, body_hash, status_code, technologies, content_length, tag, ip, port, screenshot) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, created_at, updated_at
 `
@@ -136,11 +147,16 @@ func (q *Queries) FindSubdomainByProgram(ctx context.Context, programID int64) (
 }
 
 const findSubdomains = `-- name: FindSubdomains :many
-SELECT id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, created_at, updated_at FROM subdomain
+SELECT id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, created_at, updated_at FROM subdomain LIMIT $1 OFFSET $2
 `
 
-func (q *Queries) FindSubdomains(ctx context.Context) ([]Subdomain, error) {
-	rows, err := q.db.Query(ctx, findSubdomains)
+type FindSubdomainsParams struct {
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
+}
+
+func (q *Queries) FindSubdomains(ctx context.Context, arg FindSubdomainsParams) ([]Subdomain, error) {
+	rows, err := q.db.Query(ctx, findSubdomains, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}

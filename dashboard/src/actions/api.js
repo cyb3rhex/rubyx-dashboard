@@ -60,8 +60,8 @@ export default class API {
   )
 
   // SUBDOMAIN
-  static getSubdomains = () => (
-    _get('/subdomain')
+  static getSubdomains = (page, resultsPerPage) => (
+    _get('/subdomain?page=' + page + '&resultsPerPage=' + resultsPerPage)
   )
 
   static createSubdomain = (body) => (
@@ -78,8 +78,8 @@ export default class API {
 
 
   // VULNERABILITY
-  static getVulnerabilities = () => (
-    _get('/vulnerability')
+  static getVulnerabilities = (page, resultsPerPage) => (
+    _get('/vulnerability?page=' + page + '&resultsPerPage=' + resultsPerPage)
   )
 
   static createVulnerability = (body) => (

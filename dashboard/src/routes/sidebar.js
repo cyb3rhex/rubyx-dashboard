@@ -1,8 +1,6 @@
 import React from "react";
 import { SiHackerone } from "react-icons/si";
-import { BiMoney, BiBug, BiSearch, BiListUl, BiHomeAlt } from "react-icons/bi";
-import { TbNotes } from "react-icons/tb";
-import { AiFillSecurityScan, AiFillHome } from "react-icons/ai";
+import { AiFillSecurityScan } from "react-icons/ai";
 import { FaPencilAlt, FaSearch, FaList, FaBug, FaMoneyBill, FaHome } from "react-icons/fa";
 
 const routes = [

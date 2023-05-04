@@ -3,12 +3,18 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/aituglo/rubyx/golang/db"
 	"github.com/aituglo/rubyx/golang/env"
 	"github.com/aituglo/rubyx/golang/errors"
 	"github.com/aituglo/rubyx/golang/server/write"
 )
+
+type SubdomainPagination struct {
+	Subdomains      []db.Subdomain `json:"subdomains"`
+	TotalSubdomains int            `json:"totalSubdomains"`
+}
 
 func CreateSubdomain(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
 	if user == nil {
@@ -79,7 +85,30 @@ func GetSubdomains(env env.Env, user *db.User, w http.ResponseWriter, r *http.Re
 		return write.Error(errors.RouteUnauthorized)
 	}
 
-	return write.JSONorErr(env.DB().FindSubdomains(r.Context()))
+	page, err := strconv.Atoi(r.URL.Query().Get("page"))
+	if err != nil || page < 1 {
+		page = 1
+	}
+
+	resultsPerPage, err := strconv.Atoi(r.URL.Query().Get("resultsPerPage"))
+	if err != nil || resultsPerPage < 1 {
+		resultsPerPage = 30
+	}
+
+	totalSubdomains, err := env.DB().CountSubdomains(r.Context())
+	if err != nil {
+		return write.Error(err)
+	}
+
+	subdomains, err := env.DB().FindSubdomains(r.Context(), db.FindSubdomainsParams{Limit: int32(resultsPerPage), Offset: int32((page - 1) * resultsPerPage)})
+	if err != nil {
+		return write.Error(err)
+	}
+
+	return write.JSONorErr(SubdomainPagination{
+		Subdomains:      subdomains,
+		TotalSubdomains: int(totalSubdomains),
+	}, nil)
 }
 
 func UpdateSubdomain(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {

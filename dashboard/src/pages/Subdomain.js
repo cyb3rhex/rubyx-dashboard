@@ -25,6 +25,7 @@ import {
   Label,
   Select,
 } from "@windmill/react-ui";
+import ClipLoader from "react-spinners/ClipLoader";
 import Input from "../components/Input";
 import { getPrograms } from "../actions/program";
 
@@ -40,6 +41,15 @@ function Subdomain() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isScreenshotModalOpen, setIsScreenshotModalOpen] = useState(false);
   const [screenshot, setScreenshot] = useState("");
+
+  const [resultsPerPage, setResultsPerPage] = useState(10);
+  const [pageTable, setPageTable] = useState(1);
+  const totalResults = subdomainState.total ? subdomainState.total : 0;
+
+  function onPageChangeTable(p) {
+    dispatch(getSubdomains(p, resultsPerPage));
+    setPageTable(p);
+  }
 
   function openModal() {
     setEditMode(false);
@@ -62,7 +72,7 @@ function Subdomain() {
 
   useEffect(() => {
     dispatch(getPrograms());
-    dispatch(getSubdomains());
+    dispatch(getSubdomains(1, resultsPerPage));
   }, []);
 
   const handleCreateSubdomain = () => {
@@ -97,20 +107,6 @@ function Subdomain() {
     setIsModalOpen(true);
   };
 
-  const [pageTable, setPageTable] = useState(1);
-
-  const [dataTable, setDataTable] = useState([]);
-
-  // pagination setup
-  const resultsPerPage = 30;
-  const totalResults = subdomainState.subdomains
-    ? subdomainState.subdomains.length
-    : 0;
-
-  function onPageChangeTable(p) {
-    setPageTable(p);
-  }
-
   const getProgramName = (id) => {
     if (programState && programState.programs) {
       var potential = programState.programs.find(
@@ -124,37 +120,25 @@ function Subdomain() {
     }
   };
 
-  useEffect(() => {
-    console.log(subdomainState.subdomains);
-    setDataTable(
-      subdomainState.subdomains &&
-        subdomainState.subdomains.slice(
-          (pageTable - 1) * resultsPerPage,
-          pageTable * resultsPerPage
-        )
-    );
-  }, [pageTable, subdomainState]);
-
   const [screenSize, setScreenSize] = useState(getCurrentDimension());
 
-  function getCurrentDimension(){
+  function getCurrentDimension() {
     return {
-        width: window.innerWidth,
-        height: window.innerHeight
-    }
+      width: window.innerWidth,
+      height: window.innerHeight,
+    };
   }
 
   useEffect(() => {
-      const updateDimension = () => {
-          setScreenSize(getCurrentDimension())
-      }
-      window.addEventListener('resize', updateDimension);
-  
-  
-      return(() => {
-          window.removeEventListener('resize', updateDimension);
-      })
-  }, [screenSize])
+    const updateDimension = () => {
+      setScreenSize(getCurrentDimension());
+    };
+    window.addEventListener("resize", updateDimension);
+
+    return () => {
+      window.removeEventListener("resize", updateDimension);
+    };
+  }, [screenSize]);
 
   return (
     <>
@@ -166,134 +150,134 @@ function Subdomain() {
         </div>
 
         <div>
-          {totalResults > 0 ? (
-            <TableContainer className="mb-8 w-1">
-              <Table>
-                <TableHeader>
-                  <tr>
-                    <TableCell>Subdomain</TableCell>
-                    <TableCell>Program</TableCell>
-                    <TableCell>Ports</TableCell>
-                    <TableCell>Status Code</TableCell>
-                    <TableCell>Content Length</TableCell>
-                    <TableCell>Technology</TableCell>
-                    <TableCell>Screenshot</TableCell>
-                    <TableCell>Actions</TableCell>
-                  </tr>
-                </TableHeader>
-                <TableBody>
-                  {dataTable &&
-                    dataTable.map((key, i) => (
-                      <TableRow key={i}>
-                        <TableCell>
-                          <span className="text-sm">
-                            <a href={key.url} target="__blank">
-                              {key.url}
-                            </a>
+          <TableContainer className="mb-8 w-1">
+            <Table>
+              <TableHeader>
+                <tr>
+                  <TableCell>Subdomain</TableCell>
+                  <TableCell>Program</TableCell>
+                  <TableCell>Ports</TableCell>
+                  <TableCell>Status Code</TableCell>
+                  <TableCell>Content Length</TableCell>
+                  <TableCell>Technology</TableCell>
+                  <TableCell>Screenshot</TableCell>
+                  <TableCell>Actions</TableCell>
+                </tr>
+              </TableHeader>
+              <TableBody>
+                {subdomainState.loading ? (
+                  <div className="flex justify-center items-center center">
+                    <ClipLoader color="#0f172a" loading={true} size={50} />
+                  </div>
+                ) : totalResults > 0 ? (
+                  subdomainState.subdomains &&
+                  subdomainState.subdomains.map((key, i) => (
+                    <TableRow key={i}>
+                      <TableCell>
+                        <span className="text-sm">
+                          <a href={key.url} target="__blank">
+                            {key.url}
+                          </a>
+                        </span>
+                        <br />
+                        {key.title != "" && (
+                          <span class="bg-sky-700 text-white text-xs font-medium mr-2 px-4 py-1 rounded dark:bg-blue-900 dark:text-blue-300">
+                            {key.title}
                           </span>
-                          <br />
-                          {key.title != "" && (
-                            <span class="bg-sky-700 text-white text-xs font-medium mr-2 px-4 py-1 rounded dark:bg-blue-900 dark:text-blue-300">
-                              {key.title}
-                            </span>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          <span className="text-sm">
-                            {getProgramName(key.program_id)}
-                          </span>
-                        </TableCell>
-                        <TableCell>
-                          <span className="text-sm">{key.port}</span>
-                        </TableCell>
-                        <TableCell>
-                          <span className="text-sm">{key.status_code}</span>
-                        </TableCell>
-                        <TableCell>
-                          <span className="text-sm">{key.content_length}</span>
-                        </TableCell>
-                        <TableCell>
-                          {key.technologies != "" &&
-                            key.technologies
-                              .split(",")
-                              .map(
-                                (tech, i) =>
-                                  tech !== "" && (
-                                    <span class="bg-sky-700 text-white text-xs font-medium mr-2 px-2 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
-                                      {tech}
-                                    </span>
-                                  )
-                              )}
-                        </TableCell>
-                        <TableCell>
-                          {key.screenshot !== "" ? (
-                            <img
-                              onClick={() =>
-                                openScreenshotModal(
-                                  `data:image/png;base64,${key.screenshot}`
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <span className="text-sm">
+                          {getProgramName(key.program_id)}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <span className="text-sm">{key.port}</span>
+                      </TableCell>
+                      <TableCell>
+                        <span className="text-sm">{key.status_code}</span>
+                      </TableCell>
+                      <TableCell>
+                        <span className="text-sm">{key.content_length}</span>
+                      </TableCell>
+                      <TableCell>
+                        {key.technologies != "" &&
+                          key.technologies
+                            .split(",")
+                            .map(
+                              (tech, i) =>
+                                tech !== "" && (
+                                  <span class="bg-sky-700 text-white text-xs font-medium mr-2 px-2 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+                                    {tech}
+                                  </span>
                                 )
-                              }
-                              src={`data:image/png;base64,${key.screenshot}`}
-                              className="cursor-pointer"
-                              style={{ width: "200px", height: "100px" }}
-                              alt="preview"
+                            )}
+                      </TableCell>
+                      <TableCell>
+                        {key.screenshot !== "" ? (
+                          <img
+                            onClick={() =>
+                              openScreenshotModal(
+                                `data:image/png;base64,${key.screenshot}`
+                              )
+                            }
+                            src={`data:image/png;base64,${key.screenshot}`}
+                            className="cursor-pointer"
+                            style={{ width: "200px", height: "100px" }}
+                            alt="preview"
+                          />
+                        ) : (
+                          <img
+                            src={require("../assets/img/default_picture.png")}
+                            alt="preview"
+                          />
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center space-x-4">
+                          <Button layout="link" size="icon" aria-label="Delete">
+                            <TrashIcon
+                              onClick={() => handleDeleteSubdomain(key.id)}
+                              className="w-5 h-5"
+                              aria-hidden="true"
                             />
-                          ) : (
-                            <img
-                              src={require("../assets/img/default_picture.png")}
-                              alt="preview"
+                          </Button>
+                          <Button layout="link" size="icon" aria-label="Delete">
+                            <EditIcon
+                              onClick={() => handleEditSubdomain(key)}
+                              className="w-5 h-5"
+                              aria-hidden="true"
                             />
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center space-x-4">
-                            <Button
-                              layout="link"
-                              size="icon"
-                              aria-label="Delete"
-                            >
-                              <TrashIcon
-                                onClick={() => handleDeleteSubdomain(key.id)}
-                                className="w-5 h-5"
-                                aria-hidden="true"
-                              />
-                            </Button>
-                            <Button
-                              layout="link"
-                              size="icon"
-                              aria-label="Delete"
-                            >
-                              <EditIcon
-                                onClick={() => handleEditSubdomain(key)}
-                                className="w-5 h-5"
-                                aria-hidden="true"
-                              />
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-              <TableFooter>
-                <Pagination
-                  totalResults={totalResults}
-                  resultsPerPage={resultsPerPage}
-                  onChange={onPageChangeTable}
-                  label="Navigation"
-                />
-              </TableFooter>
-            </TableContainer>
-          ) : (
-            <div className="flex items-center justify-center">
-              <span className="text-sm">No data to display</span>
-            </div>
-          )}
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <div className="flex items-center justify-center">
+                    <span className="text-sm">No data to display</span>
+                  </div>
+                )}
+              </TableBody>
+            </Table>
+            <TableFooter>
+              <Pagination
+                totalResults={totalResults}
+                resultsPerPage={resultsPerPage}
+                onChange={onPageChangeTable}
+                label="Navigation"
+              />
+            </TableFooter>
+          </TableContainer>
         </div>
 
         <Modal isOpen={isScreenshotModalOpen} onClose={closeScreenshotModal}>
-          <ModalBody style={{maxHeight: screenSize.height - 300}}>
-            <img src={screenshot} alt="preview" className="object-fill h-48 w-96 p-3"/>
+          <ModalBody style={{ maxHeight: screenSize.height - 300 }}>
+            <img
+              src={screenshot}
+              alt="preview"
+              className="object-fill h-48 w-96 p-3"
+            />
           </ModalBody>
         </Modal>
 

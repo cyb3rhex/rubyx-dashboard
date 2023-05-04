@@ -50,6 +50,36 @@ func (mr *MockQuerierMockRecorder) AddSetting(ctx, arg interface{}) *gomock.Call
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddSetting", reflect.TypeOf((*MockQuerier)(nil).AddSetting), ctx, arg)
 }
 
+// CountSubdomains mocks base method.
+func (m *MockQuerier) CountSubdomains(ctx context.Context) (int64, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CountSubdomains", ctx)
+	ret0, _ := ret[0].(int64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CountSubdomains indicates an expected call of CountSubdomains.
+func (mr *MockQuerierMockRecorder) CountSubdomains(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountSubdomains", reflect.TypeOf((*MockQuerier)(nil).CountSubdomains), ctx)
+}
+
+// CountVulnerabilities mocks base method.
+func (m *MockQuerier) CountVulnerabilities(ctx context.Context) (int64, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CountVulnerabilities", ctx)
+	ret0, _ := ret[0].(int64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CountVulnerabilities indicates an expected call of CountVulnerabilities.
+func (mr *MockQuerierMockRecorder) CountVulnerabilities(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountVulnerabilities", reflect.TypeOf((*MockQuerier)(nil).CountVulnerabilities), ctx)
+}
+
 // CreateApi mocks base method.
 func (m *MockQuerier) CreateApi(ctx context.Context, arg db.CreateApiParams) (db.Api, error) {
 	m.ctrl.T.Helper()
@@ -729,18 +759,18 @@ func (mr *MockQuerierMockRecorder) FindSubdomainByProgram(ctx, programID interfa
 }
 
 // FindSubdomains mocks base method.
-func (m *MockQuerier) FindSubdomains(ctx context.Context) ([]db.Subdomain, error) {
+func (m *MockQuerier) FindSubdomains(ctx context.Context, arg db.FindSubdomainsParams) ([]db.Subdomain, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindSubdomains", ctx)
+	ret := m.ctrl.Call(m, "FindSubdomains", ctx, arg)
 	ret0, _ := ret[0].([]db.Subdomain)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // FindSubdomains indicates an expected call of FindSubdomains.
-func (mr *MockQuerierMockRecorder) FindSubdomains(ctx interface{}) *gomock.Call {
+func (mr *MockQuerierMockRecorder) FindSubdomains(ctx, arg interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindSubdomains", reflect.TypeOf((*MockQuerier)(nil).FindSubdomains), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindSubdomains", reflect.TypeOf((*MockQuerier)(nil).FindSubdomains), ctx, arg)
 }
 
 // FindUrlByIDs mocks base method.
@@ -819,18 +849,18 @@ func (mr *MockQuerierMockRecorder) FindVulnerabilityByIDs(ctx, id interface{}) *
 }
 
 // FindVulnerabilitys mocks base method.
-func (m *MockQuerier) FindVulnerabilitys(ctx context.Context) ([]db.Vulnerability, error) {
+func (m *MockQuerier) FindVulnerabilitys(ctx context.Context, arg db.FindVulnerabilitysParams) ([]db.Vulnerability, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindVulnerabilitys", ctx)
+	ret := m.ctrl.Call(m, "FindVulnerabilitys", ctx, arg)
 	ret0, _ := ret[0].([]db.Vulnerability)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // FindVulnerabilitys indicates an expected call of FindVulnerabilitys.
-func (mr *MockQuerierMockRecorder) FindVulnerabilitys(ctx interface{}) *gomock.Call {
+func (mr *MockQuerierMockRecorder) FindVulnerabilitys(ctx, arg interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindVulnerabilitys", reflect.TypeOf((*MockQuerier)(nil).FindVulnerabilitys), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindVulnerabilitys", reflect.TypeOf((*MockQuerier)(nil).FindVulnerabilitys), ctx, arg)
 }
 
 // GetPlatforms mocks base method.
