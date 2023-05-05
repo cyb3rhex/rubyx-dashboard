@@ -77,10 +77,18 @@ func ExecuteScan(task *ScanTask, querier wrapper.Querier) {
 			task.Status = "error"
 		}
 
-		LaunchWappaGo(task, subdomains, querier)
+		subdomains, err = LaunchWappaGo(task, subdomains, querier)
+	}
+
+	if task.DirectoryScan {
+		for _, subdomain := range subdomains {
+			LaunchFFUF(task, subdomain, querier)
+			LaunchKatana(task, subdomain, querier)
+		}
 	}
 
 	if task.VulnerabilityScan {
+		subdomains = []string{"https://www.google.com"}
 		for _, subdomain := range subdomains {
 			LaunchNuclei(task, subdomain, querier)
 		}

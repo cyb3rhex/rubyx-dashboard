@@ -208,17 +208,13 @@ type Subdomain struct {
 }
 
 type Url struct {
-	ID            int64     `json:"id"`
-	SubdomainID   int64     `json:"subdomain_id"`
-	Url           string    `json:"url"`
-	Tag           string    `json:"tag"`
-	Title         string    `json:"title"`
-	BodyHash      string    `json:"body_hash"`
-	StatusCode    int32     `json:"status_code"`
-	Technologies  string    `json:"technologies"`
-	ContentLength int32     `json:"content_length"`
-	CreatedAt     time.Time `json:"created_at"`
-	UpdatedAt     time.Time `json:"updated_at"`
+	ID         int64     `json:"id"`
+	Subdomain  string    `json:"subdomain"`
+	Url        string    `json:"url"`
+	Tag        string    `json:"tag"`
+	StatusCode int32     `json:"status_code"`
+	CreatedAt  time.Time `json:"created_at"`
+	UpdatedAt  time.Time `json:"updated_at"`
 }
 
 type User struct {

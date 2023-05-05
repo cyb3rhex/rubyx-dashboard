@@ -10,10 +10,9 @@ COPY . .
 RUN apt-get update
 RUN apt-get install chromium -y
 
-RUN go install github.com/EasyRecon/wappaGo@latest
-RUN go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
 RUN go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest
 RUN go install github.com/ffuf/ffuf/v2@latest
+RUN go install github.com/projectdiscovery/katana/cmd/katana@latest
 
 CMD modd -f server.modd.conf
 
@@ -23,10 +22,9 @@ COPY . .
 RUN apt-get update
 RUN apt-get install chromium -y
 
-RUN go install github.com/EasyRecon/wappaGo@latest
-RUN go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
 RUN go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest
 RUN go install github.com/ffuf/ffuf/v2@latest
+RUN go install github.com/projectdiscovery/katana/cmd/katana@latest
 
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o serverbin ./cmd/server/server.go
 CMD ["/root/serverbin"]

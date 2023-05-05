@@ -23,13 +23,9 @@ func CreateUrl(env env.Env, user *db.User, w http.ResponseWriter, r *http.Reques
 	}
 
 	return write.JSONorErr(env.DB().CreateUrl(r.Context(), db.CreateUrlParams{
-		SubdomainID:   p.SubdomainID,
-		Url:           p.Url,
-		Title:         p.Title,
-		BodyHash:      p.BodyHash,
-		StatusCode:    p.StatusCode,
-		Technologies:  p.Technologies,
-		ContentLength: p.ContentLength,
+		Subdomain:  p.Subdomain,
+		Url:        p.Url,
+		StatusCode: p.StatusCode,
 	}))
 }
 
@@ -75,14 +71,10 @@ func UpdateUrl(env env.Env, user *db.User, w http.ResponseWriter, r *http.Reques
 	}
 
 	return write.JSONorErr(env.DB().UpdateUrl(r.Context(), db.UpdateUrlParams{
-		ID:            p.ID,
-		SubdomainID:   p.SubdomainID,
-		Url:           p.Url,
-		Title:         p.Title,
-		BodyHash:      p.BodyHash,
-		StatusCode:    p.StatusCode,
-		Technologies:  p.Technologies,
-		ContentLength: p.ContentLength,
+		ID:         p.ID,
+		Subdomain:  p.Subdomain,
+		Url:        p.Url,
+		StatusCode: p.StatusCode,
 	}))
 }
 

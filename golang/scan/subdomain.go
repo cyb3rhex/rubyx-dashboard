@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"os"
 	"regexp"
 	"strings"
 
@@ -23,13 +24,21 @@ var specialCases = map[string]struct{}{
 }
 
 func ScanSubdomains(input string) ([]string, error) {
-	runnerInstance, err := runner.NewRunner(&runner.Options{
+	options := runner.Options{
 		Threads:            10,
 		Timeout:            30,
 		MaxEnumerationTime: 10,
 		Resolvers:          resolve.DefaultResolvers,
+		All:                true,
 		Silent:             true,
-	})
+	}
+
+	_, err := os.Stat("/rubyx-data/config/subfinder.yaml")
+	if !os.IsNotExist(err) {
+		options.ProviderConfig = "/rubyx-data/config/subfinder.yaml"
+	}
+
+	runnerInstance, err := runner.NewRunner(&options)
 	if err != nil {
 		return nil, err
 	}

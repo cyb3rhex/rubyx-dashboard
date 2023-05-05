@@ -14,7 +14,7 @@ import (
 	"github.com/aituglo/rubyx/golang/db/wrapper"
 )
 
-func LaunchWappaGo(task *ScanTask, subdomains []string, querier wrapper.Querier) {
+func LaunchWappaGo(task *ScanTask, subdomains []string, querier wrapper.Querier) ([]string, error) {
 	log.Printf("Launching WappaGo for %s\n", task.Domain)
 
 	options := structure.WrapperOptions{}
@@ -30,10 +30,12 @@ func LaunchWappaGo(task *ScanTask, subdomains []string, querier wrapper.Querier)
 		options.Ports = "80, 443"
 	}
 
+	all_subdomains := []string{}
 	results := make(chan structure.Data)
 
 	go func() {
 		for urlInfos := range results {
+			all_subdomains = append(all_subdomains, urlInfos.Url)
 			if urlInfos.Infos.Screenshot != "" {
 
 				filePath := "/tmp/screenshots/" + urlInfos.Infos.Screenshot
@@ -79,4 +81,5 @@ func LaunchWappaGo(task *ScanTask, subdomains []string, querier wrapper.Querier)
 	}()
 
 	wappagoWrapper.StartReconAsync(subdomains, options, results)
+	return all_subdomains, nil
 }

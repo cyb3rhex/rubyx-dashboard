@@ -1,8 +1,8 @@
 -- name: CreateUrl :one
-INSERT INTO urls (subdomain_id, url, title, body_hash, status_code, technologies, content_length) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;
+INSERT INTO urls (subdomain, url, status_code, tag) VALUES ($1, $2, $3, $4) RETURNING *;
 
 -- name: UpdateUrl :one
-UPDATE urls SET subdomain_id = $2, url = $3, title = $4, body_hash = $5, status_code = $6, technologies = $7, content_length = $8, updated_at = NOW() WHERE id = $1 RETURNING *;
+UPDATE urls SET subdomain = $2, url = $3, status_code = $4, tag = $5, updated_at = NOW() WHERE id = $1 RETURNING *;
 
 -- name: FindUrlByIDs :one
 SELECT * FROM urls WHERE id = $1 LIMIT 1;

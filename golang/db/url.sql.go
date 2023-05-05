@@ -10,40 +10,30 @@ import (
 )
 
 const createUrl = `-- name: CreateUrl :one
-INSERT INTO urls (subdomain_id, url, title, body_hash, status_code, technologies, content_length) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, subdomain_id, url, tag, title, body_hash, status_code, technologies, content_length, created_at, updated_at
+INSERT INTO urls (subdomain, url, status_code, tag) VALUES ($1, $2, $3, $4) RETURNING id, subdomain, url, tag, status_code, created_at, updated_at
 `
 
 type CreateUrlParams struct {
-	SubdomainID   int64  `json:"subdomain_id"`
-	Url           string `json:"url"`
-	Title         string `json:"title"`
-	BodyHash      string `json:"body_hash"`
-	StatusCode    int32  `json:"status_code"`
-	Technologies  string `json:"technologies"`
-	ContentLength int32  `json:"content_length"`
+	Subdomain  string `json:"subdomain"`
+	Url        string `json:"url"`
+	StatusCode int32  `json:"status_code"`
+	Tag        string `json:"tag"`
 }
 
 func (q *Queries) CreateUrl(ctx context.Context, arg CreateUrlParams) (Url, error) {
 	row := q.db.QueryRow(ctx, createUrl,
-		arg.SubdomainID,
+		arg.Subdomain,
 		arg.Url,
-		arg.Title,
-		arg.BodyHash,
 		arg.StatusCode,
-		arg.Technologies,
-		arg.ContentLength,
+		arg.Tag,
 	)
 	var i Url
 	err := row.Scan(
 		&i.ID,
-		&i.SubdomainID,
+		&i.Subdomain,
 		&i.Url,
 		&i.Tag,
-		&i.Title,
-		&i.BodyHash,
 		&i.StatusCode,
-		&i.Technologies,
-		&i.ContentLength,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -60,7 +50,7 @@ func (q *Queries) DeleteUrlByIDs(ctx context.Context, id int64) error {
 }
 
 const findUrlByIDs = `-- name: FindUrlByIDs :one
-SELECT id, subdomain_id, url, tag, title, body_hash, status_code, technologies, content_length, created_at, updated_at FROM urls WHERE id = $1 LIMIT 1
+SELECT id, subdomain, url, tag, status_code, created_at, updated_at FROM urls WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) FindUrlByIDs(ctx context.Context, id int64) (Url, error) {
@@ -68,14 +58,10 @@ func (q *Queries) FindUrlByIDs(ctx context.Context, id int64) (Url, error) {
 	var i Url
 	err := row.Scan(
 		&i.ID,
-		&i.SubdomainID,
+		&i.Subdomain,
 		&i.Url,
 		&i.Tag,
-		&i.Title,
-		&i.BodyHash,
 		&i.StatusCode,
-		&i.Technologies,
-		&i.ContentLength,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -83,7 +69,7 @@ func (q *Queries) FindUrlByIDs(ctx context.Context, id int64) (Url, error) {
 }
 
 const findUrls = `-- name: FindUrls :many
-SELECT id, subdomain_id, url, tag, title, body_hash, status_code, technologies, content_length, created_at, updated_at FROM urls
+SELECT id, subdomain, url, tag, status_code, created_at, updated_at FROM urls
 `
 
 func (q *Queries) FindUrls(ctx context.Context) ([]Url, error) {
@@ -97,14 +83,10 @@ func (q *Queries) FindUrls(ctx context.Context) ([]Url, error) {
 		var i Url
 		if err := rows.Scan(
 			&i.ID,
-			&i.SubdomainID,
+			&i.Subdomain,
 			&i.Url,
 			&i.Tag,
-			&i.Title,
-			&i.BodyHash,
 			&i.StatusCode,
-			&i.Technologies,
-			&i.ContentLength,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -119,42 +101,32 @@ func (q *Queries) FindUrls(ctx context.Context) ([]Url, error) {
 }
 
 const updateUrl = `-- name: UpdateUrl :one
-UPDATE urls SET subdomain_id = $2, url = $3, title = $4, body_hash = $5, status_code = $6, technologies = $7, content_length = $8, updated_at = NOW() WHERE id = $1 RETURNING id, subdomain_id, url, tag, title, body_hash, status_code, technologies, content_length, created_at, updated_at
+UPDATE urls SET subdomain = $2, url = $3, status_code = $4, tag = $5, updated_at = NOW() WHERE id = $1 RETURNING id, subdomain, url, tag, status_code, created_at, updated_at
 `
 
 type UpdateUrlParams struct {
-	ID            int64  `json:"id"`
-	SubdomainID   int64  `json:"subdomain_id"`
-	Url           string `json:"url"`
-	Title         string `json:"title"`
-	BodyHash      string `json:"body_hash"`
-	StatusCode    int32  `json:"status_code"`
-	Technologies  string `json:"technologies"`
-	ContentLength int32  `json:"content_length"`
+	ID         int64  `json:"id"`
+	Subdomain  string `json:"subdomain"`
+	Url        string `json:"url"`
+	StatusCode int32  `json:"status_code"`
+	Tag        string `json:"tag"`
 }
 
 func (q *Queries) UpdateUrl(ctx context.Context, arg UpdateUrlParams) (Url, error) {
 	row := q.db.QueryRow(ctx, updateUrl,
 		arg.ID,
-		arg.SubdomainID,
+		arg.Subdomain,
 		arg.Url,
-		arg.Title,
-		arg.BodyHash,
 		arg.StatusCode,
-		arg.Technologies,
-		arg.ContentLength,
+		arg.Tag,
 	)
 	var i Url
 	err := row.Scan(
 		&i.ID,
-		&i.SubdomainID,
+		&i.Subdomain,
 		&i.Url,
 		&i.Tag,
-		&i.Title,
-		&i.BodyHash,
 		&i.StatusCode,
-		&i.Technologies,
-		&i.ContentLength,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
