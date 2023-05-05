@@ -9,6 +9,17 @@ import (
 	"context"
 )
 
+const countUrlsBySubdomain = `-- name: CountUrlsBySubdomain :one
+SELECT COUNT(*) FROM urls WHERE subdomain = $1
+`
+
+func (q *Queries) CountUrlsBySubdomain(ctx context.Context, subdomain string) (int64, error) {
+	row := q.db.QueryRow(ctx, countUrlsBySubdomain, subdomain)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const createUrl = `-- name: CreateUrl :one
 INSERT INTO urls (subdomain, url, status_code, tag) VALUES ($1, $2, $3, $4) RETURNING id, subdomain, url, tag, status_code, created_at, updated_at
 `
@@ -74,6 +85,44 @@ SELECT id, subdomain, url, tag, status_code, created_at, updated_at FROM urls
 
 func (q *Queries) FindUrls(ctx context.Context) ([]Url, error) {
 	rows, err := q.db.Query(ctx, findUrls)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Url{}
+	for rows.Next() {
+		var i Url
+		if err := rows.Scan(
+			&i.ID,
+			&i.Subdomain,
+			&i.Url,
+			&i.Tag,
+			&i.StatusCode,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const findUrlsBySubdomain = `-- name: FindUrlsBySubdomain :many
+SELECT id, subdomain, url, tag, status_code, created_at, updated_at FROM urls WHERE subdomain = $1 LIMIT $2 OFFSET $3
+`
+
+type FindUrlsBySubdomainParams struct {
+	Subdomain string `json:"subdomain"`
+	Limit     int32  `json:"limit"`
+	Offset    int32  `json:"offset"`
+}
+
+func (q *Queries) FindUrlsBySubdomain(ctx context.Context, arg FindUrlsBySubdomainParams) ([]Url, error) {
+	rows, err := q.db.Query(ctx, findUrlsBySubdomain, arg.Subdomain, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}

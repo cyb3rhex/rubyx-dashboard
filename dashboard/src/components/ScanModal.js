@@ -34,7 +34,6 @@ function ScanComponent({ isOpen, setOpen, defaultDomain }) {
       vulnerabilityScan: vulnerabilityScanCheck,
       nucleiSeverity: nucleiSeverity,
     };
-    console.log(scan)
 
     dispatch(createScan(scan));
 

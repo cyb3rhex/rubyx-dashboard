@@ -81,6 +81,9 @@ func ExecuteScan(task *ScanTask, querier wrapper.Querier) {
 	}
 
 	if task.DirectoryScan {
+		if len(subdomains) == 0 {
+			subdomains = append(subdomains, task.Domain)
+		}
 		for _, subdomain := range subdomains {
 			LaunchFFUF(task, subdomain, querier)
 			LaunchKatana(task, subdomain, querier)
@@ -88,7 +91,9 @@ func ExecuteScan(task *ScanTask, querier wrapper.Querier) {
 	}
 
 	if task.VulnerabilityScan {
-		subdomains = []string{"https://www.google.com"}
+		if len(subdomains) == 0 {
+			subdomains = append(subdomains, task.Domain)
+		}
 		for _, subdomain := range subdomains {
 			LaunchNuclei(task, subdomain, querier)
 		}

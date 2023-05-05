@@ -10,6 +10,7 @@ import {
   DELETE_SCAN_SUCCESS,
   DELETE_SCAN_ERROR,
 } from "../constants/scan";
+import {toast} from "react-toastify";
 
 export const getScans = () => async (dispatch) => {
   dispatch({
@@ -39,6 +40,12 @@ export const createScan = (scan) => async (dispatch) => {
     dispatch({
       type: CREATE_SCAN_SUCCESS,
       payload: data,
+    });
+    toast.success("Scan Launched !", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeButton: false,
     });
   } catch (err) {
     dispatch({

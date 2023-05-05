@@ -65,6 +65,21 @@ func (mr *MockQuerierMockRecorder) CountSubdomains(ctx interface{}) *gomock.Call
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountSubdomains", reflect.TypeOf((*MockQuerier)(nil).CountSubdomains), ctx)
 }
 
+// CountUrlsBySubdomain mocks base method.
+func (m *MockQuerier) CountUrlsBySubdomain(ctx context.Context, subdomain string) (int64, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CountUrlsBySubdomain", ctx, subdomain)
+	ret0, _ := ret[0].(int64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CountUrlsBySubdomain indicates an expected call of CountUrlsBySubdomain.
+func (mr *MockQuerierMockRecorder) CountUrlsBySubdomain(ctx, subdomain interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountUrlsBySubdomain", reflect.TypeOf((*MockQuerier)(nil).CountUrlsBySubdomain), ctx, subdomain)
+}
+
 // CountVulnerabilities mocks base method.
 func (m *MockQuerier) CountVulnerabilities(ctx context.Context) (int64, error) {
 	m.ctrl.T.Helper()
@@ -801,6 +816,21 @@ func (m *MockQuerier) FindUrls(ctx context.Context) ([]db.Url, error) {
 func (mr *MockQuerierMockRecorder) FindUrls(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindUrls", reflect.TypeOf((*MockQuerier)(nil).FindUrls), ctx)
+}
+
+// FindUrlsBySubdomain mocks base method.
+func (m *MockQuerier) FindUrlsBySubdomain(ctx context.Context, arg db.FindUrlsBySubdomainParams) ([]db.Url, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindUrlsBySubdomain", ctx, arg)
+	ret0, _ := ret[0].([]db.Url)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindUrlsBySubdomain indicates an expected call of FindUrlsBySubdomain.
+func (mr *MockQuerierMockRecorder) FindUrlsBySubdomain(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindUrlsBySubdomain", reflect.TypeOf((*MockQuerier)(nil).FindUrlsBySubdomain), ctx, arg)
 }
 
 // FindUserByEmail mocks base method.

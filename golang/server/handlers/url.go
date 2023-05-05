@@ -3,12 +3,18 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/aituglo/rubyx/golang/db"
 	"github.com/aituglo/rubyx/golang/env"
 	"github.com/aituglo/rubyx/golang/errors"
 	"github.com/aituglo/rubyx/golang/server/write"
 )
+
+type UrlPagination struct {
+	Urls  []db.Url `json:"urls"`
+	Total int      `json:"total"`
+}
 
 func CreateUrl(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
 	if user == nil {
@@ -55,7 +61,36 @@ func GetUrls(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request)
 		return write.Error(errors.RouteUnauthorized)
 	}
 
-	return write.JSONorErr(env.DB().FindUrls(r.Context()))
+	page, err := strconv.Atoi(r.URL.Query().Get("page"))
+	if err != nil || page < 1 {
+		page = 1
+	}
+
+	resultsPerPage, err := strconv.Atoi(r.URL.Query().Get("resultsPerPage"))
+	if err != nil || resultsPerPage < 1 {
+		resultsPerPage = 30
+	}
+
+	subdomain := r.URL.Query().Get("subdomain")
+
+	urls, err := env.DB().FindUrlsBySubdomain(r.Context(), db.FindUrlsBySubdomainParams{
+		Subdomain: subdomain,
+		Limit:     int32(resultsPerPage),
+		Offset:    int32((page - 1) * resultsPerPage),
+	})
+	if err != nil {
+		return write.Error(err)
+	}
+
+	total, err := env.DB().CountUrlsBySubdomain(r.Context(), subdomain)
+	if err != nil {
+		return write.Error(err)
+	}
+
+	return write.JSON(UrlPagination{
+		Urls:  urls,
+		Total: int(total),
+	})
 }
 
 func UpdateUrl(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {

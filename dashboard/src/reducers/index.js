@@ -8,6 +8,7 @@ import vulnerability from "./vulnerability";
 import subdomain from "./subdomain";
 import notes from "./notes";
 import scan from "./scan";
+import url from "./url";
 
 export default combineReducers({
   user,
@@ -19,4 +20,5 @@ export default combineReducers({
   subdomain,
   notes,
   scan,
+  url,
 });

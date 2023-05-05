@@ -59,6 +59,12 @@ export default class API {
     _post('/settings/data_repo_url', body)
   )
 
+  // URLS
+  static getUrls = (subdomain, page, resultsPerPage) => (
+    _get('/url?subdomain=' + subdomain + '&page=' + page + '&resultsPerPage=' + resultsPerPage)
+  )
+
+
   // SUBDOMAIN
   static getSubdomains = (page, resultsPerPage) => (
     _get('/subdomain?page=' + page + '&resultsPerPage=' + resultsPerPage)

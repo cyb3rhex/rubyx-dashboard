@@ -11,6 +11,7 @@ import (
 type Querier interface {
 	AddSetting(ctx context.Context, arg AddSettingParams) (Setting, error)
 	CountSubdomains(ctx context.Context) (int64, error)
+	CountUrlsBySubdomain(ctx context.Context, subdomain string) (int64, error)
 	CountVulnerabilities(ctx context.Context) (int64, error)
 	CreateApi(ctx context.Context, arg CreateApiParams) (Api, error)
 	CreateNote(ctx context.Context, arg CreateNoteParams) (Note, error)
@@ -61,6 +62,7 @@ type Querier interface {
 	FindSubdomains(ctx context.Context, arg FindSubdomainsParams) ([]Subdomain, error)
 	FindUrlByIDs(ctx context.Context, id int64) (Url, error)
 	FindUrls(ctx context.Context) ([]Url, error)
+	FindUrlsBySubdomain(ctx context.Context, arg FindUrlsBySubdomainParams) ([]Url, error)
 	FindUserByEmail(ctx context.Context, lower string) (User, error)
 	FindUserByID(ctx context.Context, id int64) (User, error)
 	FindVulnerabilityByIDs(ctx context.Context, id int64) (Vulnerability, error)

@@ -79,10 +79,6 @@ func (srv *server) ConfigureRouter() {
 
 	// URL
 	srv.GET("/url", handlers.GetUrls)
-	srv.GET("/url/one/:id", handlers.GetUrl)
-	srv.POST("/url", handlers.CreateUrl)
-	srv.PUT("/url", handlers.UpdateUrl)
-	srv.DELETE("/url/:id", handlers.DeleteUrl)
 
 	// VULNERABILITY
 	srv.GET("/vulnerability", handlers.GetVulnerabilities)
