@@ -96,6 +96,7 @@ func GetProgramsInfosH1(platform *db.Platform, pageID int) *ProgramsInfosH1 {
 
 func ParseProgramsH1(programs []interface{}, platform *db.Platform, env env.Env) {
 	for _, program := range programs {
+		var public db.ProgramType
 		programMap := program.(map[string]interface{})
 		submissionState := programMap["attributes"].(map[string]interface{})["submission_state"].(string)
 
@@ -107,6 +108,14 @@ func ParseProgramsH1(programs []interface{}, platform *db.Platform, env env.Env)
 		name := programMap["attributes"].(map[string]interface{})["name"].(string)
 		vdp := !programMap["attributes"].(map[string]interface{})["offers_bounties"].(bool)
 
+		checkPublic := programMap["attributes"].(map[string]interface{})["state"].(string)
+
+		if checkPublic == "public_mode" {
+			public = db.ProgramTypePublic
+		} else {
+			public = db.ProgramTypePrivate
+		}
+
 		_, err := env.DB().FindProgramBySlug(context.Background(), slug)
 		if err != nil {
 
@@ -116,7 +125,7 @@ func ParseProgramsH1(programs []interface{}, platform *db.Platform, env env.Env)
 				Vdp:        vdp,
 				Url:        fmt.Sprintf("https://hackerone.com/%s", slug),
 				Tag:        "",
-				Type:       db.ProgramTypePrivate,
+				Type:       public,
 				PlatformID: platform.ID,
 			})
 		}
