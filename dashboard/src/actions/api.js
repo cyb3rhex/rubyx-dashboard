@@ -60,14 +60,18 @@ export default class API {
   )
 
   // URLS
-  static getUrls = (subdomain, page, resultsPerPage) => (
-    _get('/url?subdomain=' + subdomain + '&page=' + page + '&resultsPerPage=' + resultsPerPage)
+  static getUrls = (subdomain, page, resultsPerPage, search) => (
+    _get('/url?subdomain=' + subdomain + '&page=' + page + '&resultsPerPage=' + resultsPerPage + '&search=' + search)
   )
 
 
   // SUBDOMAIN
-  static getSubdomains = (page, resultsPerPage) => (
-    _get('/subdomain?page=' + page + '&resultsPerPage=' + resultsPerPage)
+  static getSubdomains = (page, resultsPerPage, search, program_id, technologies) => (
+    _get('/subdomain?page=' + page + '&resultsPerPage=' + resultsPerPage + '&search=' + search + '&program_id=' + program_id + '&technologies=' + technologies)
+  )
+
+  static getUniqueTechnologies = () => (
+    _get('/subdomain/technologies')
   )
 
   static createSubdomain = (body) => (
@@ -84,8 +88,8 @@ export default class API {
 
 
   // VULNERABILITY
-  static getVulnerabilities = (page, resultsPerPage) => (
-    _get('/vulnerability?page=' + page + '&resultsPerPage=' + resultsPerPage)
+  static getVulnerabilities = (page, resultsPerPage, searchTerm, severity, program) => (
+    _get('/vulnerability?page=' + page + '&resultsPerPage=' + resultsPerPage + '&search=' + searchTerm + '&severity=' + severity + '&program_id=' + program)
   )
 
   static createVulnerability = (body) => (

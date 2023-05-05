@@ -10,11 +10,16 @@ SELECT COUNT(*) FROM urls WHERE subdomain = $1;
 -- name: FindUrlsBySubdomain :many
 SELECT * FROM urls WHERE subdomain = $1 LIMIT $2 OFFSET $3;
 
+-- name: FindUrlsBySubdomainWithSearch :many
+SELECT * FROM urls WHERE subdomain = $1 AND url LIKE $2 LIMIT $3 OFFSET $4;
+
 -- name: FindUrlByIDs :one
 SELECT * FROM urls WHERE id = $1 LIMIT 1;
 
 -- name: FindUrls :many
 SELECT * FROM urls;
+
+
 
 -- name: DeleteUrlByIDs :exec
 DELETE FROM urls WHERE id = $1;

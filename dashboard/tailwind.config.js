@@ -196,7 +196,8 @@ module.exports = {
     "src/**/*.js",
     "node_modules/@windmill/react-ui/lib/defaultTheme.js",
     "node_modules/@windmill/react-ui/dist/index.js",
-    "node_modules/tw-elements/dist/js/**/*.js"
+    "node_modules/tw-elements/dist/js/**/*.js",
+    "node_modules/react-tailwindcss-select/dist/index.esm.js"
   ],
   safelist: ["bg-sky-800", "bg-sky-900"],
   theme: {

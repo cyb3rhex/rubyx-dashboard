@@ -5,6 +5,7 @@ import {
   deleteSubdomain,
   getSubdomains,
   updateSubdomain,
+  getUniqueTechnologies,
 } from "../actions/subdomain";
 import { createScan } from "../actions/scan";
 import { useHistory } from "react-router-dom";
@@ -12,7 +13,7 @@ import { getUrls } from "../actions/url";
 import PageTitle from "../components/Typography/PageTitle";
 import { AiFillSecurityScan } from "react-icons/ai";
 import { TbArrowBack } from "react-icons/tb";
-import { TrashIcon, EditIcon } from "../icons";
+import { TbPlus } from "react-icons/tb";
 import {
   Table,
   TableHeader,
@@ -28,12 +29,11 @@ import {
   Button,
   Pagination,
   Label,
-  Select,
 } from "@windmill/react-ui";
 import ClipLoader from "react-spinners/ClipLoader";
 import Input from "../components/Input";
 import { getPrograms } from "../actions/program";
-import { Select as TWSelect, initTE } from "tw-elements";
+import Select from "react-tailwindcss-select";
 
 function Subdomain() {
   const dispatch = useDispatch();
@@ -46,10 +46,17 @@ function Subdomain() {
   const [program, setProgram] = useState();
   const [editId, setEditId] = useState(0);
   const [editMode, setEditMode] = useState(false);
-  const [allTechnologies, setAllTechnologies] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isScreenshotModalOpen, setIsScreenshotModalOpen] = useState(false);
   const [screenshot, setScreenshot] = useState("");
+  const [programSelect, setProgramSelect] = useState([]);
+  const [technologiesSelect, setTechnologiesSelect] = useState([]);
+
+  const [searchTermUrl, setSearchTermUrl] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterProgram, setFilterProgram] = useState(0);
+  const [filterProgramValue, setFilterProgramValue] = useState("");
+  const [filterTechnology, setFilterTechnology] = useState([]);
 
   const [resultsPerPage, setResultsPerPage] = useState(10);
   const [pageTable, setPageTable] = useState(1);
@@ -60,12 +67,13 @@ function Subdomain() {
   const [urlsTotalResults, setUrlsTotalResults] = useState(0);
 
   function onPageChangeTable(p) {
-    dispatch(getSubdomains(p, resultsPerPage));
+    let technologies = filterTechnology ? filterTechnology.map((option) => option.value).join(',') : "";
+    dispatch(getSubdomains(p, resultsPerPage, searchTerm, filterProgramValue, technologies));
     setPageTable(p);
   }
 
   function onUrlsPageChangeTable(p) {
-    dispatch(getUrls(url, p, resultsPerPage));
+    dispatch(getUrls(url, p, resultsPerPage, searchTermUrl));
     setUrlsPageTable(p);
   }
 
@@ -89,14 +97,41 @@ function Subdomain() {
   }
 
   useEffect(() => {
-    initTE({ Select: TWSelect });
     dispatch(getPrograms());
-    dispatch(getSubdomains(1, resultsPerPage));
+    dispatch(getUniqueTechnologies());
+    dispatch(getSubdomains(1, resultsPerPage, searchTerm, filterProgramValue, ""));
   }, []);
 
   useEffect(() => {
     setUrlsTotalResults(urlState.total ? urlState.total : 0);
   }, [urlState]);
+
+  useEffect(() => {
+    if (subdomainState && subdomainState.uniqueTechnologies) {
+      setTechnologiesSelect([
+        ...subdomainState.uniqueTechnologies.map((technology) => {
+          return { value: technology, label: technology };
+        }),
+      ]);
+    }
+  }, [subdomainState]);
+
+  useEffect(() => {
+    let technologies = filterTechnology ? filterTechnology.map((option) => option.value).join(',') : "";
+    dispatch(getSubdomains(1, resultsPerPage, searchTerm, filterProgramValue, technologies));
+  }, [searchTerm, filterProgramValue, filterTechnology]);
+
+  useEffect(() => {
+    if (programState && programState.programs) {
+      let options = [
+        { value: 0, label: "All" },
+        ...programState.programs.map((program) => {
+          return { value: program.id, label: program.name };
+        }),
+      ];
+      setProgramSelect(options);
+    }
+  }, [programState]);
 
   const handleScanUrls = () => {
     let scan = {
@@ -114,19 +149,27 @@ function Subdomain() {
     history.push("/app/scan");
   };
 
+  const handleSetFilterTechnology = (e) => {
+    setFilterTechnology(e);
+  }
+
   const handleSeeUrls = (subdomain) => {
     setUrl(subdomain);
     setSeeUrls(true);
-    dispatch(getUrls(subdomain));
+    dispatch(getUrls(subdomain, 1, urlsResultsPerPage, searchTermUrl));
   };
+
+  useEffect(() => {
+    dispatch(getUrls(url, 1, urlsResultsPerPage, searchTermUrl));
+  }, [searchTermUrl]);
 
   const handleCreateSubdomain = () => {
     setIsModalOpen(false);
 
-    dispatch(createSubdomain(parseInt(program), url));
+    dispatch(createSubdomain(parseInt(program.value), url));
 
     setUrl("");
-    setProgram(0);
+    setProgram({ value: 0, label: "All" });
   };
 
   const handleUpdateSubdomain = () => {
@@ -138,6 +181,11 @@ function Subdomain() {
     setUrl("");
     setProgram(0);
     setEditId(0);
+  };
+
+  const handleSetFilterProgram = (e) => {
+    setFilterProgram(e);
+    setFilterProgramValue(e.value);
   };
 
   const handleDeleteSubdomain = (id) => {
@@ -192,6 +240,15 @@ function Subdomain() {
           <PageTitle>Urls</PageTitle>
           <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
             <div className="flex justify-between">
+              <div className="flex-2">
+                <Input
+                  className="text-gray-700"
+                  placeholder="Search for url"
+                  aria-label="Search"
+                  onChange={(e) => setSearchTermUrl(e.target.value)}
+                />
+              </div>
+
               <div className="py-3 justify-start space-x-4">
                 <Button
                   className="bg-blue-900"
@@ -234,7 +291,11 @@ function Subdomain() {
                     urlState.urls.map((key, i) => (
                       <TableRow key={i}>
                         <TableCell>
-                          <span className="text-sm">{key.url}</span>
+                          <span className="text-sm">
+                            <a href={key.url} target="_blank">
+                              {key.url}
+                            </a>
+                          </span>
                         </TableCell>
                         <TableCell>
                           <span className="text-sm">{key.status_code}</span>
@@ -260,8 +321,41 @@ function Subdomain() {
           <PageTitle>Subdomains</PageTitle>
 
           <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-            <div className="py-3 flex items-center justify-end space-x-4">
-              <Button onClick={openModal}>Add</Button>
+            <div className="flex flex-col justify-between">
+              <div className="flex-2">
+                <Input
+                  className="text-gray-700"
+                  placeholder="Search for subdomain"
+                  aria-label="Search"
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+              <div className="flex-2">
+                <Select
+                  value={filterProgram}
+                  isSearchable={true}
+                  placeholder="Filter by program"
+                  onChange={(e) => handleSetFilterProgram(e)}
+                  options={programSelect}
+                />
+              </div>
+
+              <div className="flex-2">
+                <Select
+                  value={filterTechnology}
+                  isSearchable={true}
+                  isMultiple={true}
+                  placeholder="Filter by technology"
+                  onChange={(e) => handleSetFilterTechnology(e)}
+                  options={technologiesSelect}
+                />
+              </div>
+
+              <div className="py-3 justify-end space-x-4">
+                <Button className="bg-blue-900" onClick={openModal}>
+                  <TbPlus className="w-5 h-5" />
+                </Button>
+              </div>
             </div>
 
             <div>
@@ -277,7 +371,6 @@ function Subdomain() {
                       <TableCell>Technology</TableCell>
                       <TableCell>Screenshot</TableCell>
                       <TableCell>Urls</TableCell>
-                      <TableCell>Actions</TableCell>
                     </tr>
                   </TableHeader>
                   <TableBody>
@@ -362,32 +455,6 @@ function Subdomain() {
                               </Button>
                             </div>
                           </TableCell>
-                          <TableCell>
-                            <div className="flex items-center space-x-4">
-                              <Button
-                                layout="link"
-                                size="icon"
-                                aria-label="Delete"
-                              >
-                                <TrashIcon
-                                  onClick={() => handleDeleteSubdomain(key.id)}
-                                  className="w-5 h-5"
-                                  aria-hidden="true"
-                                />
-                              </Button>
-                              <Button
-                                layout="link"
-                                size="icon"
-                                aria-label="Delete"
-                              >
-                                <EditIcon
-                                  onClick={() => handleEditSubdomain(key)}
-                                  className="w-5 h-5"
-                                  aria-hidden="true"
-                                />
-                              </Button>
-                            </div>
-                          </TableCell>
                         </TableRow>
                       ))
                     ) : (
@@ -429,14 +496,11 @@ function Subdomain() {
                     <span>Program</span>
                     <Select
                       value={program}
-                      onChange={(e) => setProgram(e.target.value)}
-                      className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    >
-                      <option value="">Select a Program</option>
-                      {programState.programs.map((item) => (
-                        <option value={item.id}>{item.name}</option>
-                      ))}
-                    </Select>
+                      isSearchable={true}
+                      placeholder="Filter by program"
+                      onChange={(value) => setProgram(value)}
+                      options={programSelect}
+                    />
                   </Label>
                 )}
                 <Label className="pt-5">

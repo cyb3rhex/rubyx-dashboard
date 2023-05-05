@@ -31,6 +31,7 @@ import {
 import Input from "../components/Input";
 import { getPlatforms } from "../actions/platform";
 import { AiFillSecurityScan } from "react-icons/ai";
+import Scan from "../components/ScanModal";
 import { TbReload, TbPlus, TbArrowBack } from "react-icons/tb";
 import ClipLoader from "react-spinners/ClipLoader";
 import _ from "lodash";
@@ -39,10 +40,12 @@ function Program() {
   const dispatch = useDispatch();
   const programState = useSelector((state) => state.program);
   const platformState = useSelector((state) => state.platform);
+  const [isScanModalOpen, setIsScanModalOpen] = useState(false);
   const [allPrograms, setAllPrograms] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
   const [filterPlatform, setFilterPlatform] = useState("all");
+  const [scanUrl, setScanUrl] = useState("");
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
   const [type, setType] = useState("public");
@@ -82,6 +85,11 @@ function Program() {
   function closeModal() {
     setIsModalOpen(false);
   }
+
+  const handleSetScan = (url) => {
+    setScanUrl(url);
+    setIsScanModalOpen(true);
+  };
 
   const handleGetScope = (id) => {
     dispatch(getScope(id));
@@ -221,6 +229,7 @@ function Program() {
                               <Button
                                 layout="link"
                                 size="icon"
+                                onClick={() => handleSetScan(key.scope)}
                                 aria-label="Scan"
                               >
                                 <AiFillSecurityScan
@@ -236,6 +245,9 @@ function Program() {
               </TableContainer>
             )}
           </div>
+
+          <Scan isOpen={isScanModalOpen} setOpen={setIsScanModalOpen} defaultDomain={scanUrl}/>
+
         </>
       ) : (
         <>

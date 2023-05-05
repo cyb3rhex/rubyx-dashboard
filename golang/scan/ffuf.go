@@ -38,7 +38,7 @@ type FFUFResponse struct {
 func LaunchFFUF(task *ScanTask, target string, querier wrapper.Querier) {
 	log.Printf("Launching FFUF for %s\n", target)
 
-	command := "ffuf -w /rubyx-data/wordlists/discovery/directories.txt -u " + target + "/FUZZ -mc 200,204,301,302,307,401,403,500 -t 10 -json -s"
+	command := "ffuf -w /rubyx-data/wordlists/discovery/directories.txt -u " + target + "/FUZZ -mc 200,204,301,302,307,401,403,500 -t 10 -r -json -s"
 
 	ctx := context.Background()
 

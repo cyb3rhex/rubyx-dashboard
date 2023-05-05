@@ -62,7 +62,11 @@ function Layout() {
       />
 
       <div className="" style={{width: screenSize.width < 774 ? screenSize.width : collapsed ? screenSize.width - 64 : screenSize.width - 300}}>
-      <Navbar onMenuButtonClick={() => setShowSidebar((prev) => !prev)} />
+      
+      {screenSize.width < 774 && (
+        <Navbar onMenuButtonClick={() => setShowSidebar((prev) => !prev)} />
+      )}
+      
         <Main>
           <Suspense fallback={<ThemedSuspense />}>
             <Switch>

@@ -149,6 +149,50 @@ func (q *Queries) FindUrlsBySubdomain(ctx context.Context, arg FindUrlsBySubdoma
 	return items, nil
 }
 
+const findUrlsBySubdomainWithSearch = `-- name: FindUrlsBySubdomainWithSearch :many
+SELECT id, subdomain, url, tag, status_code, created_at, updated_at FROM urls WHERE subdomain = $1 AND url LIKE $2 LIMIT $3 OFFSET $4
+`
+
+type FindUrlsBySubdomainWithSearchParams struct {
+	Subdomain string `json:"subdomain"`
+	Url       string `json:"url"`
+	Limit     int32  `json:"limit"`
+	Offset    int32  `json:"offset"`
+}
+
+func (q *Queries) FindUrlsBySubdomainWithSearch(ctx context.Context, arg FindUrlsBySubdomainWithSearchParams) ([]Url, error) {
+	rows, err := q.db.Query(ctx, findUrlsBySubdomainWithSearch,
+		arg.Subdomain,
+		arg.Url,
+		arg.Limit,
+		arg.Offset,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Url{}
+	for rows.Next() {
+		var i Url
+		if err := rows.Scan(
+			&i.ID,
+			&i.Subdomain,
+			&i.Url,
+			&i.Tag,
+			&i.StatusCode,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateUrl = `-- name: UpdateUrl :one
 UPDATE urls SET subdomain = $2, url = $3, status_code = $4, tag = $5, updated_at = NOW() WHERE id = $1 RETURNING id, subdomain, url, tag, status_code, created_at, updated_at
 `

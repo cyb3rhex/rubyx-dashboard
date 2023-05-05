@@ -1,7 +1,7 @@
 import React from "react";
 import { SiHackerone } from "react-icons/si";
 import { AiFillSecurityScan } from "react-icons/ai";
-import { FaPencilAlt, FaSearch, FaList, FaBug, FaMoneyBill, FaHome } from "react-icons/fa";
+import { FaPencilAlt, FaSearch, FaList, FaBug, FaMoneyBill, FaHome, FaUser, FaWrench } from "react-icons/fa";
 
 const routes = [
   {
@@ -43,6 +43,16 @@ const routes = [
     label: "Vulnerabilities",
     href: "/app/vulnerabilities",
     icon: <FaBug className="w-6 h-6" />,
+  },
+  {
+    label: "Settings",
+    href: "/app/settings",
+    icon: <FaWrench className="w-6 h-6" />,
+  },
+  {
+    label: "My Account",
+    href: "/app/account",
+    icon: <FaUser className="w-6 h-6" />,
   }
 ];
 

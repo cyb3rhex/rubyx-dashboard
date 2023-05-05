@@ -61,6 +61,7 @@ func GetUrls(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request)
 		return write.Error(errors.RouteUnauthorized)
 	}
 
+	search := r.URL.Query().Get("search")
 	page, err := strconv.Atoi(r.URL.Query().Get("page"))
 	if err != nil || page < 1 {
 		page = 1
@@ -73,11 +74,21 @@ func GetUrls(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request)
 
 	subdomain := r.URL.Query().Get("subdomain")
 
-	urls, err := env.DB().FindUrlsBySubdomain(r.Context(), db.FindUrlsBySubdomainParams{
-		Subdomain: subdomain,
-		Limit:     int32(resultsPerPage),
-		Offset:    int32((page - 1) * resultsPerPage),
-	})
+	var urls []db.Url
+	if search != "" {
+		urls, err = env.DB().FindUrlsBySubdomainWithSearch(r.Context(), db.FindUrlsBySubdomainWithSearchParams{
+			Subdomain: subdomain,
+			Url:       "%" + search + "%",
+			Limit:     int32(resultsPerPage),
+			Offset:    int32((page - 1) * resultsPerPage),
+		})
+	} else {
+		urls, err = env.DB().FindUrlsBySubdomain(r.Context(), db.FindUrlsBySubdomainParams{
+			Subdomain: subdomain,
+			Limit:     int32(resultsPerPage),
+			Offset:    int32((page - 1) * resultsPerPage),
+		})
+	}
 	if err != nil {
 		return write.Error(err)
 	}

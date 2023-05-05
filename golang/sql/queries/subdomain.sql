@@ -13,8 +13,32 @@ SELECT * FROM subdomain WHERE program_id = $1;
 -- name: CountSubdomains :one
 SELECT COUNT(*) FROM subdomain;
 
+-- name: GetTechnologiesForAllSubdomains :many
+SELECT technologies FROM subdomain;
+
 -- name: FindSubdomains :many
 SELECT * FROM subdomain LIMIT $1 OFFSET $2;
+
+-- name: FindSubdomainsWithProgramID :many
+SELECT * FROM subdomain WHERE program_id = $1 LIMIT $2 OFFSET $3;
+
+-- name: FindSubdomainsWithSearch :many
+SELECT * FROM subdomain WHERE url LIKE $1 LIMIT $2 OFFSET $3;
+
+-- name: FindSubdomainsWithSearchAndProgramID :many
+SELECT * FROM subdomain WHERE url LIKE $1 AND program_id = $2 LIMIT $3 OFFSET $4;
+
+-- name: FindSubdomainsWithSearchAndProgramIDAndTechnologies :many
+SELECT * FROM subdomain WHERE url LIKE $1 AND program_id = $2 AND string_to_array(technologies, ',') && string_to_array($3, ',') LIMIT $4 OFFSET $5;
+
+-- name: FindSubdomainsWithSearchAndTechnologies :many
+SELECT * FROM subdomain WHERE url LIKE $1 AND string_to_array(technologies, ',') && string_to_array($2, ',') LIMIT $3 OFFSET $4;
+
+-- name: FindSubdomainsWithProgramIDAndTechnologies :many
+SELECT * FROM subdomain WHERE program_id = $1 AND string_to_array(technologies, ',') && string_to_array($2, ',') LIMIT $3 OFFSET $4;
+
+-- name: FindSubdomainsWithTechnologies :many
+SELECT * FROM subdomain WHERE string_to_array(technologies, ',') && string_to_array($1, ',') LIMIT $2 OFFSET $3;
 
 -- name: DeleteSubdomainByIDs :exec
 DELETE FROM subdomain WHERE id = $1;

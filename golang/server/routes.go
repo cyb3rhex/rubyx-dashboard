@@ -71,6 +71,7 @@ func (srv *server) ConfigureRouter() {
 
 	// SUBDOMAIN
 	srv.GET("/subdomain", handlers.GetSubdomains)
+	srv.GET("/subdomain/technologies", handlers.GetTechnologies)
 	srv.GET("/subdomain/one/:id", handlers.GetSubdomain)
 	srv.GET("/subdomain/program/:id", handlers.GetSubdomainByProgram)
 	srv.POST("/subdomain", handlers.CreateSubdomain)

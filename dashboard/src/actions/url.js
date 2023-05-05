@@ -5,12 +5,12 @@ import {
   GET_URL_ERROR,
 } from "../constants/url";
 
-export const getUrls = (subdomain, page, resultsPerPage) => async (dispatch) => {
+export const getUrls = (subdomain, page, resultsPerPage, search) => async (dispatch) => {
   dispatch({
     type: GET_URL,
   });
   try {
-    API.getUrls(subdomain, page, resultsPerPage)
+    API.getUrls(subdomain, page, resultsPerPage, search)
       .then((data) => {
         dispatch({
           type: GET_URL_SUCCESS,

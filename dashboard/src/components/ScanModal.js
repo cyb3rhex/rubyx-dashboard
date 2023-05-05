@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Input from "./Input";
 import { createScan } from "../actions/scan";
@@ -21,6 +21,10 @@ function ScanComponent({ isOpen, setOpen, defaultDomain }) {
   const [directoryScanCheck, setDirectoryScanCheck] = useState(false);
   const [vulnerabilityScanCheck, setVulnerabilityScanCheck] = useState(false);
   const [nucleiSeverity, setNucleiSeverity] = useState("info");
+
+  useEffect(() => {
+    setDomain(defaultDomain);
+  }, [defaultDomain]);
 
   const handleCreateScan = () => {
     setOpen(false);
