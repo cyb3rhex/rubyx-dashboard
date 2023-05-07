@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import classNames from "classnames";
 import { logout } from "../../actions/user";
 import { useDispatch } from "react-redux";

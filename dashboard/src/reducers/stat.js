@@ -13,7 +13,7 @@ const initialState = {
   stats: null,
 };
 
-export default function reducer (state = initialState, action) {
+export default function reducer(state = initialState, action) {
   switch (action.type) {
     case RELOAD_STAT:
       return {

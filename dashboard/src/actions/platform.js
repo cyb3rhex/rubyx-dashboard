@@ -2,23 +2,30 @@ import API from "./api";
 import { slugify } from "../utils/misc";
 import {
   GET_PLATFORM,
+  GET_PLATFORM_SUCCESS,
   GET_PLATFORM_ERROR,
   CREATE_PLATFORM,
+  CREATE_PLATFORM_SUCCESS,
   CREATE_PLATFORM_ERROR,
   DELETE_PLATFORM,
+  DELETE_PLATFORM_SUCCESS,
   DELETE_PLATFORM_ERROR,
   UPDATE_PLATFORM,
+  UPDATE_PLATFORM_SUCCESS,
   UPDATE_PLATFORM_ERROR
 } from "../constants/platform";
 import { toast } from "react-toastify";
 
 export const getPlatforms = () => async (dispatch) => {
+  dispatch({
+    type: GET_PLATFORM,
+  });
   try {
     API.getPlatforms()
       .then((data) => {
         console.log(data)
         dispatch({
-          type: GET_PLATFORM,
+          type: GET_PLATFORM_SUCCESS,
           payload: data,
         });
       })
@@ -37,6 +44,9 @@ export const getPlatforms = () => async (dispatch) => {
 };
 
 export const createPlatform = (name, email, password, otp, type) => async (dispatch) => {
+  dispatch({
+    type: CREATE_PLATFORM,
+  });
   try {
     var platform = {
       name: name,
@@ -52,7 +62,7 @@ export const createPlatform = (name, email, password, otp, type) => async (dispa
       .then((res) => {
         API.getPlatforms().then((data) => {
           dispatch({
-            type: CREATE_PLATFORM,
+            type: CREATE_PLATFORM_SUCCESS,
             payload: data,
           });
 
@@ -79,6 +89,9 @@ export const createPlatform = (name, email, password, otp, type) => async (dispa
 };
 
 export const updatePlatform = (id, name, email, password, otp, type) => async (dispatch) => {
+  dispatch({
+    type: UPDATE_PLATFORM,
+  });
   try {
     var platform = {
       id: id,
@@ -94,7 +107,7 @@ export const updatePlatform = (id, name, email, password, otp, type) => async (d
       .then((res) => {
         API.getPlatforms().then((data) => {
           dispatch({
-            type: UPDATE_PLATFORM,
+            type: UPDATE_PLATFORM_SUCCESS,
             payload: data,
           });
 
@@ -121,12 +134,15 @@ export const updatePlatform = (id, name, email, password, otp, type) => async (d
 };
 
 export const deletePlatform = (id) => async (dispatch) => {
+  dispatch({
+    type: DELETE_PLATFORM,
+  });
   try {
     API.deletePlatform(id)
       .then((res) => {
         API.getPlatforms().then((data) => {
           dispatch({
-            type: DELETE_PLATFORM,
+            type: DELETE_PLATFORM_SUCCESS,
             payload: data,
           });
 

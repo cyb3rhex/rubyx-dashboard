@@ -2,7 +2,7 @@ import React, { Suspense, useEffect, lazy, useState } from 'react'
 import { useSelector } from 'react-redux'
 import classNames from 'classnames';
 import { useHistory } from 'react-router-dom'
-import { Switch, Route, Redirect, useLocation } from 'react-router-dom'
+import { Switch, Route, Redirect } from 'react-router-dom'
 import routes from '../routes'
 
 import Sidebar from '../components/Sidebar/Sidebar'

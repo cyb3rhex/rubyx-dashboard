@@ -15,7 +15,7 @@ const initialState = {
   token: null,
 };
 
-export default function reducer (state = initialState, action) {
+export default function reducer(state = initialState, action) {
   switch (action.type) {
     case LOGIN:
       return {

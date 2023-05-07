@@ -55,7 +55,11 @@ type KatanaHeaders struct {
 }
 
 func LaunchKatana(task *ScanTask, target string, querier wrapper.Querier) {
-	log.Printf("Launching FFUF for %s\n", target)
+	log.Printf("Launching Katana for %s\n", target)
+
+	if strings.HasPrefix(target, "http://") {
+		target = strings.Replace(target, "http://", "https://", 1)
+	}
 
 	command := "katana -u " + target + " -silent -d 3 -jc -kf -iqp -json"
 

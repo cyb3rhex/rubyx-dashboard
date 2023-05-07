@@ -50,12 +50,12 @@ export const getScope = (id) => async (dispatch) => {
 };
 
 
-export const reloadPrograms = () => async (dispatch) => {
+export const reloadPrograms = (page, resultsPerPage, search, type, platform_id) => async (dispatch) => {
   dispatch({
     type: RELOAD_PROGRAM,
   });
   try {
-    API.reloadPrograms()
+    API.reloadPrograms(page, resultsPerPage, search, type, platform_id)
       .then((res) => {
         API.getPrograms().then((data) => {
           dispatch({
@@ -85,12 +85,12 @@ export const reloadPrograms = () => async (dispatch) => {
 };
 
 
-export const getPrograms = () => async (dispatch) => {
+export const getPrograms = (page, resultsPerPage, search, type, platform_id) => async (dispatch) => {
   dispatch({
     type: GET_PROGRAM,
   });
   try {
-    API.getPrograms()
+    API.getPrograms(page, resultsPerPage, search, type, platform_id)
       .then((data) => {
         dispatch({
           type: GET_PROGRAM_SUCCESS,
@@ -112,7 +112,7 @@ export const getPrograms = () => async (dispatch) => {
   }
 };
 
-export const createProgram = (platform_id, name, url, type, vdp) => async (dispatch) => {
+export const createProgram = (platform_id, name, url, type, vdp, resultsPerPage) => async (dispatch) => {
   dispatch({
     type: CREATE_PROGRAM,
   });
@@ -128,7 +128,7 @@ export const createProgram = (platform_id, name, url, type, vdp) => async (dispa
 
     API.createProgram(program)
       .then((res) => {
-        API.getPrograms().then((data) => {
+        API.getPrograms(1, resultsPerPage, "", "", 0).then((data) => {
           dispatch({
             type: CREATE_PROGRAM_SUCCESS,
             payload: data,
@@ -155,7 +155,7 @@ export const createProgram = (platform_id, name, url, type, vdp) => async (dispa
   }
 };
 
-export const updateProgram = (id, platform_id, name, url, type, vdp) => async (dispatch) => {
+export const updateProgram = (id, platform_id, name, url, type, vdp, resultsPerPage) => async (dispatch) => {
   dispatch({
     type: UPDATE_PROGRAM,
   });
@@ -172,7 +172,7 @@ export const updateProgram = (id, platform_id, name, url, type, vdp) => async (d
 
     API.updateProgram(program)
       .then((res) => {
-        API.getPrograms().then((data) => {
+        API.getPrograms(1, resultsPerPage, "", "", 0).then((data) => {
           dispatch({
             type: UPDATE_PROGRAM_SUCCESS,
             payload: data,
@@ -199,14 +199,14 @@ export const updateProgram = (id, platform_id, name, url, type, vdp) => async (d
   }
 };
 
-export const deleteProgram = (id) => async (dispatch) => {
+export const deleteProgram = (id, resultsPerPage) => async (dispatch) => {
   dispatch({
     type: DELETE_PROGRAM,
   });
   try {
     API.deleteProgram(id)
       .then((res) => {
-        API.getPrograms().then((data) => {
+        API.getPrograms(1, resultsPerPage, "", "", 0).then((data) => {
           dispatch({
             type: DELETE_PROGRAM_SUCCESS,
             payload: data,

@@ -11,10 +11,52 @@ SELECT * FROM program WHERE id = $1 LIMIT 1;
 SELECT * FROM program WHERE slug = $1 LIMIT 1;
 
 -- name: FindPrograms :many
-SELECT * FROM program;
+SELECT * FROM program LIMIT $1 OFFSET $2;
+
+-- name: FindProgramsWithSearch :many
+SELECT * FROM program WHERE name LIKE $1 LIMIT $2 OFFSET $3;
+
+-- name: FindProgramsWithSearchAndType :many
+SELECT * FROM program WHERE name LIKE $1 AND type = $2::program_type LIMIT $3 OFFSET $4;
+
+-- name: FindProgramsWithType :many
+SELECT * FROM program WHERE type = $1::program_type LIMIT $2 OFFSET $3;
+
+-- name: FindProgramsWithSearchAndTypeAndPlatform :many
+SELECT * FROM program WHERE name LIKE $1 AND type = $2::program_type AND platform_id = $3 LIMIT $4 OFFSET $5;
+
+-- name: FindProgramsWithTypeAndPlatform :many
+SELECT * FROM program WHERE type = $1::program_type AND platform_id = $2 LIMIT $3 OFFSET $4;
+
+-- name: FindProgramsWithSearchAndPlatform :many
+SELECT * FROM program WHERE name LIKE $1 AND platform_id = $2 LIMIT $3 OFFSET $4;
+
+-- name: FindProgramsWithPlatform :many
+SELECT * FROM program WHERE platform_id = $1 LIMIT $2 OFFSET $3;
+
+-- name: CountPrograms :one
+SELECT COUNT(*) FROM program;
+
+-- name: CountProgramsWithSearch :one
+SELECT COUNT(*) FROM program WHERE name LIKE $1;
+
+-- name: CountProgramsWithSearchAndType :one
+SELECT COUNT(*) FROM program WHERE name LIKE $1 AND type = $2::program_type;
+
+-- name: CountProgramsWithType :one
+SELECT COUNT(*) FROM program WHERE type = $1::program_type;
+
+-- name: CountProgramsWithSearchAndTypeAndPlatform :one
+SELECT COUNT(*) FROM program WHERE name LIKE $1 AND type = $2::program_type AND platform_id = $3;
+
+-- name: CountProgramsWithTypeAndPlatform :one
+SELECT COUNT(*) FROM program WHERE type = $1::program_type AND platform_id = $2;
+
+-- name: CountProgramsWithSearchAndPlatform :one
+SELECT COUNT(*) FROM program WHERE name LIKE $1 AND platform_id = $2;
+
+-- name: CountProgramsWithPlatform :one
+SELECT COUNT(*) FROM program WHERE platform_id = $1;
 
 -- name: DeleteProgramByIDs :exec
 DELETE FROM program WHERE id = $1;
-
--- name: DeleteProgramBySlug :exec
-DELETE FROM program WHERE slug = $1;

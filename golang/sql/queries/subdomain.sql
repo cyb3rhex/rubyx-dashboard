@@ -13,6 +13,27 @@ SELECT * FROM subdomain WHERE program_id = $1;
 -- name: CountSubdomains :one
 SELECT COUNT(*) FROM subdomain;
 
+-- name: CountSubdomainsWithProgramID :one
+SELECT COUNT(*) FROM subdomain WHERE program_id = $1;
+
+-- name: CountSubdomainsWithSearch :one
+SELECT COUNT(*) FROM subdomain WHERE url LIKE $1;
+
+-- name: CountSubdomainsWithSearchAndProgramID :one
+SELECT COUNT(*) FROM subdomain WHERE url LIKE $1 AND program_id = $2;
+
+-- name: CountSubdomainsWithSearchAndProgramIDAndTechnologies :one
+SELECT COUNT(*) FROM subdomain WHERE url LIKE $1 AND program_id = $2 AND string_to_array(technologies, ',') && string_to_array($3, ',');
+
+-- name: CountSubdomainsWithSearchAndTechnologies :one
+SELECT COUNT(*) FROM subdomain WHERE url LIKE $1 AND string_to_array(technologies, ',') && string_to_array($2, ',');
+
+-- name: CountSubdomainsWithProgramIDAndTechnologies :one
+SELECT COUNT(*) FROM subdomain WHERE program_id = $1 AND string_to_array(technologies, ',') && string_to_array($2, ',');
+
+-- name: CountSubdomainsWithTechnologies :one
+SELECT COUNT(*) FROM subdomain WHERE string_to_array(technologies, ',') && string_to_array($1, ',');
+
 -- name: GetTechnologiesForAllSubdomains :many
 SELECT technologies FROM subdomain;
 

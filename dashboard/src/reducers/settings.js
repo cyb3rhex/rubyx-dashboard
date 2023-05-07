@@ -23,7 +23,7 @@ const initialState = {
   dataRepoUrl: null,
 };
 
-export default function reducer (state = initialState, action) {
+export default function reducer(state = initialState, action) {
   switch (action.type) {
     case GET_DATA_REPO_URL:
       return {

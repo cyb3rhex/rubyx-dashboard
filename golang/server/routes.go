@@ -50,11 +50,9 @@ func (srv *server) ConfigureRouter() {
 	srv.GET("/program", handlers.GetPrograms)
 	srv.GET("/program/scope/:id", handlers.GetScopeByProgramID)
 	srv.GET("/program/id/:id", handlers.GetProgram)
-	srv.GET("/program/slug/:name", handlers.GetProgramBySlug)
 	srv.POST("/program", handlers.CreateProgram)
 	srv.PUT("/program", handlers.UpdateProgram)
 	srv.DELETE("/program/id/:id", handlers.DeleteProgram)
-	srv.DELETE("/program/slug/:name", handlers.DeleteProgramBySlug)
 
 	// SETTINGS
 	srv.GET("/settings/data_repo_url", handlers.GetRepoDataUrl)
@@ -67,16 +65,10 @@ func (srv *server) ConfigureRouter() {
 	srv.POST("/notes", handlers.CreateNote)
 	srv.PUT("/notes", handlers.UpdateNote)
 	srv.DELETE("/notes/:id", handlers.DeleteNote)
-	srv.GET("/notes/program/:id", handlers.GetNotesByProgramID)
 
 	// SUBDOMAIN
 	srv.GET("/subdomain", handlers.GetSubdomains)
 	srv.GET("/subdomain/technologies", handlers.GetTechnologies)
-	srv.GET("/subdomain/one/:id", handlers.GetSubdomain)
-	srv.GET("/subdomain/program/:id", handlers.GetSubdomainByProgram)
-	srv.POST("/subdomain", handlers.CreateSubdomain)
-	srv.PUT("/subdomain", handlers.UpdateSubdomain)
-	srv.DELETE("/subdomain/:id", handlers.DeleteSubdomain)
 
 	// URL
 	srv.GET("/url", handlers.GetUrls)

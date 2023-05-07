@@ -85,7 +85,7 @@ func ExecuteScan(task *ScanTask, querier wrapper.Querier) {
 			subdomains = append(subdomains, task.Domain)
 		}
 		for _, subdomain := range subdomains {
-			LaunchFFUF(task, subdomain, querier)
+			go LaunchFFUF(task, subdomain, querier)
 			LaunchKatana(task, subdomain, querier)
 		}
 	}

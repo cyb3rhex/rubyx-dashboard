@@ -145,8 +145,8 @@ export default class API {
   )
 
   // NOTES
-  static getNotes = () => (
-    _get('/notes')
+  static getNotes = (page, resultsPerPage, search, tags, program_id) => (
+    _get('/notes?page=' + page + '&resultsPerPage=' + resultsPerPage + '&search=' + search + '&tags=' + tags + '&program_id=' + program_id)
   )
 
   static getNotesByProgram = (id) => (
@@ -166,8 +166,8 @@ export default class API {
   )
 
    // PROGRAM
-   static getPrograms = () => (
-    _get('/program')
+   static getPrograms = (page, resultsPerPage, search, type, platform_id) => (
+    _get('/program?page=' + page + '&resultsPerPage=' + resultsPerPage + '&search=' + search + '&type=' + type + '&platform_id=' + platform_id)
   )
 
   static createProgram = (body) => (
@@ -179,7 +179,7 @@ export default class API {
   )
 
   static deleteProgram = (id) => (
-    _delete(`/program/id/${id}`)
+    _delete(`/program/${id}`)
   )
 
   static reloadPrograms = () => (

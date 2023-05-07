@@ -20,6 +20,104 @@ func (q *Queries) CountSubdomains(ctx context.Context) (int64, error) {
 	return count, err
 }
 
+const countSubdomainsWithProgramID = `-- name: CountSubdomainsWithProgramID :one
+SELECT COUNT(*) FROM subdomain WHERE program_id = $1
+`
+
+func (q *Queries) CountSubdomainsWithProgramID(ctx context.Context, programID int64) (int64, error) {
+	row := q.db.QueryRow(ctx, countSubdomainsWithProgramID, programID)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const countSubdomainsWithProgramIDAndTechnologies = `-- name: CountSubdomainsWithProgramIDAndTechnologies :one
+SELECT COUNT(*) FROM subdomain WHERE program_id = $1 AND string_to_array(technologies, ',') && string_to_array($2, ',')
+`
+
+type CountSubdomainsWithProgramIDAndTechnologiesParams struct {
+	ProgramID     int64  `json:"program_id"`
+	StringToArray string `json:"string_to_array"`
+}
+
+func (q *Queries) CountSubdomainsWithProgramIDAndTechnologies(ctx context.Context, arg CountSubdomainsWithProgramIDAndTechnologiesParams) (int64, error) {
+	row := q.db.QueryRow(ctx, countSubdomainsWithProgramIDAndTechnologies, arg.ProgramID, arg.StringToArray)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const countSubdomainsWithSearch = `-- name: CountSubdomainsWithSearch :one
+SELECT COUNT(*) FROM subdomain WHERE url LIKE $1
+`
+
+func (q *Queries) CountSubdomainsWithSearch(ctx context.Context, url string) (int64, error) {
+	row := q.db.QueryRow(ctx, countSubdomainsWithSearch, url)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const countSubdomainsWithSearchAndProgramID = `-- name: CountSubdomainsWithSearchAndProgramID :one
+SELECT COUNT(*) FROM subdomain WHERE url LIKE $1 AND program_id = $2
+`
+
+type CountSubdomainsWithSearchAndProgramIDParams struct {
+	Url       string `json:"url"`
+	ProgramID int64  `json:"program_id"`
+}
+
+func (q *Queries) CountSubdomainsWithSearchAndProgramID(ctx context.Context, arg CountSubdomainsWithSearchAndProgramIDParams) (int64, error) {
+	row := q.db.QueryRow(ctx, countSubdomainsWithSearchAndProgramID, arg.Url, arg.ProgramID)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const countSubdomainsWithSearchAndProgramIDAndTechnologies = `-- name: CountSubdomainsWithSearchAndProgramIDAndTechnologies :one
+SELECT COUNT(*) FROM subdomain WHERE url LIKE $1 AND program_id = $2 AND string_to_array(technologies, ',') && string_to_array($3, ',')
+`
+
+type CountSubdomainsWithSearchAndProgramIDAndTechnologiesParams struct {
+	Url           string `json:"url"`
+	ProgramID     int64  `json:"program_id"`
+	StringToArray string `json:"string_to_array"`
+}
+
+func (q *Queries) CountSubdomainsWithSearchAndProgramIDAndTechnologies(ctx context.Context, arg CountSubdomainsWithSearchAndProgramIDAndTechnologiesParams) (int64, error) {
+	row := q.db.QueryRow(ctx, countSubdomainsWithSearchAndProgramIDAndTechnologies, arg.Url, arg.ProgramID, arg.StringToArray)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const countSubdomainsWithSearchAndTechnologies = `-- name: CountSubdomainsWithSearchAndTechnologies :one
+SELECT COUNT(*) FROM subdomain WHERE url LIKE $1 AND string_to_array(technologies, ',') && string_to_array($2, ',')
+`
+
+type CountSubdomainsWithSearchAndTechnologiesParams struct {
+	Url           string `json:"url"`
+	StringToArray string `json:"string_to_array"`
+}
+
+func (q *Queries) CountSubdomainsWithSearchAndTechnologies(ctx context.Context, arg CountSubdomainsWithSearchAndTechnologiesParams) (int64, error) {
+	row := q.db.QueryRow(ctx, countSubdomainsWithSearchAndTechnologies, arg.Url, arg.StringToArray)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const countSubdomainsWithTechnologies = `-- name: CountSubdomainsWithTechnologies :one
+SELECT COUNT(*) FROM subdomain WHERE string_to_array(technologies, ',') && string_to_array($1, ',')
+`
+
+func (q *Queries) CountSubdomainsWithTechnologies(ctx context.Context, stringToArray string) (int64, error) {
+	row := q.db.QueryRow(ctx, countSubdomainsWithTechnologies, stringToArray)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const createSubdomain = `-- name: CreateSubdomain :one
 INSERT INTO subdomain (program_id, url, title, body_hash, status_code, technologies, content_length, tag, ip, port, screenshot) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, created_at, updated_at
 `

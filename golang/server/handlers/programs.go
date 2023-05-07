@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/aituglo/rubyx/golang/db"
 	"github.com/aituglo/rubyx/golang/env"
@@ -10,6 +11,22 @@ import (
 	"github.com/aituglo/rubyx/golang/server/utils"
 	"github.com/aituglo/rubyx/golang/server/write"
 )
+
+type ProgramPagination struct {
+	Programs []db.Program `json:"programs"`
+	Total    int          `json:"total"`
+}
+
+func toProgramType(s string) db.ProgramType {
+	switch s {
+	case "public":
+		return db.ProgramTypePublic
+	case "private":
+		return db.ProgramTypePrivate
+	default:
+		return ""
+	}
+}
 
 func ReloadPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
 	if user == nil {
@@ -75,24 +92,6 @@ func GetProgram(env env.Env, user *db.User, w http.ResponseWriter, r *http.Reque
 	return write.JSON(program)
 }
 
-func GetProgramBySlug(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user == nil {
-		return write.Error(errors.RouteUnauthorized)
-	}
-
-	slug := getString("name", r)
-
-	program, err := env.DB().FindProgramBySlug(r.Context(), slug)
-	if err != nil {
-		if isNotFound(err) {
-			return write.Error(errors.ItemNotFound)
-		}
-		return write.Error(err)
-	}
-
-	return write.JSON(program)
-}
-
 func GetScopeByProgramID(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
 	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
@@ -116,7 +115,120 @@ func GetPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 		return write.Error(errors.RouteUnauthorized)
 	}
 
-	return write.JSONorErr(env.DB().FindPrograms(r.Context()))
+	page, err := strconv.Atoi(r.URL.Query().Get("page"))
+	if err != nil || page < 1 {
+		page = 1
+	}
+
+	resultsPerPage, err := strconv.Atoi(r.URL.Query().Get("resultsPerPage"))
+	if err != nil || resultsPerPage < 1 {
+		resultsPerPage = 30
+	}
+
+	search := r.URL.Query().Get("search")
+	platformType := r.URL.Query().Get("type")
+	platformIDStr := r.URL.Query().Get("platform_id")
+	var platformID int64
+	platformIDProvided := false
+	if platformIDStr != "" {
+		id, err := strconv.ParseInt(platformIDStr, 10, 64)
+		if err != nil {
+			return write.Error(err)
+		}
+		platformID = id
+		if platformID != 0 {
+			platformIDProvided = true
+		} else {
+			platformIDProvided = false
+		}
+	}
+
+	var programs []db.Program
+	var total int64
+	if search != "" && platformType != "" && platformIDProvided {
+		programs, err = env.DB().FindProgramsWithSearchAndTypeAndPlatform(r.Context(), db.FindProgramsWithSearchAndTypeAndPlatformParams{
+			Name:       "%" + search + "%",
+			Column2:    toProgramType(platformType),
+			PlatformID: platformID,
+			Offset:     int32((page - 1) * resultsPerPage),
+			Limit:      int32(resultsPerPage),
+		})
+		total, err = env.DB().CountProgramsWithSearchAndTypeAndPlatform(r.Context(), db.CountProgramsWithSearchAndTypeAndPlatformParams{
+			Name:       "%" + search + "%",
+			Column2:    toProgramType(platformType),
+			PlatformID: platformID,
+		})
+	} else if search != "" && platformType != "" && !platformIDProvided {
+		programs, err = env.DB().FindProgramsWithSearchAndType(r.Context(), db.FindProgramsWithSearchAndTypeParams{
+			Name:    "%" + search + "%",
+			Column2: toProgramType(platformType),
+			Offset:  int32((page - 1) * resultsPerPage),
+			Limit:   int32(resultsPerPage),
+		})
+		total, err = env.DB().CountProgramsWithSearchAndType(r.Context(), db.CountProgramsWithSearchAndTypeParams{
+			Name:    "%" + search + "%",
+			Column2: toProgramType(platformType),
+		})
+	} else if search != "" && platformType == "" && platformIDProvided {
+		programs, err = env.DB().FindProgramsWithSearchAndPlatform(r.Context(), db.FindProgramsWithSearchAndPlatformParams{
+			Name:       "%" + search + "%",
+			PlatformID: platformID,
+			Offset:     int32((page - 1) * resultsPerPage),
+			Limit:      int32(resultsPerPage),
+		})
+		total, err = env.DB().CountProgramsWithSearchAndPlatform(r.Context(), db.CountProgramsWithSearchAndPlatformParams{
+			Name:       "%" + search + "%",
+			PlatformID: platformID,
+		})
+	} else if search == "" && platformType != "" && platformIDProvided {
+		programs, err = env.DB().FindProgramsWithTypeAndPlatform(r.Context(), db.FindProgramsWithTypeAndPlatformParams{
+			Column1:    toProgramType(platformType),
+			PlatformID: platformID,
+			Offset:     int32((page - 1) * resultsPerPage),
+			Limit:      int32(resultsPerPage),
+		})
+
+		total, err = env.DB().CountProgramsWithTypeAndPlatform(r.Context(), db.CountProgramsWithTypeAndPlatformParams{
+			Column1:    toProgramType(platformType),
+			PlatformID: platformID,
+		})
+	} else if search != "" && platformType == "" && !platformIDProvided {
+		programs, err = env.DB().FindProgramsWithSearch(r.Context(), db.FindProgramsWithSearchParams{
+			Name:   "%" + search + "%",
+			Offset: int32((page - 1) * resultsPerPage),
+			Limit:  int32(resultsPerPage),
+		})
+		total, err = env.DB().CountProgramsWithSearch(r.Context(), "%"+search+"%")
+	} else if search == "" && platformType != "" && !platformIDProvided {
+		programs, err = env.DB().FindProgramsWithType(r.Context(), db.FindProgramsWithTypeParams{
+			Column1: toProgramType(platformType),
+			Offset:  int32((page - 1) * resultsPerPage),
+			Limit:   int32(resultsPerPage),
+		})
+		total, err = env.DB().CountProgramsWithType(r.Context(), toProgramType(platformType))
+	} else if search == "" && platformType == "" && platformIDProvided {
+		programs, err = env.DB().FindProgramsWithPlatform(r.Context(), db.FindProgramsWithPlatformParams{
+			PlatformID: platformID,
+			Offset:     int32((page - 1) * resultsPerPage),
+			Limit:      int32(resultsPerPage),
+		})
+		total, err = env.DB().CountProgramsWithPlatform(r.Context(), platformID)
+	} else {
+		programs, err = env.DB().FindPrograms(r.Context(), db.FindProgramsParams{
+			Offset: int32((page - 1) * resultsPerPage),
+			Limit:  int32(resultsPerPage),
+		})
+		total, err = env.DB().CountPrograms(r.Context())
+	}
+
+	if err != nil {
+		return write.Error(err)
+	}
+
+	return write.JSONorErr(ProgramPagination{
+		Programs: programs,
+		Total:    int(total),
+	}, nil)
 }
 
 func UpdateProgram(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
@@ -153,14 +265,4 @@ func DeleteProgram(env env.Env, user *db.User, w http.ResponseWriter, r *http.Re
 	}
 
 	return write.SuccessOrErr(env.DB().DeleteProgramByIDs(r.Context(), id))
-}
-
-func DeleteProgramBySlug(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user == nil {
-		return write.Error(errors.RouteUnauthorized)
-	}
-
-	slug := getString("name", r)
-
-	return write.SuccessOrErr(env.DB().DeleteProgramBySlug(r.Context(), slug))
 }

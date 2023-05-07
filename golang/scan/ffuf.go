@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os/exec"
+	"strings"
 
 	"github.com/aituglo/rubyx/golang/db"
 	"github.com/aituglo/rubyx/golang/db/wrapper"
@@ -38,7 +39,11 @@ type FFUFResponse struct {
 func LaunchFFUF(task *ScanTask, target string, querier wrapper.Querier) {
 	log.Printf("Launching FFUF for %s\n", target)
 
-	command := "ffuf -w /rubyx-data/wordlists/discovery/directories.txt -u " + target + "/FUZZ -mc 200,204,301,302,307,401,403,500 -t 10 -r -json -s"
+	if strings.HasPrefix(target, "http://") {
+		target = strings.Replace(target, "http://", "https://", 1)
+	}
+
+	command := "ffuf -w /rubyx-data/wordlists/discovery/directories.txt -u " + target + "/FUZZ -mc 200,204,301,302,307,401,403,500 -t 10 -r -k -json -s"
 
 	ctx := context.Background()
 

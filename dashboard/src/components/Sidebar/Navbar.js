@@ -1,13 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { logout } from "../../actions/user";
 import { NavLink } from "react-router-dom";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import {
-  SearchIcon,
-  MoonIcon,
-  SunIcon,
-  MenuIcon,
   PersonIcon,
   OutlinePersonIcon,
   OutlineCogIcon,
@@ -16,14 +12,11 @@ import {
 import {
   Dropdown,
   DropdownItem,
-  WindmillContext,
 } from "@windmill/react-ui";
-import Input from "../Input";
 import classNames from "classnames";
 
 const Navbar = (props) => {
   const dispatch = useDispatch();
-  const { mode, toggleMode } = useContext(WindmillContext);
   
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 

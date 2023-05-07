@@ -9,6 +9,115 @@ import (
 	"context"
 )
 
+const countNotes = `-- name: CountNotes :one
+SELECT COUNT(*) FROM notes
+`
+
+func (q *Queries) CountNotes(ctx context.Context) (int64, error) {
+	row := q.db.QueryRow(ctx, countNotes)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const countNotesByProgramID = `-- name: CountNotesByProgramID :one
+SELECT COUNT(*) FROM notes WHERE program_id = $1
+`
+
+func (q *Queries) CountNotesByProgramID(ctx context.Context, programID int64) (int64, error) {
+	row := q.db.QueryRow(ctx, countNotesByProgramID, programID)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const countNotesByProgramIDAndTag = `-- name: CountNotesByProgramIDAndTag :one
+SELECT COUNT(*) FROM notes WHERE program_id = $1 AND string_to_array(tag, ',') && string_to_array($2, ',')
+`
+
+type CountNotesByProgramIDAndTagParams struct {
+	ProgramID     int64  `json:"program_id"`
+	StringToArray string `json:"string_to_array"`
+}
+
+func (q *Queries) CountNotesByProgramIDAndTag(ctx context.Context, arg CountNotesByProgramIDAndTagParams) (int64, error) {
+	row := q.db.QueryRow(ctx, countNotesByProgramIDAndTag, arg.ProgramID, arg.StringToArray)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const countNotesBySearch = `-- name: CountNotesBySearch :one
+SELECT COUNT(*) FROM notes WHERE title LIKE $1
+`
+
+func (q *Queries) CountNotesBySearch(ctx context.Context, title string) (int64, error) {
+	row := q.db.QueryRow(ctx, countNotesBySearch, title)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const countNotesBySearchAndProgramID = `-- name: CountNotesBySearchAndProgramID :one
+SELECT COUNT(*) FROM notes WHERE title LIKE $1 AND program_id = $2
+`
+
+type CountNotesBySearchAndProgramIDParams struct {
+	Title     string `json:"title"`
+	ProgramID int64  `json:"program_id"`
+}
+
+func (q *Queries) CountNotesBySearchAndProgramID(ctx context.Context, arg CountNotesBySearchAndProgramIDParams) (int64, error) {
+	row := q.db.QueryRow(ctx, countNotesBySearchAndProgramID, arg.Title, arg.ProgramID)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const countNotesBySearchAndProgramIDAndTag = `-- name: CountNotesBySearchAndProgramIDAndTag :one
+SELECT COUNT(*) FROM notes WHERE title LIKE $1 AND program_id = $2 AND string_to_array(tag, ',') && string_to_array($3, ',')
+`
+
+type CountNotesBySearchAndProgramIDAndTagParams struct {
+	Title         string `json:"title"`
+	ProgramID     int64  `json:"program_id"`
+	StringToArray string `json:"string_to_array"`
+}
+
+func (q *Queries) CountNotesBySearchAndProgramIDAndTag(ctx context.Context, arg CountNotesBySearchAndProgramIDAndTagParams) (int64, error) {
+	row := q.db.QueryRow(ctx, countNotesBySearchAndProgramIDAndTag, arg.Title, arg.ProgramID, arg.StringToArray)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const countNotesBySearchAndTag = `-- name: CountNotesBySearchAndTag :one
+SELECT COUNT(*) FROM notes WHERE title LIKE $1 AND string_to_array(tag, ',') && string_to_array($2, ',')
+`
+
+type CountNotesBySearchAndTagParams struct {
+	Title         string `json:"title"`
+	StringToArray string `json:"string_to_array"`
+}
+
+func (q *Queries) CountNotesBySearchAndTag(ctx context.Context, arg CountNotesBySearchAndTagParams) (int64, error) {
+	row := q.db.QueryRow(ctx, countNotesBySearchAndTag, arg.Title, arg.StringToArray)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const countNotesByTag = `-- name: CountNotesByTag :one
+SELECT COUNT(*) FROM notes WHERE string_to_array(tag, ',') && string_to_array($1, ',')
+`
+
+func (q *Queries) CountNotesByTag(ctx context.Context, stringToArray string) (int64, error) {
+	row := q.db.QueryRow(ctx, countNotesByTag, stringToArray)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const createNote = `-- name: CreateNote :one
 INSERT INTO notes (program_id, title, content, tag) VALUES ($1, $2, $3, $4) RETURNING id, title, program_id, content, tag, created_at, updated_at
 `
@@ -69,11 +178,16 @@ func (q *Queries) FindNoteByID(ctx context.Context, id int64) (Note, error) {
 }
 
 const findNotes = `-- name: FindNotes :many
-SELECT id, title, program_id, content, tag, created_at, updated_at FROM notes
+SELECT id, title, program_id, content, tag, created_at, updated_at FROM notes LIMIT $1 OFFSET $2
 `
 
-func (q *Queries) FindNotes(ctx context.Context) ([]Note, error) {
-	rows, err := q.db.Query(ctx, findNotes)
+type FindNotesParams struct {
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
+}
+
+func (q *Queries) FindNotes(ctx context.Context, arg FindNotesParams) ([]Note, error) {
+	rows, err := q.db.Query(ctx, findNotes, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
@@ -101,11 +215,271 @@ func (q *Queries) FindNotes(ctx context.Context) ([]Note, error) {
 }
 
 const findNotesByProgramID = `-- name: FindNotesByProgramID :many
-SELECT id, title, program_id, content, tag, created_at, updated_at FROM notes WHERE program_id = $1
+SELECT id, title, program_id, content, tag, created_at, updated_at FROM notes WHERE program_id = $1 LIMIT $2 OFFSET $3
 `
 
-func (q *Queries) FindNotesByProgramID(ctx context.Context, programID int64) ([]Note, error) {
-	rows, err := q.db.Query(ctx, findNotesByProgramID, programID)
+type FindNotesByProgramIDParams struct {
+	ProgramID int64 `json:"program_id"`
+	Limit     int32 `json:"limit"`
+	Offset    int32 `json:"offset"`
+}
+
+func (q *Queries) FindNotesByProgramID(ctx context.Context, arg FindNotesByProgramIDParams) ([]Note, error) {
+	rows, err := q.db.Query(ctx, findNotesByProgramID, arg.ProgramID, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Note{}
+	for rows.Next() {
+		var i Note
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.ProgramID,
+			&i.Content,
+			&i.Tag,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const findNotesByProgramIDAndTag = `-- name: FindNotesByProgramIDAndTag :many
+SELECT id, title, program_id, content, tag, created_at, updated_at FROM notes WHERE program_id = $1 AND string_to_array(tag, ',') && string_to_array($2, ',') LIMIT $3 OFFSET $4
+`
+
+type FindNotesByProgramIDAndTagParams struct {
+	ProgramID     int64  `json:"program_id"`
+	StringToArray string `json:"string_to_array"`
+	Limit         int32  `json:"limit"`
+	Offset        int32  `json:"offset"`
+}
+
+func (q *Queries) FindNotesByProgramIDAndTag(ctx context.Context, arg FindNotesByProgramIDAndTagParams) ([]Note, error) {
+	rows, err := q.db.Query(ctx, findNotesByProgramIDAndTag,
+		arg.ProgramID,
+		arg.StringToArray,
+		arg.Limit,
+		arg.Offset,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Note{}
+	for rows.Next() {
+		var i Note
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.ProgramID,
+			&i.Content,
+			&i.Tag,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const findNotesBySearch = `-- name: FindNotesBySearch :many
+SELECT id, title, program_id, content, tag, created_at, updated_at FROM notes WHERE title LIKE $1 LIMIT $2 OFFSET $3
+`
+
+type FindNotesBySearchParams struct {
+	Title  string `json:"title"`
+	Limit  int32  `json:"limit"`
+	Offset int32  `json:"offset"`
+}
+
+func (q *Queries) FindNotesBySearch(ctx context.Context, arg FindNotesBySearchParams) ([]Note, error) {
+	rows, err := q.db.Query(ctx, findNotesBySearch, arg.Title, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Note{}
+	for rows.Next() {
+		var i Note
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.ProgramID,
+			&i.Content,
+			&i.Tag,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const findNotesBySearchAndProgramID = `-- name: FindNotesBySearchAndProgramID :many
+SELECT id, title, program_id, content, tag, created_at, updated_at FROM notes WHERE title LIKE $1 AND program_id = $2 LIMIT $3 OFFSET $4
+`
+
+type FindNotesBySearchAndProgramIDParams struct {
+	Title     string `json:"title"`
+	ProgramID int64  `json:"program_id"`
+	Limit     int32  `json:"limit"`
+	Offset    int32  `json:"offset"`
+}
+
+func (q *Queries) FindNotesBySearchAndProgramID(ctx context.Context, arg FindNotesBySearchAndProgramIDParams) ([]Note, error) {
+	rows, err := q.db.Query(ctx, findNotesBySearchAndProgramID,
+		arg.Title,
+		arg.ProgramID,
+		arg.Limit,
+		arg.Offset,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Note{}
+	for rows.Next() {
+		var i Note
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.ProgramID,
+			&i.Content,
+			&i.Tag,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const findNotesBySearchAndProgramIDAndTag = `-- name: FindNotesBySearchAndProgramIDAndTag :many
+SELECT id, title, program_id, content, tag, created_at, updated_at FROM notes WHERE title LIKE $1 AND program_id = $2 AND string_to_array(tag, ',') && string_to_array($3, ',') LIMIT $4 OFFSET $5
+`
+
+type FindNotesBySearchAndProgramIDAndTagParams struct {
+	Title         string `json:"title"`
+	ProgramID     int64  `json:"program_id"`
+	StringToArray string `json:"string_to_array"`
+	Limit         int32  `json:"limit"`
+	Offset        int32  `json:"offset"`
+}
+
+func (q *Queries) FindNotesBySearchAndProgramIDAndTag(ctx context.Context, arg FindNotesBySearchAndProgramIDAndTagParams) ([]Note, error) {
+	rows, err := q.db.Query(ctx, findNotesBySearchAndProgramIDAndTag,
+		arg.Title,
+		arg.ProgramID,
+		arg.StringToArray,
+		arg.Limit,
+		arg.Offset,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Note{}
+	for rows.Next() {
+		var i Note
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.ProgramID,
+			&i.Content,
+			&i.Tag,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const findNotesBySearchAndTag = `-- name: FindNotesBySearchAndTag :many
+SELECT id, title, program_id, content, tag, created_at, updated_at FROM notes WHERE title LIKE $1 AND string_to_array(tag, ',') && string_to_array($2, ',') LIMIT $3 OFFSET $4
+`
+
+type FindNotesBySearchAndTagParams struct {
+	Title         string `json:"title"`
+	StringToArray string `json:"string_to_array"`
+	Limit         int32  `json:"limit"`
+	Offset        int32  `json:"offset"`
+}
+
+func (q *Queries) FindNotesBySearchAndTag(ctx context.Context, arg FindNotesBySearchAndTagParams) ([]Note, error) {
+	rows, err := q.db.Query(ctx, findNotesBySearchAndTag,
+		arg.Title,
+		arg.StringToArray,
+		arg.Limit,
+		arg.Offset,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Note{}
+	for rows.Next() {
+		var i Note
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.ProgramID,
+			&i.Content,
+			&i.Tag,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const findNotesByTag = `-- name: FindNotesByTag :many
+SELECT id, title, program_id, content, tag, created_at, updated_at FROM notes WHERE string_to_array(tag, ',') && string_to_array($1, ',') LIMIT $2 OFFSET $3
+`
+
+type FindNotesByTagParams struct {
+	StringToArray string `json:"string_to_array"`
+	Limit         int32  `json:"limit"`
+	Offset        int32  `json:"offset"`
+}
+
+func (q *Queries) FindNotesByTag(ctx context.Context, arg FindNotesByTagParams) ([]Note, error) {
+	rows, err := q.db.Query(ctx, findNotesByTag, arg.StringToArray, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}

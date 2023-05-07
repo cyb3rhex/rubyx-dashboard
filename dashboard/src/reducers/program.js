@@ -24,6 +24,7 @@ const initialState = {
   loading: true,
   error: "",
   programs: null,
+  total: 0,
   scope: null
 };
 
@@ -59,7 +60,8 @@ export default function reducer (state = initialState, action) {
       return {
         ...state,
         loading: false,
-        programs: action.payload,
+        programs: action.payload.programs,
+        total: action.payload.total,
         error: "",
       };
     case RELOAD_PROGRAM_ERROR:
@@ -67,6 +69,7 @@ export default function reducer (state = initialState, action) {
         ...state,
         loading: false,
         programs: null,
+        total: 0,
         error: action.payload,
       };
     case CREATE_PROGRAM:
@@ -79,7 +82,8 @@ export default function reducer (state = initialState, action) {
       return {
         ...state,
         loading: false,
-        programs: action.payload,
+        programs: action.payload.programs,
+        total: action.payload.total,
         error: "",
       };
     case CREATE_PROGRAM_ERROR:
@@ -87,6 +91,7 @@ export default function reducer (state = initialState, action) {
         ...state,
         loading: false,
         programs: null,
+        total: 0,
         error: action.payload,
       };
     case UPDATE_PROGRAM:
@@ -99,7 +104,8 @@ export default function reducer (state = initialState, action) {
       return {
         ...state,
         loading: false,
-        programs: action.payload,
+        programs: action.payload.programs,
+        total: action.payload.total,
         error: "",
       };
     case UPDATE_PROGRAM_ERROR:
@@ -107,6 +113,7 @@ export default function reducer (state = initialState, action) {
         ...state,
         loading: false,
         programs: null,
+        total: 0,
         error: action.payload,
       };
     case GET_PROGRAM:
@@ -119,7 +126,8 @@ export default function reducer (state = initialState, action) {
       return {
         ...state,
         loading: false,
-        programs: action.payload,
+        programs: action.payload.programs,
+        total: action.payload.total,
         error: "",
       };
     case GET_PROGRAM_ERROR:
@@ -127,6 +135,7 @@ export default function reducer (state = initialState, action) {
         ...state,
         loading: false,
         programs: null,
+        total: 0,
         error: action.payload,
       };
     case DELETE_PROGRAM:
@@ -139,7 +148,8 @@ export default function reducer (state = initialState, action) {
       return {
         ...state,
         loading: false,
-        programs: action.payload,
+        programs: action.payload.programs,
+        total: action.payload.total,
         error: "",
       };
     case DELETE_PROGRAM_ERROR:
@@ -147,6 +157,7 @@ export default function reducer (state = initialState, action) {
         ...state,
         loading: false,
         programs: null,
+        total: 0,
         error: action.payload,
       };
     default:

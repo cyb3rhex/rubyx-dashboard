@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  createPlatform,
   deletePlatform,
   getPlatforms,
-  updatePlatform,
 } from "../actions/platform";
 import PageTitle from "../components/Typography/PageTitle";
 import { TrashIcon, EditIcon } from "../icons";
+import ClipLoader from "react-spinners/ClipLoader";
 import {
   Table,
   TableHeader,
@@ -15,82 +14,39 @@ import {
   TableBody,
   TableRow,
   TableContainer,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
-  Label,
-  Select,
 } from "@windmill/react-ui";
-import Input from "../components/Input";
+
+import Add from "../components/Platform/Add";
 
 function Platform() {
   const dispatch = useDispatch();
   const platformState = useSelector((state) => state.platform);
-  const [name, setName] = useState("yeswehack");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [otp, setOtp] = useState("");
-  const [type, setType] = useState("public");
-  const [editId, setEditId] = useState(0);
+
+  const [currentPlatform, setCurrentPlatform] = useState({});
   const [editMode, setEditMode] = useState(false);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  function openModal() {
-    setEditMode(false);
-    setIsModalOpen(true);
-  }
-
-  function closeModal() {
-    setIsModalOpen(false);
-  }
 
   useEffect(() => {
     dispatch(getPlatforms());
   }, []);
 
-  const handleCreatePlatform = () => {
+  const handleAddPlatform = () => {
+    setEditMode(false);
+    setCurrentPlatform({});
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
     setIsModalOpen(false);
-
-    dispatch(createPlatform(name, email, password, otp, type));
-
-    setName("yeswehack");
-    setType("public");
-    setEmail("");
-    setPassword("");
-    setOtp("");
-    setEditId(0);
   };
 
   const handleDeletePlatform = (id) => {
     dispatch(deletePlatform(id));
   };
 
-  const handleUpdatePlatform = () => {
-    setIsModalOpen(false);
-    setEditMode(false);
-
-    dispatch(
-      updatePlatform(parseInt(editId), name, email, password, otp, type)
-    );
-
-    setName("yeswehack");
-    setType("public");
-    setEmail("");
-    setPassword("");
-    setOtp("");
-    setEditId(0);
-  };
-
   const handleEditPlatform = (platform) => {
-    setName(platform.name);
-    setType(platform.type);
-    setEmail(platform.email);
-    setPassword("");
-    setOtp("");
-    setEditId(platform.id);
+    setCurrentPlatform(platform);
     setEditMode(true);
     setIsModalOpen(true);
   };
@@ -101,11 +57,23 @@ function Platform() {
 
       <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
         <div className="py-3 flex items-center justify-end space-x-4">
-          <Button onClick={openModal}>Add</Button>
+          <Button onClick={handleAddPlatform}>Add</Button>
         </div>
 
+        {platformState.loading && (
+          <div className="flex items-center justify-center">
+            <ClipLoader
+              color={"#355dad"}
+              loading={true}
+              size={30}
+              aria-label="Loading"
+              data-testid="loader"
+            />
+          </div>
+        )}
+
         {platformState.platforms && platformState.platforms.length > 0 ? (
-          <TableContainer className="mb-8">
+          <TableContainer className={`mb-8 ${platformState.loading && 'hidden'}`}>
             <Table>
               <TableHeader>
                 <tr>
@@ -155,139 +123,21 @@ function Platform() {
               </TableBody>
             </Table>
           </TableContainer>
-        )  : (
+        ) : (
           <div className="flex items-center justify-center">
             <span className="text-sm">No data to display</span>
           </div>
         )}
-
-        <Modal isOpen={isModalOpen} onClose={closeModal}>
-          <ModalHeader>Add a Platform</ModalHeader>
-          <ModalBody>
-            <Label className="pt-5">
-              <span>Name</span>
-              <Select
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              >
-                <option value="yeswehack">YesWeHack</option>
-                <option value="hackerone">HackerOne</option>
-              </Select>
-            </Label>
-
-            {name === "yeswehack" && (
-              <>
-                <Label className="pt-5">
-                  <span>Email</span>
-                  <Input
-                    className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder=""
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </Label>
-
-                <Label className="pt-5">
-                  <span>Password</span>
-                  <Input
-                    className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    type="password"
-                    placeholder=""
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </Label>
-
-                <Label className="pt-5">
-                  <span>TOTP Code</span>
-                  <Input
-                    className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder=""
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
-                  />
-                </Label>
-              </>
-            )}
-
-            {name === "hackerone" && (
-              <>
-                <Label className="pt-5">
-                  <span>Username</span>
-                  <Input
-                    className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder=""
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </Label>
-
-                <Label className="pt-5">
-                  <span>API Key</span>
-                  <Input
-                    className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    type="password"
-                    placeholder=""
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </Label>
-              </>
-            )}
-
-            <Label className="pt-5">
-              <span>Type</span>
-              <Select
-                value={type}
-                onChange={(e) => setType(e.target.value)}
-                className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              >
-                <option value="private">Private</option>
-                <option value="public">Public</option>
-              </Select>
-            </Label>
-          </ModalBody>
-          <ModalFooter>
-            <div className="hidden sm:block">
-              <Button layout="outline" onClick={closeModal}>
-                Cancel
-              </Button>
-            </div>
-            <div className="hidden sm:block">
-              {editMode ? (
-                <Button onClick={() => handleUpdatePlatform()}>Update</Button>
-              ) : (
-                <Button onClick={() => handleCreatePlatform()}>Add</Button>
-              )}
-            </div>
-            <div className="block w-full sm:hidden">
-              <Button block size="large" layout="outline" onClick={closeModal}>
-                Cancel
-              </Button>
-            </div>
-            <div className="block w-full sm:hidden">
-              {editMode ? (
-                <Button
-                  block
-                  size="large"
-                  onClick={() => handleUpdatePlatform()}
-                >
-                  Update
-                </Button>
-              ) : (
-                <Button
-                  block
-                  size="large"
-                  onClick={() => handleCreatePlatform()}
-                >
-                  Add
-                </Button>
-              )}
-            </div>
-          </ModalFooter>
-        </Modal>
       </div>
+
+      <Add
+        seeModal={isModalOpen}
+        setSeeModal={setIsModalOpen}
+        closeModal={closeModal}
+        editMode={editMode}
+        setEditMode={setEditMode}
+        currentPlatform={currentPlatform}
+      />
     </>
   );
 }

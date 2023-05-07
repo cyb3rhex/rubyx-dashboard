@@ -18,6 +18,7 @@ import {
   Button,
   Pagination,
 } from "@windmill/react-ui";
+import ClipLoader from "react-spinners/ClipLoader";
 
 
 function ScanPage() {
@@ -69,8 +70,14 @@ function ScanPage() {
           <Button onClick={openModal}>Add</Button>
         </div>
 
+        {scanState.loading && (
+          <div className="flex justify-center items-center center">
+            <ClipLoader color="#0f172a" loading={true} size={50} />
+          </div>
+        )}
+
         {totalResults > 0 ? (
-          <TableContainer className="mb-8">
+          <TableContainer className={`mb-8 ${scanState.loading && 'hidden'}`}>
             <Table>
               <TableHeader>
                 <tr>

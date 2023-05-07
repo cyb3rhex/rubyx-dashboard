@@ -33,6 +33,7 @@
     "classnames": "2.2.6",
     "faker": "4.1.0",
     "postcss": "^8.4.21",
+    "react-modal-image": "^2.6.0",
     "react": "^16.13.1",
     "react-chartjs-2": "2.9.0",
     "react-dom": "^16.13.1",
@@ -54,7 +55,7 @@
   "devDependencies": {
     "@release-it/conventional-changelog": "^5.1.1",
     "@svgr/webpack": "^6.5.1",
-    "autoprefixer": "^9",
+    "autoprefixer": "10.4.5",
     "commitizen": "^4.3.0",
     "cross-env": "7.0.2",
     "cssnano": "4.1.10",

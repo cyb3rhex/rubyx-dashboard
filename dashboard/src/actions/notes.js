@@ -12,18 +12,15 @@ import {
   DELETE_NOTE,
   DELETE_NOTE_SUCCESS,
   DELETE_NOTE_ERROR,
-  GET_NOTES_BY_PROGRAM_ID,
-  GET_NOTES_BY_PROGRAM_ID_SUCCESS,
-  GET_NOTES_BY_PROGRAM_ID_ERROR,
 } from "../constants/notes";
 
-export const getNotes = () => async (dispatch) => {
+export const getNotes = (page, resultsPerPage, search, tags, program_id) => async (dispatch) => {
   dispatch({
     type: GET_NOTES,
   });
 
   try {
-    API.getNotes()
+    API.getNotes(page, resultsPerPage, search, tags, program_id)
       .then((data) => {
         dispatch({
           type: GET_NOTES_SUCCESS,
@@ -44,33 +41,6 @@ export const getNotes = () => async (dispatch) => {
   }
 };
 
-export const getNotesByProgramId = (id) => async (dispatch) => {
-  dispatch({
-    type: GET_NOTES_BY_PROGRAM_ID,
-  });
-
-  try {
-    API.getNotesByProgram(id)
-      .then((data) => {
-        dispatch({
-          type: GET_NOTES_BY_PROGRAM_ID_SUCCESS,
-          payload: data,
-        });
-      })
-      .catch((err) => {
-        dispatch({
-          type: GET_NOTES_BY_PROGRAM_ID_ERROR,
-          payload: err,
-        });
-      });
-  } catch (err) {
-    dispatch({
-      type: GET_NOTES_BY_PROGRAM_ID_ERROR,
-      payload: err,
-    });
-  }
-};
-
 export const createNote = (note) => async (dispatch) => {
   dispatch({
     type: CREATE_NOTE,
@@ -79,7 +49,7 @@ export const createNote = (note) => async (dispatch) => {
   try {
     API.createNote(note)
       .then((res) => {
-        API.getNotes().then((data) => {
+        API.getNotes(1, 30, "", "", 0).then((data) => {
           dispatch({
             type: CREATE_NOTE_SUCCESS,
             payload: data,
@@ -117,7 +87,7 @@ export const updateNote =
 
       API.updateNote(note)
         .then((res) => {
-          API.getNotes().then((data) => {
+          API.getNotes(1, 30, "", "", 0).then((data) => {
             dispatch({
               type: UPDATE_NOTE_SUCCESS,
               payload: data,
@@ -146,7 +116,7 @@ export const deleteNote = (id) => async (dispatch) => {
   try {
     API.deleteNote(id)
       .then((res) => {
-        API.getNotes().then((data) => {
+        API.getNotes(1, 30, "", "", 0).then((data) => {
           dispatch({
             type: DELETE_NOTE_SUCCESS,
             payload: data,

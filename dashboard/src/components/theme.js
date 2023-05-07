@@ -1,4 +1,4 @@
-export default {
+const theme = {
   // Alert
   alert: {
     base: 'p-4 pl-12 relative rounded-lg leading-5',
@@ -214,3 +214,5 @@ export default {
     },
   },
 }
+
+export default theme;
