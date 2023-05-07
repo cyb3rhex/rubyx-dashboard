@@ -61,7 +61,7 @@ function Platform() {
         </div>
 
         {platformState.loading && (
-          <div className="flex items-center justify-center">
+          <div className="flex flex-col md:flex-row items-center justify-center">
             <ClipLoader
               color={"#355dad"}
               loading={true}

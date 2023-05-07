@@ -14,7 +14,7 @@ const Page404 = lazy(() => import('../pages/404'))
 
 function Layout() {
   const [collapsed, setSidebarCollapsed] = useState(false);
-  const [showSidebar, setShowSidebar] = useState(true);
+  const [showSidebar, setShowSidebar] = useState(false);
 
   const userState = useSelector((state) => state.user)
   const history = useHistory()

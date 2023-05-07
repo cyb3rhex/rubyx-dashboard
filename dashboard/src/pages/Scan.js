@@ -66,7 +66,7 @@ function ScanPage() {
       <PageTitle>Scans</PageTitle>
 
       <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-        <div className="py-3 flex items-center justify-end space-x-4">
+        <div className="py-3 flex flex-col md:flex-row justify-center items-center justify-end space-x-4">
           <Button onClick={openModal}>Add</Button>
         </div>
 

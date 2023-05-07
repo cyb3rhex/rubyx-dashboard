@@ -115,7 +115,7 @@ function Subdomain() {
           <PageTitle>Subdomains</PageTitle>
 
           <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-            <div className="flex items-center mb-4 space-x-4">
+            <div className="flex flex-col md:flex-row justify-center items-center mb-4 space-x-4">
               <Input
                 className="text-gray-700"
                 placeholder="Search for subdomain"
