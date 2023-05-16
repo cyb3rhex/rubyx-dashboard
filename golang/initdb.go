@@ -21,30 +21,31 @@ const (
 var src = rand.NewSource(time.Now().UnixNano())
 
 func main() {
-	// Connexion à la base de données
 	dbpool, err := env.Connect()
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer dbpool.Close()
 
-	// Génération d'un mot de passe aléatoire et d'un sel
 	password := "passw0rd"
 	salt := generateRandomString(32)
 
-	// Hachage du mot de passe et du sel
 	hashedPassword, err := hashPassword(password, salt)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// Insertion d'un nouvel utilisateur avec le mot de passe et le sel hashés
 	_, err = dbpool.Exec(context.Background(), "INSERT INTO users (email, pass, salt) VALUES ($1, $2, $3)", "admin@admin.com", hashedPassword, salt)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Default user added !")
+	_, err = dbpool.Exec(context.Background(), "INSERT INTO settings (key, value) VALUES ($1, $2)", "repo_data_url", "https://github.com/Aituglo/rubyx-data")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Default user added and database initializated !")
 }
 
 func generateRandomString(n int) string {

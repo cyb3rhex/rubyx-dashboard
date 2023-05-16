@@ -10,7 +10,7 @@ require (
 	github.com/pquerna/otp v1.4.0
 	github.com/projectdiscovery/subfinder/v2 v2.5.8
 	github.com/stretchr/testify v1.8.2
-	golang.org/x/crypto v0.7.0
+	golang.org/x/crypto v0.9.0
 )
 
 require (
@@ -22,7 +22,7 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.0.0 // indirect
 	github.com/AzureAD/microsoft-authentication-library-for-go v0.9.0 // indirect
 	github.com/DataDog/gostackparse v0.6.0 // indirect
-	github.com/EasyRecon/wappaGo v0.0.0-20230502063134-0080ce6c5815 // indirect
+	github.com/EasyRecon/wappaGo v0.0.0-20230516142359-7fa463ef2e3c // indirect
 	github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible // indirect
 	github.com/Masterminds/semver/v3 v3.2.1 // indirect
 	github.com/Microsoft/go-winio v0.5.2 // indirect
@@ -39,7 +39,7 @@ require (
 	github.com/alecthomas/jsonschema v0.0.0-20211022214203-8b29eab41725 // indirect
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 // indirect
 	github.com/alecthomas/units v0.0.0-20211218093645-b94a6e3cc137 // indirect
-	github.com/andybalholm/cascadia v1.3.1 // indirect
+	github.com/andybalholm/cascadia v1.3.2 // indirect
 	github.com/andygrunwald/go-jira v1.16.0 // indirect
 	github.com/antchfx/htmlquery v1.3.0 // indirect
 	github.com/antchfx/xmlquery v1.3.15 // indirect
@@ -73,8 +73,8 @@ require (
 	github.com/caddyserver/certmagic v0.17.2 // indirect
 	github.com/charmbracelet/glamour v0.6.0 // indirect
 	github.com/cheggaaa/pb/v3 v3.1.2 // indirect
-	github.com/chromedp/cdproto v0.0.0-20220827030233-358ed4af73cf // indirect
-	github.com/chromedp/chromedp v0.8.5 // indirect
+	github.com/chromedp/cdproto v0.0.0-20230512205701-c5692af2b095 // indirect
+	github.com/chromedp/chromedp v0.9.1 // indirect
 	github.com/chromedp/sysutil v1.0.0 // indirect
 	github.com/cloudflare/cfssl v1.6.4 // indirect
 	github.com/cloudflare/circl v1.1.0 // indirect
@@ -100,8 +100,8 @@ require (
 	github.com/goburrow/cache v0.1.4 // indirect
 	github.com/gobwas/httphead v0.1.0 // indirect
 	github.com/gobwas/pool v0.2.1 // indirect
-	github.com/gobwas/ws v1.1.0 // indirect
-	github.com/goccy/go-json v0.9.11 // indirect
+	github.com/gobwas/ws v1.2.0 // indirect
+	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
@@ -121,7 +121,7 @@ require (
 	github.com/hbakhtiyor/strsim v0.0.0-20190107154042-4d2bbb273edf // indirect
 	github.com/hdm/jarm-go v0.0.7 // indirect
 	github.com/iancoleman/orderedmap v0.0.0-20190318233801-ac98e3ecb4b0 // indirect
-	github.com/imdario/mergo v0.3.13 // indirect
+	github.com/imdario/mergo v0.3.15 // indirect
 	github.com/itchyny/gojq v0.12.11 // indirect
 	github.com/itchyny/timefmt-go v0.1.5 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
@@ -176,25 +176,25 @@ require (
 	github.com/power-devops/perfstat v0.0.0-20210106213030-5aafc221ea8c // indirect
 	github.com/projectdiscovery/asnmap v1.0.3 // indirect
 	github.com/projectdiscovery/blackrock v0.0.1 // indirect
-	github.com/projectdiscovery/cdncheck v1.0.1 // indirect
+	github.com/projectdiscovery/cdncheck v1.0.4 // indirect
 	github.com/projectdiscovery/chaos-client v0.5.1 // indirect
 	github.com/projectdiscovery/clistats v0.0.12 // indirect
 	github.com/projectdiscovery/cryptoutil v1.0.0 // indirect
 	github.com/projectdiscovery/dnsx v1.1.4 // indirect
 	github.com/projectdiscovery/dsl v0.0.7 // indirect
-	github.com/projectdiscovery/fastdialer v0.0.25 // indirect
+	github.com/projectdiscovery/fastdialer v0.0.26 // indirect
 	github.com/projectdiscovery/fasttemplate v0.0.2 // indirect
 	github.com/projectdiscovery/freeport v0.0.4 // indirect
 	github.com/projectdiscovery/goflags v0.1.8 // indirect
-	github.com/projectdiscovery/gologger v1.1.8 // indirect
+	github.com/projectdiscovery/gologger v1.1.10 // indirect
 	github.com/projectdiscovery/hmap v0.0.11 // indirect
-	github.com/projectdiscovery/httputil v0.0.0-20210913064028-815c8db933ff // indirect
+	github.com/projectdiscovery/httputil v0.0.1 // indirect
 	github.com/projectdiscovery/httpx v1.3.0 // indirect
 	github.com/projectdiscovery/interactsh v1.1.3 // indirect
 	github.com/projectdiscovery/iputil v0.0.2 // indirect
 	github.com/projectdiscovery/katana v1.0.1 // indirect
 	github.com/projectdiscovery/mapcidr v1.1.1 // indirect
-	github.com/projectdiscovery/networkpolicy v0.0.5 // indirect
+	github.com/projectdiscovery/networkpolicy v0.0.6 // indirect
 	github.com/projectdiscovery/nuclei v1.1.7 // indirect
 	github.com/projectdiscovery/nuclei/v2 v2.9.4-0.20230504112835-5c62e7a2961b // indirect
 	github.com/projectdiscovery/nvd v1.0.10-0.20230327073015-721181aba1e8 // indirect
@@ -202,12 +202,12 @@ require (
 	github.com/projectdiscovery/rawhttp v0.1.11 // indirect
 	github.com/projectdiscovery/rdap v0.9.1-0.20221108103045-9865884d1917 // indirect
 	github.com/projectdiscovery/retryabledns v1.0.24 // indirect
-	github.com/projectdiscovery/retryablehttp-go v1.0.15 // indirect
+	github.com/projectdiscovery/retryablehttp-go v1.0.16 // indirect
 	github.com/projectdiscovery/sarif v0.0.1 // indirect
 	github.com/projectdiscovery/stringsutil v0.0.2 // indirect
 	github.com/projectdiscovery/tlsx v1.0.9 // indirect
 	github.com/projectdiscovery/uncover v1.0.2 // indirect
-	github.com/projectdiscovery/utils v0.0.26 // indirect
+	github.com/projectdiscovery/utils v0.0.31 // indirect
 	github.com/projectdiscovery/wappalyzergo v0.0.92 // indirect
 	github.com/projectdiscovery/yamldoc-go v1.0.4 // indirect
 	github.com/remeh/sizedwaitgroup v1.0.0 // indirect
@@ -217,15 +217,15 @@ require (
 	github.com/sashabaranov/go-openai v1.8.0 // indirect
 	github.com/segmentio/ksuid v1.0.4 // indirect
 	github.com/sergi/go-diff v1.2.0 // indirect
-	github.com/shirou/gopsutil/v3 v3.23.3 // indirect
-	github.com/shoenig/go-m1cpu v0.1.4 // indirect
+	github.com/shirou/gopsutil/v3 v3.23.4 // indirect
+	github.com/shoenig/go-m1cpu v0.1.5 // indirect
 	github.com/skeema/knownhosts v1.1.0 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/src-d/gcfg v1.4.0 // indirect
 	github.com/syndtr/goleveldb v1.0.0 // indirect
 	github.com/tidwall/btree v1.6.0 // indirect
-	github.com/tidwall/buntdb v1.2.10 // indirect
+	github.com/tidwall/buntdb v1.3.0 // indirect
 	github.com/tidwall/gjson v1.14.4 // indirect
 	github.com/tidwall/grect v0.1.4 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
@@ -253,7 +253,7 @@ require (
 	github.com/yuin/goldmark-emoji v1.0.1 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
 	github.com/zmap/rc2 v0.0.0-20190804163417-abaa70531248 // indirect
-	github.com/zmap/zcrypto v0.0.0-20230205235340-d51ce4775101 // indirect
+	github.com/zmap/zcrypto v0.0.0-20230422215203-9a665e1e9968 // indirect
 	go.etcd.io/bbolt v1.3.7 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
@@ -261,12 +261,12 @@ require (
 	goftp.io/server/v2 v2.0.0 // indirect
 	golang.org/x/exp v0.0.0-20230420155640-133eef4313cb // indirect
 	golang.org/x/mod v0.10.0 // indirect
-	golang.org/x/net v0.9.0 // indirect
-	golang.org/x/oauth2 v0.7.0 // indirect
-	golang.org/x/sys v0.7.0 // indirect
+	golang.org/x/net v0.10.0 // indirect
+	golang.org/x/oauth2 v0.8.0 // indirect
+	golang.org/x/sys v0.8.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
-	golang.org/x/tools v0.8.0 // indirect
+	golang.org/x/tools v0.9.1 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.29.1 // indirect
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6 // indirect
