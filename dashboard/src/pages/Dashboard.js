@@ -3,6 +3,9 @@ import { useSelector, useDispatch } from "react-redux";
 import InfoCard from "../components/Cards/InfoCard";
 import PageTitle from "../components/Typography/PageTitle";
 import { ChatIcon, MoneyIcon, PeopleIcon } from "../icons";
+import {
+  getPrograms,
+} from "../actions/program";
 import RoundIcon from "../components/RoundIcon";
 import { getStats } from "../actions/stat";
 
@@ -36,6 +39,7 @@ function Dashboard() {
 
   useEffect(() => {
     dispatch(getStats());
+    dispatch(getPrograms(1, 30, "", "", ""));
   }, []);
 
   return (
@@ -68,7 +72,7 @@ function Dashboard() {
 
         <InfoCard
           title="Programs"
-          value={programState.programs && programState.programs.length}
+          value={programState && programState.total}
         >
           <RoundIcon
             icon={PeopleIcon}

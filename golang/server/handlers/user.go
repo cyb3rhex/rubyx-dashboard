@@ -15,6 +15,11 @@ import (
 
 var src = rand.NewSource(time.Now().UnixNano())
 
+type ChangePasswordForm struct {
+	PreviousPass string `json:"previousPass"`
+	NewPass      string `json:"newPass"`
+}
+
 const (
 	letterBytes   = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	letterIdxBits = 6                    // 6 bits to represent a letter index
@@ -58,23 +63,32 @@ func UpdatePassword(env env.Env, user *db.User, w http.ResponseWriter, r *http.R
 	}
 
 	decoder := json.NewDecoder(r.Body)
-	u := &db.User{}
-	err := decoder.Decode(&u)
-	if err != nil || u == nil {
+	changeForm := &ChangePasswordForm{}
+	err := decoder.Decode(&changeForm)
+	if err != nil || changeForm == nil {
 		return write.Error(errors.NoJSONBody)
 	}
 
+	currentUser, err := env.DB().FindUserByID(r.Context(), user.ID)
+	if err != nil {
+		return write.Error(errors.UserNotFound)
+	}
+
+	if !checkPasswordHash(changeForm.PreviousPass, currentUser.Salt, currentUser.Pass) {
+		return write.Error(errors.PreviousPassIncorrect)
+	}
+
 	// salt and hash it
-	u.Salt = generateRandomString(32)
-	u.Pass, err = hashPassword(u.Pass, u.Salt)
+	salt := generateRandomString(32)
+	pass, err := hashPassword(changeForm.NewPass, salt)
 	if err != nil {
 		return write.Error(err)
 	}
 
 	err = env.DB().UpdateUserPassword(r.Context(), db.UpdateUserPasswordParams{
 		ID:   user.ID,
-		Pass: u.Pass,
-		Salt: u.Salt,
+		Pass: pass,
+		Salt: salt,
 	})
 
 	if err != nil {
@@ -94,6 +108,15 @@ func UpdateEmail(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 	err := decoder.Decode(&u)
 	if err != nil || u == nil {
 		return write.Error(errors.NoJSONBody)
+	}
+
+	currentUser, err := env.DB().FindUserByID(r.Context(), user.ID)
+	if err != nil {
+		return write.Error(errors.UserNotFound)
+	}
+
+	if !checkPasswordHash(u.Pass, currentUser.Salt, currentUser.Pass) {
+		return write.Error(errors.PreviousPassIncorrect)
 	}
 
 	err = env.DB().UpdateUserEmail(r.Context(), db.UpdateUserEmailParams{

@@ -17,10 +17,10 @@ git clone https://github.com/aituglo/rubyx.git
 cp .env.example .env
 
 # build and start the containers
-docker-compose up --build
+docker compose up --build
 
 # Init the first user
-docker-compose run golang go run initdb.go
+docker compose run golang go run initdb.go
 ```
 
 1) Visit `https://localhost` (*note **https***)

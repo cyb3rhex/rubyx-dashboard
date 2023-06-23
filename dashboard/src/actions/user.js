@@ -45,10 +45,11 @@ export const login = (email, pass) => async (dispatch) => {
   }
 };
 
-export const changePassword = (pass) => async (dispatch) => {
+export const changePassword = (previousPass, newPass) => async (dispatch) => {
   try {
     var data = {
-      pass: pass,
+      previousPass: previousPass,
+      newPass: newPass
     };
 
     API.updatePassword(data)
@@ -56,11 +57,23 @@ export const changePassword = (pass) => async (dispatch) => {
         dispatch({
           type: CHANGE_PASSWORD,
         });
+        toast.success("Password changed !", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeButton: false,
+        });
       })
       .catch((err) => {
         dispatch({
           type: CHANGE_PASSWORD_ERROR,
           payload: err,
+        });
+        toast.error("An error has occured", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeButton: false,
         });
       });
   } catch (err) {
@@ -68,13 +81,20 @@ export const changePassword = (pass) => async (dispatch) => {
       type: CHANGE_PASSWORD_ERROR,
       payload: err,
     });
+    toast.error("An error has occured", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeButton: false,
+    });
   }
 };
 
-export const changeEmail = (email) => async (dispatch) => {
+export const changeEmail = (email, pass) => async (dispatch) => {
   try {
     var data = {
       email: email,
+      pass: pass,
     };
 
     API.updateEmail(data)
@@ -82,17 +102,35 @@ export const changeEmail = (email) => async (dispatch) => {
         dispatch({
           type: CHANGE_EMAIL,
         });
+        toast.success("Email changed !", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeButton: false,
+        });
       })
       .catch((err) => {
         dispatch({
           type: CHANGE_EMAIL_ERROR,
           payload: err,
         });
+        toast.error("An error has occured", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeButton: false,
+        });
       });
   } catch (err) {
     dispatch({
       type: CHANGE_EMAIL_ERROR,
       payload: err,
+    });
+    toast.error("An error has occured", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeButton: false,
     });
   }
 };

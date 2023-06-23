@@ -12,6 +12,8 @@ var (
 	NoJSONBody   = errors.New("Unable to decode JSON")
 	InvalidEmail = errors.New("Invalid Email")
 
+	PreviousPassIncorrect = errors.New("Previous password is incorrect")
+
 	FailedLogin          = errors.New("Invalid Email or Password")
 	AlreadyRegistered    = errors.New("An account already exists for this email")
 	VerificationNotFound = errors.New("Invalid Verification Code")

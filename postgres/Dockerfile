@@ -1,6 +1,6 @@
-FROM postgres:12.1
+FROM postgres:12.15
 
-RUN apt-get update && apt-get install -y wget \
+RUN apt update && apt install -y wget \
     && rm -rf /var/lib/apt/lists/*
 
 # snag a binary of golang-migrate
