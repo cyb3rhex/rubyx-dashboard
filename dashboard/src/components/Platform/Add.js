@@ -6,7 +6,7 @@ import {
   ModalFooter,
   Button,
   Label,
-  Select
+  Select,
 } from "@windmill/react-ui";
 import { useDispatch } from "react-redux";
 import { createPlatform, updatePlatform } from "../../actions/platform";

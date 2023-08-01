@@ -19,12 +19,6 @@ function Login() {
     dispatch(login(email, pass));
   };
 
-  const handleInputKeyPress = (event) => {
-    if (event.key === "Enter" && formRef.current !== null) {
-      handleLogin(event);
-    }
-  };
-
   useEffect(() => {
     if (userState.token) {
       history.push("/app/dashboard");
@@ -41,9 +35,6 @@ function Login() {
                 <h1 className="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">
                   Login
                 </h1>
-                {userState.error !== "" && (
-                  <p className="text-red-700">{userState.error}</p>
-                )}
                 <Label>
                   <span>Email</span>
                   <Input
@@ -51,7 +42,6 @@ function Login() {
                     type="email"
                     placeholder="john@doe.com"
                     value={email}
-                    onKeyPress={handleInputKeyPress}
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </Label>
@@ -63,12 +53,11 @@ function Login() {
                     type="password"
                     placeholder="***************"
                     value={pass}
-                    onKeyPress={handleInputKeyPress}
                     onChange={(e) => setPass(e.target.value)}
                   />
                 </Label>
 
-                <Button className="mt-4" block onClick={(e) => handleLogin(e)}>
+                <Button className="mt-4" block type="submit">
                   Log in
                 </Button>
               </form>

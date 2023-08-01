@@ -152,6 +152,43 @@ func (q *Queries) FindStats(ctx context.Context) ([]Stat, error) {
 	return items, nil
 }
 
+const findStatsWithPlatform = `-- name: FindStatsWithPlatform :many
+SELECT id, report_id, report_title, severity, reward, currency, collab, report_status, report_date, platform_id, created_at, updated_at FROM stats WHERE platform_id = $1
+`
+
+func (q *Queries) FindStatsWithPlatform(ctx context.Context, platformID int64) ([]Stat, error) {
+	rows, err := q.db.Query(ctx, findStatsWithPlatform, platformID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Stat{}
+	for rows.Next() {
+		var i Stat
+		if err := rows.Scan(
+			&i.ID,
+			&i.ReportID,
+			&i.ReportTitle,
+			&i.Severity,
+			&i.Reward,
+			&i.Currency,
+			&i.Collab,
+			&i.ReportStatus,
+			&i.ReportDate,
+			&i.PlatformID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateStat = `-- name: UpdateStat :one
 UPDATE stats
 SET report_id = $2, report_title = $3, severity = $4, reward = $5, collab = $6, report_status = $7, updated_at = NOW()

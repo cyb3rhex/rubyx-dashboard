@@ -35,6 +35,7 @@ func LaunchWappaGo(task *ScanTask, subdomains []string, querier wrapper.Querier)
 
 	go func() {
 		for urlInfos := range results {
+
 			all_subdomains = append(all_subdomains, urlInfos.Url)
 			if urlInfos.Infos.Screenshot != "" {
 

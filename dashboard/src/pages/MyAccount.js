@@ -24,7 +24,8 @@ function MyAccount() {
   const [confirmNewPass, setConfirmNewPass] = useState("");
   const [email, setEmail] = useState("");
 
-  const handleChangePassword = () => {
+  const handleChangePassword = (e) => {
+    e.preventDefault();
     if (
       newPass.length > 0 &&
       previousPass.length > 0 &&
@@ -45,7 +46,8 @@ function MyAccount() {
     }
   };
 
-  const handleChangeEmail = () => {
+  const handleChangeEmail = (e) => {
+    e.preventDefault();
     dispatch(changeEmail(email, previousPassEmail));
     setEmail("");
     setPreviousPassEmail("");
@@ -56,7 +58,7 @@ function MyAccount() {
       <PageTitle>My Account</PageTitle>
       <SectionTitle>Update Email</SectionTitle>
 
-      <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+      <form onSubmit={(e) => handleChangeEmail(e)} className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
         <Label>
           <span>Email</span>
           <Input
@@ -80,12 +82,12 @@ function MyAccount() {
         </div>
 
         <div className="py-3">
-          <Button onClick={() => handleChangeEmail()}>Update</Button>
+          <Button type="submit" >Update</Button>
         </div>
-      </div>
+      </form>
       <SectionTitle>Update Password</SectionTitle>
 
-      <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+      <form onSubmit={(e) => handleChangePassword(e)} className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
         <div className="py-3">
           <Label>
             <span>Previous Password</span>
@@ -121,9 +123,9 @@ function MyAccount() {
         </div>
 
         <div className="py-3">
-          <Button onClick={() => handleChangePassword()}>Update</Button>
+          <Button type="submit">Update</Button>
         </div>
-      </div>
+      </form>
     </>
   );
 }

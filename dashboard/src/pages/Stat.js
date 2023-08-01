@@ -8,22 +8,35 @@ import { Doughnut, Bar } from "react-chartjs-2";
 import ChartLegend from "../components/Chart/ChartLegend";
 import { MoneyIcon, PeopleIcon } from "../icons";
 import RoundIcon from "../components/RoundIcon";
-import { Button } from "@windmill/react-ui";
+import { Button, Select } from "@windmill/react-ui";
 import { getPrograms } from "../actions/program";
+import { getPlatforms } from "../actions/platform";
 import ClipLoader from "react-spinners/ClipLoader";
-import { TbReload } from "react-icons/tb"
+import { TbReload } from "react-icons/tb";
+import { AiOutlineCaretLeft, AiOutlineCaretRight } from "react-icons/ai";
 
 function Stat() {
   const dispatch = useDispatch();
   const statState = useSelector((state) => state.stat);
+  const platformState = useSelector((state) => state.platform);
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [nReports, setNReports] = useState([]);
+  const [yearNumbersOfReports, setYearNumbersOfReports] = useState();
+  const [yearBounties, setYearBounties] = useState();
   const [bountyPerMonth, setBountyPerMonth] = useState([]);
   const [critical, setCritical] = useState([]);
 
+  const [filterPlatform, setFilterPlatform] = useState(0);
+
   useEffect(() => {
     dispatch(getPrograms());
-    dispatch(getStats());
+    dispatch(getPlatforms());
+    dispatch(getStats(filterPlatform));
   }, []);
+
+  useEffect(() => {
+    dispatch(getStats(filterPlatform));
+  }, [filterPlatform]);
 
   useEffect(() => {
     if (statState.stats) {
@@ -39,7 +52,7 @@ function Stat() {
       }
       statState.stats.forEach((item) => {
         let date = new Date(item.report_date);
-        if (date.getFullYear() === new Date().getFullYear()) {
+        if (date.getFullYear() === currentYear) {
           nReports[date.getMonth()] += 1;
           bountyPerMonth[date.getMonth()] += item.reward;
           if (item.severity === "C") {
@@ -56,11 +69,17 @@ function Stat() {
           }
         }
       });
+      let reports = 0;
+      nReports.map((x) => (reports += x));
+      setYearNumbersOfReports(reports);
+      let bounties = 0;
+      bountyPerMonth.map((x) => (bounties += x));
+      setYearBounties(bounties);
       setNReports(nReports);
       setBountyPerMonth(bountyPerMonth);
       setCritical(critical);
     }
-  }, [statState.stats]);
+  }, [statState.stats, currentYear]);
 
   const totalStat = (stats) => {
     var total = 0;
@@ -195,7 +214,7 @@ function Stat() {
       <PageTitle>Stats</PageTitle>
 
       <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-        <div className="py-3  flex items-center justify-end space-x-4">
+        <div className="py-3 flex items-center space-x-4">
           {statState.loading ? (
             <ClipLoader
               color={"#355dad"}
@@ -205,14 +224,38 @@ function Stat() {
               data-testid="loader"
             />
           ) : (
-            <Button onClick={() => handleReloadStats()}><TbReload className="w-5 h-5" /></Button>
+            <Button onClick={() => handleReloadStats()}>
+              <TbReload className="w-5 h-5" />
+            </Button>
           )}
+
+          <Button onClick={() => setCurrentYear(currentYear - 1)}>
+            <AiOutlineCaretLeft className="w-5 h-5" />
+          </Button>
+          <b>{currentYear}</b>
+          <Button onClick={() => setCurrentYear(currentYear + 1)}>
+            <AiOutlineCaretRight className="w-5 h-5" />
+          </Button>
+          <Select
+            onChange={(e) => setFilterPlatform(e.target.value)}
+            className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          >
+            <option value="0">All Platforms</option>
+            {platformState.platforms &&
+              platformState.platforms.map((platform) => (
+                <option key={platform.id} value={platform.id}>
+                  {platform.name}
+                </option>
+              ))}
+          </Select>
         </div>
+
+        <div className=""></div>
 
         <div className="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
           <InfoCard
             title="Numbers of Rapports"
-            value={`${statState.stats ? statState.stats.length : 0}`}
+            value={`${yearNumbersOfReports}`}
           >
             <RoundIcon
               icon={PeopleIcon}
@@ -234,8 +277,17 @@ function Stat() {
             />
           </InfoCard>
 
+          <InfoCard title="Total Bounties" value={`$ ${yearBounties}`}>
+            <RoundIcon
+              icon={MoneyIcon}
+              iconColorClass="text-green-500 dark:text-green-100"
+              bgColorClass="bg-green-100 dark:bg-green-500"
+              className="mr-4"
+            />
+          </InfoCard>
+
           <InfoCard
-            title="Total Bounties balance"
+            title="Total Bounties all time"
             value={`$ ${statState.stats ? totalStat(statState.stats) : 0}`}
           >
             <RoundIcon

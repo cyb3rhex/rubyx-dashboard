@@ -18,5 +18,8 @@ SELECT * FROM stats WHERE id = $1 LIMIT 1;
 -- name: FindStats :many
 SELECT * FROM stats;
 
+-- name: FindStatsWithPlatform :many
+SELECT * FROM stats WHERE platform_id = $1;
+
 -- name: DeleteStatByID :exec
 DELETE FROM stats WHERE id = $1;

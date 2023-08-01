@@ -1269,6 +1269,21 @@ func (mr *MockQuerierMockRecorder) FindStats(ctx interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindStats", reflect.TypeOf((*MockQuerier)(nil).FindStats), ctx)
 }
 
+// FindStatsWithPlatform mocks base method.
+func (m *MockQuerier) FindStatsWithPlatform(ctx context.Context, platformID int64) ([]db.Stat, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindStatsWithPlatform", ctx, platformID)
+	ret0, _ := ret[0].([]db.Stat)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindStatsWithPlatform indicates an expected call of FindStatsWithPlatform.
+func (mr *MockQuerierMockRecorder) FindStatsWithPlatform(ctx, platformID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindStatsWithPlatform", reflect.TypeOf((*MockQuerier)(nil).FindStatsWithPlatform), ctx, platformID)
+}
+
 // FindSubdomainByIDs mocks base method.
 func (m *MockQuerier) FindSubdomainByIDs(ctx context.Context, id int64) (db.Subdomain, error) {
 	m.ctrl.T.Helper()

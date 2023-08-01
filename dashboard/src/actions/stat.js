@@ -9,12 +9,12 @@ import {
 } from "../constants/stat";
 import { toast } from "react-toastify";
 
-export const getStats = () => async (dispatch) => {
+export const getStats = (platform_id) => async (dispatch) => {
   dispatch({
     type: GET_STATS,
   });
   try {
-    API.getStats()
+    API.getStats(platform_id)
       .then((data) => {
         dispatch({
           type: GET_STATS_SUCCESS,
@@ -35,12 +35,12 @@ export const getStats = () => async (dispatch) => {
   }
 };
 
-export const reloadStats = () => async (dispatch) => {
+export const reloadStats = (platform_id) => async (dispatch) => {
   dispatch({
     type: RELOAD_STAT,
   });
   try {
-    API.reloadStats()
+    API.reloadStats(platform_id)
       .then((res) => {
         API.getStats().then((data) => {
           dispatch({

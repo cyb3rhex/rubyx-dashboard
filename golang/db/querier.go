@@ -92,6 +92,7 @@ type Querier interface {
 	FindStatByID(ctx context.Context, id int64) (Stat, error)
 	FindStatByReportID(ctx context.Context, reportID string) (Stat, error)
 	FindStats(ctx context.Context) ([]Stat, error)
+	FindStatsWithPlatform(ctx context.Context, platformID int64) ([]Stat, error)
 	FindSubdomainByIDs(ctx context.Context, id int64) (Subdomain, error)
 	FindSubdomainByProgram(ctx context.Context, programID int64) ([]Subdomain, error)
 	FindSubdomains(ctx context.Context, arg FindSubdomainsParams) ([]Subdomain, error)

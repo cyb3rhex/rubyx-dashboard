@@ -119,12 +119,12 @@ export default class API {
   
 
   // STAT
-  static getStats = () => (
-    _get('/stats')
+  static getStats = (platform_id) => (
+    _get('/stats?platform_id=' + platform_id)
   )
 
-  static reloadStats = () => (
-    _get('/stats/reload')
+  static reloadStats = (platform_id) => (
+    _get('/stats/reload?platform_id=' + platform_id)
   )
 
   // PLATFORM

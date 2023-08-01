@@ -29,11 +29,7 @@ function Url({ setSeeUrls, url }) {
 
   useEffect(() => {
     dispatch(getUrls(url, 1, resultsPerPage, searchTerm));
-  }, [url]);
-
-  useEffect(() => {
-    dispatch(getUrls(url, 1, resultsPerPage, searchTerm));
-  }, [searchTerm]);
+  }, [url, searchTerm]);
 
   const onPageChangeTable = (p) => {
     dispatch(getUrls(url, p, resultsPerPage, searchTerm));
@@ -61,13 +57,6 @@ function Url({ setSeeUrls, url }) {
 
       <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
         <div className="flex items-center mb-4 space-x-4">
-          <Input
-            className="text-gray-700"
-            placeholder="Search for url"
-            aria-label="Search"
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-
           <Button className="bg-blue-900" onClick={() => setSeeUrls(false)}>
             <TbArrowBack className="w-5 h-5" />
           </Button>
@@ -75,6 +64,13 @@ function Url({ setSeeUrls, url }) {
           <Button className="bg-blue-900" onClick={() => handleScanUrls()}>
             Scan
           </Button>
+
+          <Input
+            className="text-gray-700"
+            placeholder="Search for url"
+            aria-label="Search"
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
 
         {urlState.loading && (
@@ -90,7 +86,7 @@ function Url({ setSeeUrls, url }) {
         )}
 
         {urlState.total && urlState.total > 0 ? (
-          <TableContainer className={`mb-8 ${urlState.loading && 'hidden'}`}>
+          <TableContainer className={`mb-8 ${urlState.loading && "hidden"}`}>
             <Table>
               <TableHeader>
                 <tr>
@@ -104,7 +100,11 @@ function Url({ setSeeUrls, url }) {
                     <TableRow key={i}>
                       <TableCell>
                         <span className="text-sm">
-                          <a href={key.url} target="_blank" rel="noreferrer noopener">
+                          <a
+                            href={key.url}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                          >
                             {key.url}
                           </a>
                         </span>

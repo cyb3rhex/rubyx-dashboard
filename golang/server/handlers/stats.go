@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/aituglo/rubyx/golang/db"
 	"github.com/aituglo/rubyx/golang/env"
@@ -17,12 +18,28 @@ func ReloadStats(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 		return write.Error(errors.RouteUnauthorized)
 	}
 
-	platform, err := env.DB().GetPlatforms(r.Context())
+	platforms, err := env.DB().GetPlatforms(r.Context())
 	if err != nil {
 		return write.Error(err)
 	}
 
-	for _, p := range platform {
+	platformIDStr := r.URL.Query().Get("platform_id")
+	var platformID int64
+	platformIDProvided := false
+	if platformIDStr != "" {
+		id, err := strconv.ParseInt(platformIDStr, 10, 64)
+		if err != nil {
+			return write.Error(err)
+		}
+		platformID = id
+		if platformID != 0 {
+			platformIDProvided = true
+		} else {
+			platformIDProvided = false
+		}
+	}
+
+	for _, p := range platforms {
 		if p.Name == "yeswehack" {
 			_, err := utils.GetJWTYWH(&p)
 			if err != nil {
@@ -39,7 +56,11 @@ func ReloadStats(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 		}
 	}
 
-	return write.JSONorErr(env.DB().FindStats(r.Context()))
+	if platformIDProvided {
+		return write.JSONorErr(env.DB().FindStatsWithPlatform(r.Context(), platformID))
+	} else {
+		return write.JSONorErr(env.DB().FindStats(r.Context()))
+	}
 }
 
 func CreateStat(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
@@ -93,7 +114,27 @@ func GetStats(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request
 		return write.Error(errors.RouteUnauthorized)
 	}
 
-	return write.JSONorErr(env.DB().FindStats(r.Context()))
+	platformIDStr := r.URL.Query().Get("platform_id")
+	var platformID int64
+	platformIDProvided := false
+	if platformIDStr != "" {
+		id, err := strconv.ParseInt(platformIDStr, 10, 64)
+		if err != nil {
+			return write.Error(err)
+		}
+		platformID = id
+		if platformID != 0 {
+			platformIDProvided = true
+		} else {
+			platformIDProvided = false
+		}
+	}
+
+	if platformIDProvided {
+		return write.JSONorErr(env.DB().FindStatsWithPlatform(r.Context(), platformID))
+	} else {
+		return write.JSONorErr(env.DB().FindStats(r.Context()))
+	}
 }
 
 func UpdateStat(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {

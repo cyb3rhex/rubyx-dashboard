@@ -23,7 +23,7 @@ export const login = (email, pass) => async (dispatch) => {
           type: LOGIN,
           payload: user,
         });
-        toast.success("Success !", {
+        toast.success("You are now logged in !", {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 3000,
           hideProgressBar: true,
@@ -31,13 +31,24 @@ export const login = (email, pass) => async (dispatch) => {
         });
       })
       .catch((err) => {
-        console.log(err);
+        toast.error(err, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeButton: false,
+        });
         dispatch({
           type: LOGIN_ERROR,
           payload: err,
         });
       });
   } catch (err) {
+    toast.error(err, {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeButton: false,
+    });
     dispatch({
       type: LOGIN_ERROR,
       payload: err,
@@ -114,7 +125,7 @@ export const changeEmail = (email, pass) => async (dispatch) => {
           type: CHANGE_EMAIL_ERROR,
           payload: err,
         });
-        toast.error("An error has occured", {
+        toast.error(err, {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 3000,
           hideProgressBar: true,
@@ -126,7 +137,7 @@ export const changeEmail = (email, pass) => async (dispatch) => {
       type: CHANGE_EMAIL_ERROR,
       payload: err,
     });
-    toast.error("An error has occured", {
+    toast.error(err, {
       position: toast.POSITION.TOP_RIGHT,
       autoClose: 3000,
       hideProgressBar: true,
@@ -137,6 +148,12 @@ export const changeEmail = (email, pass) => async (dispatch) => {
 
 export const logout = () => async (dispatch) => {
   API.logout().then((res) => {
+    toast.success("You are now logged out !", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeButton: false,
+    });
     dispatch({
       type: LOGOUT,
     });
