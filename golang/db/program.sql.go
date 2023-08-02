@@ -119,7 +119,7 @@ func (q *Queries) CountProgramsWithTypeAndPlatform(ctx context.Context, arg Coun
 }
 
 const createProgram = `-- name: CreateProgram :one
-INSERT INTO program (platform_id, name, slug, vdp, tag, url, type) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, platform_id, name, slug, vdp, tag, url, type, created_at, updated_at
+INSERT INTO program (platform_id, name, slug, vdp, tag, url, type) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, platform_id, name, slug, vdp, favourite, tag, url, type, created_at, updated_at
 `
 
 type CreateProgramParams struct {
@@ -149,6 +149,7 @@ func (q *Queries) CreateProgram(ctx context.Context, arg CreateProgramParams) (P
 		&i.Name,
 		&i.Slug,
 		&i.Vdp,
+		&i.Favourite,
 		&i.Tag,
 		&i.Url,
 		&i.Type,
@@ -167,8 +168,36 @@ func (q *Queries) DeleteProgramByIDs(ctx context.Context, id int64) error {
 	return err
 }
 
+const favouriteProgram = `-- name: FavouriteProgram :one
+UPDATE program SET favourite = $2, updated_at = NOW() WHERE id = $1 RETURNING id, platform_id, name, slug, vdp, favourite, tag, url, type, created_at, updated_at
+`
+
+type FavouriteProgramParams struct {
+	ID        int64 `json:"id"`
+	Favourite bool  `json:"favourite"`
+}
+
+func (q *Queries) FavouriteProgram(ctx context.Context, arg FavouriteProgramParams) (Program, error) {
+	row := q.db.QueryRow(ctx, favouriteProgram, arg.ID, arg.Favourite)
+	var i Program
+	err := row.Scan(
+		&i.ID,
+		&i.PlatformID,
+		&i.Name,
+		&i.Slug,
+		&i.Vdp,
+		&i.Favourite,
+		&i.Tag,
+		&i.Url,
+		&i.Type,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const findProgramByIDs = `-- name: FindProgramByIDs :one
-SELECT id, platform_id, name, slug, vdp, tag, url, type, created_at, updated_at FROM program WHERE id = $1 LIMIT 1
+SELECT id, platform_id, name, slug, vdp, favourite, tag, url, type, created_at, updated_at FROM program WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) FindProgramByIDs(ctx context.Context, id int64) (Program, error) {
@@ -180,6 +209,7 @@ func (q *Queries) FindProgramByIDs(ctx context.Context, id int64) (Program, erro
 		&i.Name,
 		&i.Slug,
 		&i.Vdp,
+		&i.Favourite,
 		&i.Tag,
 		&i.Url,
 		&i.Type,
@@ -190,7 +220,7 @@ func (q *Queries) FindProgramByIDs(ctx context.Context, id int64) (Program, erro
 }
 
 const findProgramBySlug = `-- name: FindProgramBySlug :one
-SELECT id, platform_id, name, slug, vdp, tag, url, type, created_at, updated_at FROM program WHERE slug = $1 LIMIT 1
+SELECT id, platform_id, name, slug, vdp, favourite, tag, url, type, created_at, updated_at FROM program WHERE slug = $1 LIMIT 1
 `
 
 func (q *Queries) FindProgramBySlug(ctx context.Context, slug string) (Program, error) {
@@ -202,6 +232,7 @@ func (q *Queries) FindProgramBySlug(ctx context.Context, slug string) (Program, 
 		&i.Name,
 		&i.Slug,
 		&i.Vdp,
+		&i.Favourite,
 		&i.Tag,
 		&i.Url,
 		&i.Type,
@@ -212,7 +243,7 @@ func (q *Queries) FindProgramBySlug(ctx context.Context, slug string) (Program, 
 }
 
 const findPrograms = `-- name: FindPrograms :many
-SELECT id, platform_id, name, slug, vdp, tag, url, type, created_at, updated_at FROM program LIMIT $1 OFFSET $2
+SELECT id, platform_id, name, slug, vdp, favourite, tag, url, type, created_at, updated_at FROM program LIMIT $1 OFFSET $2
 `
 
 type FindProgramsParams struct {
@@ -235,6 +266,7 @@ func (q *Queries) FindPrograms(ctx context.Context, arg FindProgramsParams) ([]P
 			&i.Name,
 			&i.Slug,
 			&i.Vdp,
+			&i.Favourite,
 			&i.Tag,
 			&i.Url,
 			&i.Type,
@@ -252,7 +284,7 @@ func (q *Queries) FindPrograms(ctx context.Context, arg FindProgramsParams) ([]P
 }
 
 const findProgramsWithPlatform = `-- name: FindProgramsWithPlatform :many
-SELECT id, platform_id, name, slug, vdp, tag, url, type, created_at, updated_at FROM program WHERE platform_id = $1 LIMIT $2 OFFSET $3
+SELECT id, platform_id, name, slug, vdp, favourite, tag, url, type, created_at, updated_at FROM program WHERE platform_id = $1 LIMIT $2 OFFSET $3
 `
 
 type FindProgramsWithPlatformParams struct {
@@ -276,6 +308,7 @@ func (q *Queries) FindProgramsWithPlatform(ctx context.Context, arg FindPrograms
 			&i.Name,
 			&i.Slug,
 			&i.Vdp,
+			&i.Favourite,
 			&i.Tag,
 			&i.Url,
 			&i.Type,
@@ -293,7 +326,7 @@ func (q *Queries) FindProgramsWithPlatform(ctx context.Context, arg FindPrograms
 }
 
 const findProgramsWithSearch = `-- name: FindProgramsWithSearch :many
-SELECT id, platform_id, name, slug, vdp, tag, url, type, created_at, updated_at FROM program WHERE name LIKE $1 LIMIT $2 OFFSET $3
+SELECT id, platform_id, name, slug, vdp, favourite, tag, url, type, created_at, updated_at FROM program WHERE name LIKE $1 LIMIT $2 OFFSET $3
 `
 
 type FindProgramsWithSearchParams struct {
@@ -317,6 +350,7 @@ func (q *Queries) FindProgramsWithSearch(ctx context.Context, arg FindProgramsWi
 			&i.Name,
 			&i.Slug,
 			&i.Vdp,
+			&i.Favourite,
 			&i.Tag,
 			&i.Url,
 			&i.Type,
@@ -334,7 +368,7 @@ func (q *Queries) FindProgramsWithSearch(ctx context.Context, arg FindProgramsWi
 }
 
 const findProgramsWithSearchAndPlatform = `-- name: FindProgramsWithSearchAndPlatform :many
-SELECT id, platform_id, name, slug, vdp, tag, url, type, created_at, updated_at FROM program WHERE name LIKE $1 AND platform_id = $2 LIMIT $3 OFFSET $4
+SELECT id, platform_id, name, slug, vdp, favourite, tag, url, type, created_at, updated_at FROM program WHERE name LIKE $1 AND platform_id = $2 LIMIT $3 OFFSET $4
 `
 
 type FindProgramsWithSearchAndPlatformParams struct {
@@ -364,6 +398,7 @@ func (q *Queries) FindProgramsWithSearchAndPlatform(ctx context.Context, arg Fin
 			&i.Name,
 			&i.Slug,
 			&i.Vdp,
+			&i.Favourite,
 			&i.Tag,
 			&i.Url,
 			&i.Type,
@@ -381,7 +416,7 @@ func (q *Queries) FindProgramsWithSearchAndPlatform(ctx context.Context, arg Fin
 }
 
 const findProgramsWithSearchAndType = `-- name: FindProgramsWithSearchAndType :many
-SELECT id, platform_id, name, slug, vdp, tag, url, type, created_at, updated_at FROM program WHERE name LIKE $1 AND type = $2::program_type LIMIT $3 OFFSET $4
+SELECT id, platform_id, name, slug, vdp, favourite, tag, url, type, created_at, updated_at FROM program WHERE name LIKE $1 AND type = $2::program_type LIMIT $3 OFFSET $4
 `
 
 type FindProgramsWithSearchAndTypeParams struct {
@@ -411,6 +446,7 @@ func (q *Queries) FindProgramsWithSearchAndType(ctx context.Context, arg FindPro
 			&i.Name,
 			&i.Slug,
 			&i.Vdp,
+			&i.Favourite,
 			&i.Tag,
 			&i.Url,
 			&i.Type,
@@ -428,7 +464,7 @@ func (q *Queries) FindProgramsWithSearchAndType(ctx context.Context, arg FindPro
 }
 
 const findProgramsWithSearchAndTypeAndPlatform = `-- name: FindProgramsWithSearchAndTypeAndPlatform :many
-SELECT id, platform_id, name, slug, vdp, tag, url, type, created_at, updated_at FROM program WHERE name LIKE $1 AND type = $2::program_type AND platform_id = $3 LIMIT $4 OFFSET $5
+SELECT id, platform_id, name, slug, vdp, favourite, tag, url, type, created_at, updated_at FROM program WHERE name LIKE $1 AND type = $2::program_type AND platform_id = $3 LIMIT $4 OFFSET $5
 `
 
 type FindProgramsWithSearchAndTypeAndPlatformParams struct {
@@ -460,6 +496,7 @@ func (q *Queries) FindProgramsWithSearchAndTypeAndPlatform(ctx context.Context, 
 			&i.Name,
 			&i.Slug,
 			&i.Vdp,
+			&i.Favourite,
 			&i.Tag,
 			&i.Url,
 			&i.Type,
@@ -477,7 +514,7 @@ func (q *Queries) FindProgramsWithSearchAndTypeAndPlatform(ctx context.Context, 
 }
 
 const findProgramsWithType = `-- name: FindProgramsWithType :many
-SELECT id, platform_id, name, slug, vdp, tag, url, type, created_at, updated_at FROM program WHERE type = $1::program_type LIMIT $2 OFFSET $3
+SELECT id, platform_id, name, slug, vdp, favourite, tag, url, type, created_at, updated_at FROM program WHERE type = $1::program_type LIMIT $2 OFFSET $3
 `
 
 type FindProgramsWithTypeParams struct {
@@ -501,6 +538,7 @@ func (q *Queries) FindProgramsWithType(ctx context.Context, arg FindProgramsWith
 			&i.Name,
 			&i.Slug,
 			&i.Vdp,
+			&i.Favourite,
 			&i.Tag,
 			&i.Url,
 			&i.Type,
@@ -518,7 +556,7 @@ func (q *Queries) FindProgramsWithType(ctx context.Context, arg FindProgramsWith
 }
 
 const findProgramsWithTypeAndPlatform = `-- name: FindProgramsWithTypeAndPlatform :many
-SELECT id, platform_id, name, slug, vdp, tag, url, type, created_at, updated_at FROM program WHERE type = $1::program_type AND platform_id = $2 LIMIT $3 OFFSET $4
+SELECT id, platform_id, name, slug, vdp, favourite, tag, url, type, created_at, updated_at FROM program WHERE type = $1::program_type AND platform_id = $2 LIMIT $3 OFFSET $4
 `
 
 type FindProgramsWithTypeAndPlatformParams struct {
@@ -548,6 +586,7 @@ func (q *Queries) FindProgramsWithTypeAndPlatform(ctx context.Context, arg FindP
 			&i.Name,
 			&i.Slug,
 			&i.Vdp,
+			&i.Favourite,
 			&i.Tag,
 			&i.Url,
 			&i.Type,
@@ -565,7 +604,7 @@ func (q *Queries) FindProgramsWithTypeAndPlatform(ctx context.Context, arg FindP
 }
 
 const updateProgram = `-- name: UpdateProgram :one
-UPDATE program SET platform_id = $2, name = $3, slug = $4, vdp = $5, url = $6, type = $7, updated_at = NOW() WHERE id = $1 RETURNING id, platform_id, name, slug, vdp, tag, url, type, created_at, updated_at
+UPDATE program SET platform_id = $2, name = $3, slug = $4, vdp = $5, url = $6, type = $7, updated_at = NOW() WHERE id = $1 RETURNING id, platform_id, name, slug, vdp, favourite, tag, url, type, created_at, updated_at
 `
 
 type UpdateProgramParams struct {
@@ -595,6 +634,7 @@ func (q *Queries) UpdateProgram(ctx context.Context, arg UpdateProgramParams) (P
 		&i.Name,
 		&i.Slug,
 		&i.Vdp,
+		&i.Favourite,
 		&i.Tag,
 		&i.Url,
 		&i.Type,

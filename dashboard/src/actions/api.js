@@ -189,6 +189,10 @@ export default class API {
   static getScope = (id) => (
     _get(`/program/scope/${id}`)
   )
+
+  static favouriteProgram = (id) => (
+    _get(`/program/favourite/${id}`)
+  )
   
 }
 

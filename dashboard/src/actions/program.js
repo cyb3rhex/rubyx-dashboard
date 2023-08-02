@@ -19,6 +19,9 @@ import {
   GET_SCOPE,
   GET_SCOPE_ERROR,
   GET_SCOPE_SUCCESS,
+  FAVOURITE_PROGRAM,
+  FAVOURITE_PROGRAM_ERROR,
+  FAVOURITE_PROGRAM_SUCCESS,
 } from "../constants/program";
 import {toast} from "react-toastify";
 
@@ -228,6 +231,34 @@ export const deleteProgram = (id, resultsPerPage) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: DELETE_PROGRAM_ERROR,
+      payload: err,
+    });
+  }
+};
+
+export const favouriteProgram = (id, resultsPerPage) => async (dispatch) => {
+  dispatch({
+    type: FAVOURITE_PROGRAM,
+  });
+  try {
+    API.favouriteProgram(id)
+      .then((res) => {
+        API.getPrograms(1, resultsPerPage, "", "", 0).then((data) => {
+          dispatch({
+            type: FAVOURITE_PROGRAM_SUCCESS,
+            payload: data,
+          });
+        });
+      })
+      .catch((err) => {
+        dispatch({
+          type: FAVOURITE_PROGRAM_ERROR,
+          payload: err,
+        });
+      });
+  } catch (err) {
+    dispatch({
+      type: FAVOURITE_PROGRAM_ERROR,
       payload: err,
     });
   }

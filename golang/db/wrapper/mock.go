@@ -774,6 +774,21 @@ func (mr *MockQuerierMockRecorder) DeleteVulnerabilityByIDs(ctx, id interface{})
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteVulnerabilityByIDs", reflect.TypeOf((*MockQuerier)(nil).DeleteVulnerabilityByIDs), ctx, id)
 }
 
+// FavouriteProgram mocks base method.
+func (m *MockQuerier) FavouriteProgram(ctx context.Context, arg db.FavouriteProgramParams) (db.Program, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FavouriteProgram", ctx, arg)
+	ret0, _ := ret[0].(db.Program)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FavouriteProgram indicates an expected call of FavouriteProgram.
+func (mr *MockQuerierMockRecorder) FavouriteProgram(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FavouriteProgram", reflect.TypeOf((*MockQuerier)(nil).FavouriteProgram), ctx, arg)
+}
+
 // FindApiByIDs mocks base method.
 func (m *MockQuerier) FindApiByIDs(ctx context.Context, id int64) (db.Api, error) {
 	m.ctrl.T.Helper()

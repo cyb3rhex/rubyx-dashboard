@@ -107,6 +107,7 @@ type Note struct {
 	Title     string    `json:"title"`
 	ProgramID int64     `json:"program_id"`
 	Content   string    `json:"content"`
+	Favourite bool      `json:"favourite"`
 	Tag       string    `json:"tag"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
@@ -132,6 +133,7 @@ type Program struct {
 	Name       string      `json:"name"`
 	Slug       string      `json:"slug"`
 	Vdp        bool        `json:"vdp"`
+	Favourite  bool        `json:"favourite"`
 	Tag        string      `json:"tag"`
 	Url        string      `json:"url"`
 	Type       ProgramType `json:"type"`
@@ -203,6 +205,7 @@ type Subdomain struct {
 	StatusCode    int32     `json:"status_code"`
 	Technologies  string    `json:"technologies"`
 	ContentLength int32     `json:"content_length"`
+	Favourite     bool      `json:"favourite"`
 	CreatedAt     time.Time `json:"created_at"`
 	UpdatedAt     time.Time `json:"updated_at"`
 }
@@ -233,6 +236,7 @@ type Vulnerability struct {
 	Tag       string    `json:"tag"`
 	Type      string    `json:"type"`
 	Severity  string    `json:"severity"`
+	Favourite bool      `json:"favourite"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }

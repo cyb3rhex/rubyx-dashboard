@@ -119,7 +119,7 @@ func (q *Queries) CountNotesByTag(ctx context.Context, stringToArray string) (in
 }
 
 const createNote = `-- name: CreateNote :one
-INSERT INTO notes (program_id, title, content, tag) VALUES ($1, $2, $3, $4) RETURNING id, title, program_id, content, tag, created_at, updated_at
+INSERT INTO notes (program_id, title, content, tag) VALUES ($1, $2, $3, $4) RETURNING id, title, program_id, content, favourite, tag, created_at, updated_at
 `
 
 type CreateNoteParams struct {
@@ -142,6 +142,7 @@ func (q *Queries) CreateNote(ctx context.Context, arg CreateNoteParams) (Note, e
 		&i.Title,
 		&i.ProgramID,
 		&i.Content,
+		&i.Favourite,
 		&i.Tag,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -159,7 +160,7 @@ func (q *Queries) DeleteNote(ctx context.Context, id int64) error {
 }
 
 const findNoteByID = `-- name: FindNoteByID :one
-SELECT id, title, program_id, content, tag, created_at, updated_at FROM notes WHERE id = $1 LIMIT 1
+SELECT id, title, program_id, content, favourite, tag, created_at, updated_at FROM notes WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) FindNoteByID(ctx context.Context, id int64) (Note, error) {
@@ -170,6 +171,7 @@ func (q *Queries) FindNoteByID(ctx context.Context, id int64) (Note, error) {
 		&i.Title,
 		&i.ProgramID,
 		&i.Content,
+		&i.Favourite,
 		&i.Tag,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -178,7 +180,7 @@ func (q *Queries) FindNoteByID(ctx context.Context, id int64) (Note, error) {
 }
 
 const findNotes = `-- name: FindNotes :many
-SELECT id, title, program_id, content, tag, created_at, updated_at FROM notes LIMIT $1 OFFSET $2
+SELECT id, title, program_id, content, favourite, tag, created_at, updated_at FROM notes LIMIT $1 OFFSET $2
 `
 
 type FindNotesParams struct {
@@ -200,6 +202,7 @@ func (q *Queries) FindNotes(ctx context.Context, arg FindNotesParams) ([]Note, e
 			&i.Title,
 			&i.ProgramID,
 			&i.Content,
+			&i.Favourite,
 			&i.Tag,
 			&i.CreatedAt,
 			&i.UpdatedAt,
@@ -215,7 +218,7 @@ func (q *Queries) FindNotes(ctx context.Context, arg FindNotesParams) ([]Note, e
 }
 
 const findNotesByProgramID = `-- name: FindNotesByProgramID :many
-SELECT id, title, program_id, content, tag, created_at, updated_at FROM notes WHERE program_id = $1 LIMIT $2 OFFSET $3
+SELECT id, title, program_id, content, favourite, tag, created_at, updated_at FROM notes WHERE program_id = $1 LIMIT $2 OFFSET $3
 `
 
 type FindNotesByProgramIDParams struct {
@@ -238,6 +241,7 @@ func (q *Queries) FindNotesByProgramID(ctx context.Context, arg FindNotesByProgr
 			&i.Title,
 			&i.ProgramID,
 			&i.Content,
+			&i.Favourite,
 			&i.Tag,
 			&i.CreatedAt,
 			&i.UpdatedAt,
@@ -253,7 +257,7 @@ func (q *Queries) FindNotesByProgramID(ctx context.Context, arg FindNotesByProgr
 }
 
 const findNotesByProgramIDAndTag = `-- name: FindNotesByProgramIDAndTag :many
-SELECT id, title, program_id, content, tag, created_at, updated_at FROM notes WHERE program_id = $1 AND string_to_array(tag, ',') && string_to_array($2, ',') LIMIT $3 OFFSET $4
+SELECT id, title, program_id, content, favourite, tag, created_at, updated_at FROM notes WHERE program_id = $1 AND string_to_array(tag, ',') && string_to_array($2, ',') LIMIT $3 OFFSET $4
 `
 
 type FindNotesByProgramIDAndTagParams struct {
@@ -282,6 +286,7 @@ func (q *Queries) FindNotesByProgramIDAndTag(ctx context.Context, arg FindNotesB
 			&i.Title,
 			&i.ProgramID,
 			&i.Content,
+			&i.Favourite,
 			&i.Tag,
 			&i.CreatedAt,
 			&i.UpdatedAt,
@@ -297,7 +302,7 @@ func (q *Queries) FindNotesByProgramIDAndTag(ctx context.Context, arg FindNotesB
 }
 
 const findNotesBySearch = `-- name: FindNotesBySearch :many
-SELECT id, title, program_id, content, tag, created_at, updated_at FROM notes WHERE title LIKE $1 LIMIT $2 OFFSET $3
+SELECT id, title, program_id, content, favourite, tag, created_at, updated_at FROM notes WHERE title LIKE $1 LIMIT $2 OFFSET $3
 `
 
 type FindNotesBySearchParams struct {
@@ -320,6 +325,7 @@ func (q *Queries) FindNotesBySearch(ctx context.Context, arg FindNotesBySearchPa
 			&i.Title,
 			&i.ProgramID,
 			&i.Content,
+			&i.Favourite,
 			&i.Tag,
 			&i.CreatedAt,
 			&i.UpdatedAt,
@@ -335,7 +341,7 @@ func (q *Queries) FindNotesBySearch(ctx context.Context, arg FindNotesBySearchPa
 }
 
 const findNotesBySearchAndProgramID = `-- name: FindNotesBySearchAndProgramID :many
-SELECT id, title, program_id, content, tag, created_at, updated_at FROM notes WHERE title LIKE $1 AND program_id = $2 LIMIT $3 OFFSET $4
+SELECT id, title, program_id, content, favourite, tag, created_at, updated_at FROM notes WHERE title LIKE $1 AND program_id = $2 LIMIT $3 OFFSET $4
 `
 
 type FindNotesBySearchAndProgramIDParams struct {
@@ -364,6 +370,7 @@ func (q *Queries) FindNotesBySearchAndProgramID(ctx context.Context, arg FindNot
 			&i.Title,
 			&i.ProgramID,
 			&i.Content,
+			&i.Favourite,
 			&i.Tag,
 			&i.CreatedAt,
 			&i.UpdatedAt,
@@ -379,7 +386,7 @@ func (q *Queries) FindNotesBySearchAndProgramID(ctx context.Context, arg FindNot
 }
 
 const findNotesBySearchAndProgramIDAndTag = `-- name: FindNotesBySearchAndProgramIDAndTag :many
-SELECT id, title, program_id, content, tag, created_at, updated_at FROM notes WHERE title LIKE $1 AND program_id = $2 AND string_to_array(tag, ',') && string_to_array($3, ',') LIMIT $4 OFFSET $5
+SELECT id, title, program_id, content, favourite, tag, created_at, updated_at FROM notes WHERE title LIKE $1 AND program_id = $2 AND string_to_array(tag, ',') && string_to_array($3, ',') LIMIT $4 OFFSET $5
 `
 
 type FindNotesBySearchAndProgramIDAndTagParams struct {
@@ -410,6 +417,7 @@ func (q *Queries) FindNotesBySearchAndProgramIDAndTag(ctx context.Context, arg F
 			&i.Title,
 			&i.ProgramID,
 			&i.Content,
+			&i.Favourite,
 			&i.Tag,
 			&i.CreatedAt,
 			&i.UpdatedAt,
@@ -425,7 +433,7 @@ func (q *Queries) FindNotesBySearchAndProgramIDAndTag(ctx context.Context, arg F
 }
 
 const findNotesBySearchAndTag = `-- name: FindNotesBySearchAndTag :many
-SELECT id, title, program_id, content, tag, created_at, updated_at FROM notes WHERE title LIKE $1 AND string_to_array(tag, ',') && string_to_array($2, ',') LIMIT $3 OFFSET $4
+SELECT id, title, program_id, content, favourite, tag, created_at, updated_at FROM notes WHERE title LIKE $1 AND string_to_array(tag, ',') && string_to_array($2, ',') LIMIT $3 OFFSET $4
 `
 
 type FindNotesBySearchAndTagParams struct {
@@ -454,6 +462,7 @@ func (q *Queries) FindNotesBySearchAndTag(ctx context.Context, arg FindNotesBySe
 			&i.Title,
 			&i.ProgramID,
 			&i.Content,
+			&i.Favourite,
 			&i.Tag,
 			&i.CreatedAt,
 			&i.UpdatedAt,
@@ -469,7 +478,7 @@ func (q *Queries) FindNotesBySearchAndTag(ctx context.Context, arg FindNotesBySe
 }
 
 const findNotesByTag = `-- name: FindNotesByTag :many
-SELECT id, title, program_id, content, tag, created_at, updated_at FROM notes WHERE string_to_array(tag, ',') && string_to_array($1, ',') LIMIT $2 OFFSET $3
+SELECT id, title, program_id, content, favourite, tag, created_at, updated_at FROM notes WHERE string_to_array(tag, ',') && string_to_array($1, ',') LIMIT $2 OFFSET $3
 `
 
 type FindNotesByTagParams struct {
@@ -492,6 +501,7 @@ func (q *Queries) FindNotesByTag(ctx context.Context, arg FindNotesByTagParams) 
 			&i.Title,
 			&i.ProgramID,
 			&i.Content,
+			&i.Favourite,
 			&i.Tag,
 			&i.CreatedAt,
 			&i.UpdatedAt,
@@ -510,7 +520,7 @@ const updateNote = `-- name: UpdateNote :one
 UPDATE notes
 SET program_id = $2, title = $3, content = $4, tag = $5, updated_at = now()
 WHERE id = $1
-RETURNING id, title, program_id, content, tag, created_at, updated_at
+RETURNING id, title, program_id, content, favourite, tag, created_at, updated_at
 `
 
 type UpdateNoteParams struct {
@@ -535,6 +545,7 @@ func (q *Queries) UpdateNote(ctx context.Context, arg UpdateNoteParams) (Note, e
 		&i.Title,
 		&i.ProgramID,
 		&i.Content,
+		&i.Favourite,
 		&i.Tag,
 		&i.CreatedAt,
 		&i.UpdatedAt,

@@ -119,7 +119,7 @@ func (q *Queries) CountSubdomainsWithTechnologies(ctx context.Context, stringToA
 }
 
 const createSubdomain = `-- name: CreateSubdomain :one
-INSERT INTO subdomain (program_id, url, title, body_hash, status_code, technologies, content_length, tag, ip, port, screenshot) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, created_at, updated_at
+INSERT INTO subdomain (program_id, url, title, body_hash, status_code, technologies, content_length, tag, ip, port, screenshot) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, favourite, created_at, updated_at
 `
 
 type CreateSubdomainParams struct {
@@ -164,6 +164,7 @@ func (q *Queries) CreateSubdomain(ctx context.Context, arg CreateSubdomainParams
 		&i.StatusCode,
 		&i.Technologies,
 		&i.ContentLength,
+		&i.Favourite,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -180,7 +181,7 @@ func (q *Queries) DeleteSubdomainByIDs(ctx context.Context, id int64) error {
 }
 
 const findSubdomainByIDs = `-- name: FindSubdomainByIDs :one
-SELECT id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, created_at, updated_at FROM subdomain WHERE id = $1 LIMIT 1
+SELECT id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, favourite, created_at, updated_at FROM subdomain WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) FindSubdomainByIDs(ctx context.Context, id int64) (Subdomain, error) {
@@ -199,6 +200,7 @@ func (q *Queries) FindSubdomainByIDs(ctx context.Context, id int64) (Subdomain, 
 		&i.StatusCode,
 		&i.Technologies,
 		&i.ContentLength,
+		&i.Favourite,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -206,7 +208,7 @@ func (q *Queries) FindSubdomainByIDs(ctx context.Context, id int64) (Subdomain, 
 }
 
 const findSubdomainByProgram = `-- name: FindSubdomainByProgram :many
-SELECT id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, created_at, updated_at FROM subdomain WHERE program_id = $1
+SELECT id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, favourite, created_at, updated_at FROM subdomain WHERE program_id = $1
 `
 
 func (q *Queries) FindSubdomainByProgram(ctx context.Context, programID int64) ([]Subdomain, error) {
@@ -231,6 +233,7 @@ func (q *Queries) FindSubdomainByProgram(ctx context.Context, programID int64) (
 			&i.StatusCode,
 			&i.Technologies,
 			&i.ContentLength,
+			&i.Favourite,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -245,7 +248,7 @@ func (q *Queries) FindSubdomainByProgram(ctx context.Context, programID int64) (
 }
 
 const findSubdomains = `-- name: FindSubdomains :many
-SELECT id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, created_at, updated_at FROM subdomain LIMIT $1 OFFSET $2
+SELECT id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, favourite, created_at, updated_at FROM subdomain LIMIT $1 OFFSET $2
 `
 
 type FindSubdomainsParams struct {
@@ -275,6 +278,7 @@ func (q *Queries) FindSubdomains(ctx context.Context, arg FindSubdomainsParams) 
 			&i.StatusCode,
 			&i.Technologies,
 			&i.ContentLength,
+			&i.Favourite,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -289,7 +293,7 @@ func (q *Queries) FindSubdomains(ctx context.Context, arg FindSubdomainsParams) 
 }
 
 const findSubdomainsWithProgramID = `-- name: FindSubdomainsWithProgramID :many
-SELECT id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, created_at, updated_at FROM subdomain WHERE program_id = $1 LIMIT $2 OFFSET $3
+SELECT id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, favourite, created_at, updated_at FROM subdomain WHERE program_id = $1 LIMIT $2 OFFSET $3
 `
 
 type FindSubdomainsWithProgramIDParams struct {
@@ -320,6 +324,7 @@ func (q *Queries) FindSubdomainsWithProgramID(ctx context.Context, arg FindSubdo
 			&i.StatusCode,
 			&i.Technologies,
 			&i.ContentLength,
+			&i.Favourite,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -334,7 +339,7 @@ func (q *Queries) FindSubdomainsWithProgramID(ctx context.Context, arg FindSubdo
 }
 
 const findSubdomainsWithProgramIDAndTechnologies = `-- name: FindSubdomainsWithProgramIDAndTechnologies :many
-SELECT id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, created_at, updated_at FROM subdomain WHERE program_id = $1 AND string_to_array(technologies, ',') && string_to_array($2, ',') LIMIT $3 OFFSET $4
+SELECT id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, favourite, created_at, updated_at FROM subdomain WHERE program_id = $1 AND string_to_array(technologies, ',') && string_to_array($2, ',') LIMIT $3 OFFSET $4
 `
 
 type FindSubdomainsWithProgramIDAndTechnologiesParams struct {
@@ -371,6 +376,7 @@ func (q *Queries) FindSubdomainsWithProgramIDAndTechnologies(ctx context.Context
 			&i.StatusCode,
 			&i.Technologies,
 			&i.ContentLength,
+			&i.Favourite,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -385,7 +391,7 @@ func (q *Queries) FindSubdomainsWithProgramIDAndTechnologies(ctx context.Context
 }
 
 const findSubdomainsWithSearch = `-- name: FindSubdomainsWithSearch :many
-SELECT id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, created_at, updated_at FROM subdomain WHERE url LIKE $1 LIMIT $2 OFFSET $3
+SELECT id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, favourite, created_at, updated_at FROM subdomain WHERE url LIKE $1 LIMIT $2 OFFSET $3
 `
 
 type FindSubdomainsWithSearchParams struct {
@@ -416,6 +422,7 @@ func (q *Queries) FindSubdomainsWithSearch(ctx context.Context, arg FindSubdomai
 			&i.StatusCode,
 			&i.Technologies,
 			&i.ContentLength,
+			&i.Favourite,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -430,7 +437,7 @@ func (q *Queries) FindSubdomainsWithSearch(ctx context.Context, arg FindSubdomai
 }
 
 const findSubdomainsWithSearchAndProgramID = `-- name: FindSubdomainsWithSearchAndProgramID :many
-SELECT id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, created_at, updated_at FROM subdomain WHERE url LIKE $1 AND program_id = $2 LIMIT $3 OFFSET $4
+SELECT id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, favourite, created_at, updated_at FROM subdomain WHERE url LIKE $1 AND program_id = $2 LIMIT $3 OFFSET $4
 `
 
 type FindSubdomainsWithSearchAndProgramIDParams struct {
@@ -467,6 +474,7 @@ func (q *Queries) FindSubdomainsWithSearchAndProgramID(ctx context.Context, arg 
 			&i.StatusCode,
 			&i.Technologies,
 			&i.ContentLength,
+			&i.Favourite,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -481,7 +489,7 @@ func (q *Queries) FindSubdomainsWithSearchAndProgramID(ctx context.Context, arg 
 }
 
 const findSubdomainsWithSearchAndProgramIDAndTechnologies = `-- name: FindSubdomainsWithSearchAndProgramIDAndTechnologies :many
-SELECT id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, created_at, updated_at FROM subdomain WHERE url LIKE $1 AND program_id = $2 AND string_to_array(technologies, ',') && string_to_array($3, ',') LIMIT $4 OFFSET $5
+SELECT id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, favourite, created_at, updated_at FROM subdomain WHERE url LIKE $1 AND program_id = $2 AND string_to_array(technologies, ',') && string_to_array($3, ',') LIMIT $4 OFFSET $5
 `
 
 type FindSubdomainsWithSearchAndProgramIDAndTechnologiesParams struct {
@@ -520,6 +528,7 @@ func (q *Queries) FindSubdomainsWithSearchAndProgramIDAndTechnologies(ctx contex
 			&i.StatusCode,
 			&i.Technologies,
 			&i.ContentLength,
+			&i.Favourite,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -534,7 +543,7 @@ func (q *Queries) FindSubdomainsWithSearchAndProgramIDAndTechnologies(ctx contex
 }
 
 const findSubdomainsWithSearchAndTechnologies = `-- name: FindSubdomainsWithSearchAndTechnologies :many
-SELECT id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, created_at, updated_at FROM subdomain WHERE url LIKE $1 AND string_to_array(technologies, ',') && string_to_array($2, ',') LIMIT $3 OFFSET $4
+SELECT id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, favourite, created_at, updated_at FROM subdomain WHERE url LIKE $1 AND string_to_array(technologies, ',') && string_to_array($2, ',') LIMIT $3 OFFSET $4
 `
 
 type FindSubdomainsWithSearchAndTechnologiesParams struct {
@@ -571,6 +580,7 @@ func (q *Queries) FindSubdomainsWithSearchAndTechnologies(ctx context.Context, a
 			&i.StatusCode,
 			&i.Technologies,
 			&i.ContentLength,
+			&i.Favourite,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -585,7 +595,7 @@ func (q *Queries) FindSubdomainsWithSearchAndTechnologies(ctx context.Context, a
 }
 
 const findSubdomainsWithTechnologies = `-- name: FindSubdomainsWithTechnologies :many
-SELECT id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, created_at, updated_at FROM subdomain WHERE string_to_array(technologies, ',') && string_to_array($1, ',') LIMIT $2 OFFSET $3
+SELECT id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, favourite, created_at, updated_at FROM subdomain WHERE string_to_array(technologies, ',') && string_to_array($1, ',') LIMIT $2 OFFSET $3
 `
 
 type FindSubdomainsWithTechnologiesParams struct {
@@ -616,6 +626,7 @@ func (q *Queries) FindSubdomainsWithTechnologies(ctx context.Context, arg FindSu
 			&i.StatusCode,
 			&i.Technologies,
 			&i.ContentLength,
+			&i.Favourite,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -654,7 +665,7 @@ func (q *Queries) GetTechnologiesForAllSubdomains(ctx context.Context) ([]string
 }
 
 const updateSubdomain = `-- name: UpdateSubdomain :one
-UPDATE subdomain SET program_id = $2, url = $3, title = $4, body_hash = $5, status_code = $6, technologies = $7, content_length = $8, tag = $9, updated_at = NOW() WHERE id = $1 RETURNING id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, created_at, updated_at
+UPDATE subdomain SET program_id = $2, url = $3, title = $4, body_hash = $5, status_code = $6, technologies = $7, content_length = $8, tag = $9, updated_at = NOW() WHERE id = $1 RETURNING id, program_id, url, title, body_hash, tag, ip, port, screenshot, status_code, technologies, content_length, favourite, created_at, updated_at
 `
 
 type UpdateSubdomainParams struct {
@@ -695,6 +706,7 @@ func (q *Queries) UpdateSubdomain(ctx context.Context, arg UpdateSubdomainParams
 		&i.StatusCode,
 		&i.Technologies,
 		&i.ContentLength,
+		&i.Favourite,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)

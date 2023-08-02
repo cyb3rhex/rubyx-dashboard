@@ -11,6 +11,7 @@ CREATE TABLE program (
   name varchar(200) NOT NULL,
   slug varchar(200) NOT NULL UNIQUE,
   vdp boolean NOT NULL,
+  favourite boolean NOT NULL DEFAULT false,
   tag text NOT NULL,
   url text NOT NULL,
   type program_type NOT NULL,

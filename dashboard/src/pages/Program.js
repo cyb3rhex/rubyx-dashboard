@@ -5,6 +5,7 @@ import {
   getPrograms,
   reloadPrograms,
   getScope,
+  favouriteProgram,
 } from "../actions/program";
 import PageTitle from "../components/Typography/PageTitle";
 import { TrashIcon, EditIcon } from "../icons";
@@ -22,7 +23,11 @@ import {
 } from "@windmill/react-ui";
 import Input from "../components/Input";
 import { getPlatforms } from "../actions/platform";
-import { AiFillSecurityScan } from "react-icons/ai";
+import {
+  AiFillSecurityScan,
+  AiOutlineHeart,
+  AiFillHeart,
+} from "react-icons/ai";
 import { TbReload, TbPlus } from "react-icons/tb";
 import ClipLoader from "react-spinners/ClipLoader";
 import { getPlatformName } from "../utils/misc";
@@ -205,6 +210,33 @@ function Program() {
                           </TableCell>
                           <TableCell>
                             <div className="flex items-center space-x-4">
+                              <Button
+                                layout="link"
+                                size="icon"
+                                aria-label="Favourite"
+                              >
+                                {key.favourite ? (
+                                  <AiFillHeart
+                                    onClick={() =>
+                                      dispatch(
+                                        favouriteProgram(key.id, resultsPerPage)
+                                      )
+                                    }
+                                    className="w-5 h-5"
+                                    aria-hidden="true"
+                                  />
+                                ) : (
+                                  <AiOutlineHeart
+                                    onClick={() =>
+                                      dispatch(
+                                        favouriteProgram(key.id, resultsPerPage)
+                                      )
+                                    }
+                                    className="w-5 h-5"
+                                    aria-hidden="true"
+                                  />
+                                )}
+                              </Button>
                               <Button
                                 layout="link"
                                 size="icon"

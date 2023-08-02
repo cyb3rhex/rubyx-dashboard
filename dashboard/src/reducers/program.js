@@ -16,7 +16,10 @@ import {
   RELOAD_PROGRAM_ERROR,
   GET_SCOPE,
   GET_SCOPE_ERROR,
-  GET_SCOPE_SUCCESS
+  GET_SCOPE_SUCCESS,
+  FAVOURITE_PROGRAM,
+  FAVOURITE_PROGRAM_ERROR,
+  FAVOURITE_PROGRAM_SUCCESS,
 } from "../constants/program";
 
 const initialState = {
@@ -25,10 +28,10 @@ const initialState = {
   error: "",
   programs: null,
   total: 0,
-  scope: null
+  scope: null,
 };
 
-export default function reducer (state = initialState, action) {
+export default function reducer(state = initialState, action) {
   switch (action.type) {
     case GET_SCOPE:
       return {
@@ -153,6 +156,28 @@ export default function reducer (state = initialState, action) {
         error: "",
       };
     case DELETE_PROGRAM_ERROR:
+      return {
+        ...state,
+        loading: false,
+        programs: null,
+        total: 0,
+        error: action.payload,
+      };
+    case FAVOURITE_PROGRAM:
+      return {
+        ...state,
+        loading: false,
+        error: "",
+      };
+    case FAVOURITE_PROGRAM_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        programs: action.payload.programs,
+        total: action.payload.total,
+        error: "",
+      };
+    case FAVOURITE_PROGRAM_ERROR:
       return {
         ...state,
         loading: false,

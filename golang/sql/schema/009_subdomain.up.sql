@@ -13,6 +13,7 @@ CREATE TABLE subdomain (
   status_code int NOT NULL,
   technologies text NOT NULL,
   content_length int NOT NULL,
+  favourite boolean NOT NULL DEFAULT false,
   created_at timestamp NOT NULL DEFAULT now(),
   updated_at timestamp NOT NULL DEFAULT now()
 );

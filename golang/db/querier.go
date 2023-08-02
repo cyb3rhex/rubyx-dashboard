@@ -59,6 +59,7 @@ type Querier interface {
 	DeleteSubdomainByIDs(ctx context.Context, id int64) error
 	DeleteUrlByIDs(ctx context.Context, id int64) error
 	DeleteVulnerabilityByIDs(ctx context.Context, id int64) error
+	FavouriteProgram(ctx context.Context, arg FavouriteProgramParams) (Program, error)
 	FindApiByIDs(ctx context.Context, id int64) (Api, error)
 	FindApis(ctx context.Context) ([]Api, error)
 	FindNoteByID(ctx context.Context, id int64) (Note, error)

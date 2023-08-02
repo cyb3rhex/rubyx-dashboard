@@ -92,6 +92,30 @@ func GetProgram(env env.Env, user *db.User, w http.ResponseWriter, r *http.Reque
 	return write.JSON(program)
 }
 
+func FavouriteProgram(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
+	if user == nil {
+		return write.Error(errors.RouteUnauthorized)
+	}
+
+	id, err := getID(r)
+	if err != nil {
+		return write.Error(errors.RouteNotFound)
+	}
+
+	program, err := env.DB().FindProgramByIDs(r.Context(), id)
+	if err != nil {
+		if isNotFound(err) {
+			return write.Error(errors.ItemNotFound)
+		}
+		return write.Error(err)
+	}
+
+	return write.JSONorErr(env.DB().FavouriteProgram(r.Context(), db.FavouriteProgramParams{
+		ID:        id,
+		Favourite: !program.Favourite,
+	}))
+}
+
 func GetScopeByProgramID(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
 	if user == nil {
 		return write.Error(errors.RouteUnauthorized)

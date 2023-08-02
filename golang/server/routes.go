@@ -50,6 +50,7 @@ func (srv *server) ConfigureRouter() {
 	srv.GET("/program", handlers.GetPrograms)
 	srv.GET("/program/scope/:id", handlers.GetScopeByProgramID)
 	srv.GET("/program/id/:id", handlers.GetProgram)
+	srv.GET("/program/favourite/:id", handlers.FavouriteProgram)
 	srv.POST("/program", handlers.CreateProgram)
 	srv.PUT("/program", handlers.UpdateProgram)
 	srv.DELETE("/program/id/:id", handlers.DeleteProgram)
