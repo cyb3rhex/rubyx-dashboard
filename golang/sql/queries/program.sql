@@ -13,6 +13,9 @@ SELECT * FROM program WHERE id = $1 LIMIT 1;
 -- name: FindProgramBySlug :one
 SELECT * FROM program WHERE slug = $1 LIMIT 1;
 
+-- name: FindAllPrograms :many
+SELECT * FROM program;
+
 -- name: FindPrograms :many
 SELECT * FROM program LIMIT $1 OFFSET $2;
 

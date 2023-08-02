@@ -9,8 +9,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/aituglo/rubyx/golang/db"
-	"github.com/aituglo/rubyx/golang/env"
+	"github.com/aituglo/rubyx-dashboard/golang/db"
+	"github.com/aituglo/rubyx-dashboard/golang/env"
 )
 
 type ProgramsInfosH1 struct {

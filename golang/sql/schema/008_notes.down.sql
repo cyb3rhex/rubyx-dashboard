@@ -1,2 +1,0 @@
-DROP SCHEMA notes;
-DROP TABLE notes;

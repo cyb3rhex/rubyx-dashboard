@@ -6,9 +6,9 @@ import (
 
 	"github.com/julienschmidt/httprouter"
 
-	"github.com/aituglo/rubyx/golang/env"
-	"github.com/aituglo/rubyx/golang/errors"
-	"github.com/aituglo/rubyx/golang/server/write"
+	"github.com/aituglo/rubyx-dashboard/golang/env"
+	"github.com/aituglo/rubyx-dashboard/golang/errors"
+	"github.com/aituglo/rubyx-dashboard/golang/server/write"
 )
 
 // isDev is used in the lag middleware... we don't want to read from env on every request

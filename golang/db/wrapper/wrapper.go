@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 
-	"github.com/aituglo/rubyx/golang/db"
+	"github.com/aituglo/rubyx-dashboard/golang/db"
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 

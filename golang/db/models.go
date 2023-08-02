@@ -102,17 +102,6 @@ type Api struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-type Note struct {
-	ID        int64     `json:"id"`
-	Title     string    `json:"title"`
-	ProgramID int64     `json:"program_id"`
-	Content   string    `json:"content"`
-	Favourite bool      `json:"favourite"`
-	Tag       string    `json:"tag"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-}
-
 type Platform struct {
 	ID             int64        `json:"id"`
 	Name           string       `json:"name"`
@@ -145,19 +134,6 @@ type Reset struct {
 	UserID    int64     `json:"user_id"`
 	Code      string    `json:"code"`
 	CreatedAt time.Time `json:"created_at"`
-}
-
-type Scan struct {
-	ID        string    `json:"id"`
-	Domain    string    `json:"domain"`
-	Params    string    `json:"params"`
-	Type      string    `json:"type"`
-	Status    string    `json:"status"`
-	StartTime time.Time `json:"start_time"`
-	EndTime   time.Time `json:"end_time"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-	Output    string    `json:"output"`
 }
 
 type Scope struct {

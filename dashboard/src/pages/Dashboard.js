@@ -11,7 +11,6 @@ import { getStats } from "../actions/stat";
 
 function Dashboard() {
   const statState = useSelector((state) => state.stat);
-  const noteState = useSelector((state) => state.notes);
   const programState = useSelector((state) => state.program);
   const dispatch = useDispatch();
 
@@ -78,18 +77,6 @@ function Dashboard() {
             icon={PeopleIcon}
             iconColorClass="text-orange-500 dark:text-orange-100"
             bgColorClass="bg-orange-100 dark:bg-orange-500"
-            className="mr-4"
-          />
-        </InfoCard>
-
-        <InfoCard
-          title="Notes"
-          value={noteState.notes && noteState.notes.length}
-        >
-          <RoundIcon
-            icon={ChatIcon}
-            iconColorClass="text-teal-500 dark:text-teal-100"
-            bgColorClass="bg-teal-100 dark:bg-teal-500"
             className="mr-4"
           />
         </InfoCard>

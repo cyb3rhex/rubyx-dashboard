@@ -5,11 +5,11 @@ import (
 	"net/http"
 	"runtime/debug"
 
-	"github.com/aituglo/rubyx/golang/db"
-	"github.com/aituglo/rubyx/golang/env"
-	"github.com/aituglo/rubyx/golang/errors"
-	"github.com/aituglo/rubyx/golang/server/handlers"
-	"github.com/aituglo/rubyx/golang/server/write"
+	"github.com/aituglo/rubyx-dashboard/golang/db"
+	"github.com/aituglo/rubyx-dashboard/golang/env"
+	"github.com/aituglo/rubyx-dashboard/golang/errors"
+	"github.com/aituglo/rubyx-dashboard/golang/server/handlers"
+	"github.com/aituglo/rubyx-dashboard/golang/server/write"
 	"github.com/julienschmidt/httprouter"
 )
 
@@ -48,28 +48,22 @@ func (srv *server) ConfigureRouter() {
 	// PROGRAMS
 	srv.GET("/program/reload", handlers.ReloadPrograms)
 	srv.GET("/program", handlers.GetPrograms)
+	srv.GET("/scope", handlers.GetProgramByScope)
 	srv.GET("/program/scope/:id", handlers.GetScopeByProgramID)
 	srv.GET("/program/id/:id", handlers.GetProgram)
+	srv.GET("/program/slug/:name", handlers.GetProgramBySlug)
 	srv.GET("/program/favourite/:id", handlers.FavouriteProgram)
 	srv.POST("/program", handlers.CreateProgram)
 	srv.PUT("/program", handlers.UpdateProgram)
 	srv.DELETE("/program/id/:id", handlers.DeleteProgram)
 
-	// SETTINGS
-	srv.GET("/settings/data_repo_url", handlers.GetRepoDataUrl)
-	srv.POST("/settings/data_repo_url", handlers.SetRepoDataUrl)
-	srv.GET("/settings/pull_rubyx_data", handlers.PullRubyxData)
-
-	// NOTES
-	srv.GET("/notes", handlers.GetNotes)
-	srv.GET("/notes/id/:id", handlers.GetNote)
-	srv.POST("/notes", handlers.CreateNote)
-	srv.PUT("/notes", handlers.UpdateNote)
-	srv.DELETE("/notes/:id", handlers.DeleteNote)
-
 	// SUBDOMAIN
 	srv.GET("/subdomain", handlers.GetSubdomains)
 	srv.GET("/subdomain/technologies", handlers.GetTechnologies)
+	srv.GET("/subdomain/program/:id", handlers.GetSubdomainByProgram)
+	srv.POST("/subdomain", handlers.CreateSubdomain)
+	srv.PUT("/subdomain", handlers.UpdateSubdomain)
+	srv.DELETE("/subdomain/:id", handlers.DeleteSubdomain)
 
 	// URL
 	srv.GET("/url", handlers.GetUrls)
@@ -85,11 +79,6 @@ func (srv *server) ConfigureRouter() {
 	srv.GET("/stats", handlers.GetStats)
 	srv.GET("/stat/one/:id", handlers.GetStat)
 	srv.GET("/stats/reload", handlers.ReloadStats)
-
-	// SCAN
-	srv.POST("/scans", handlers.LaunchScan)
-	srv.GET("/scans", handlers.GetScans)
-	srv.DELETE("/scan/:id", handlers.DeleteScan)
 
 	// API
 	srv.GET("/api", handlers.GetApis)

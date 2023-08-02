@@ -6,8 +6,6 @@ import platform from "./platform";
 import stat from "./stat";
 import vulnerability from "./vulnerability";
 import subdomain from "./subdomain";
-import notes from "./notes";
-import scan from "./scan";
 import url from "./url";
 
 export default combineReducers({
@@ -18,7 +16,5 @@ export default combineReducers({
   stat,
   vulnerability,
   subdomain,
-  notes,
-  scan,
   url,
 });

@@ -10,7 +10,7 @@ COPY . .
 RUN apt update
 RUN apt install chromium -y
 
-RUN git clone https://github.com/Aituglo/rubyx-data /rubyx-data
+RUN git clone https://github.com/aituglo/rubyx-dashboard-data /rubyx-data
 RUN go install github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest
 RUN go install github.com/ffuf/ffuf/v2@latest
 RUN go install github.com/projectdiscovery/katana/cmd/katana@latest
@@ -23,7 +23,7 @@ COPY . .
 RUN apt update
 RUN apt install chromium -y
 
-RUN git clone https://github.com/Aituglo/rubyx-data /rubyx-data
+RUN git clone https://github.com/aituglo/rubyx-dashboard-data /rubyx-data
 RUN go install github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest
 RUN go install github.com/ffuf/ffuf/v2@latest
 RUN go install github.com/projectdiscovery/katana/cmd/katana@latest

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import PageTitle from "../Typography/PageTitle";
 import {
   Table,
@@ -10,18 +10,9 @@ import {
   Button,
 } from "@windmill/react-ui";
 import ClipLoader from "react-spinners/ClipLoader";
-import Scan from "../ScanModal";
-import { AiFillSecurityScan } from "react-icons/ai";
 import { TbArrowBack } from "react-icons/tb";
 
 function Scope({ setSeeScope, programState }) {
-  const [isScanModalOpen, setIsScanModalOpen] = useState(false);
-  const [scanUrl, setScanUrl] = useState("");
-
-  const handleSetScan = (url) => {
-    setScanUrl(url);
-    setIsScanModalOpen(true);
-  };
 
   return (
     <>
@@ -51,7 +42,6 @@ function Scope({ setSeeScope, programState }) {
                 <tr>
                   <TableCell>Scope</TableCell>
                   <TableCell>Type</TableCell>
-                  <TableCell>Actions</TableCell>
                 </tr>
               </TableHeader>
               <TableBody>
@@ -64,18 +54,6 @@ function Scope({ setSeeScope, programState }) {
                       <TableCell>
                         <span className="text-sm">{key.scope_type}</span>
                       </TableCell>
-                      <TableCell>
-                        <div className="flex items-center justify-center space-x-4">
-                          <Button
-                            layout="link"
-                            size="icon"
-                            onClick={() => handleSetScan(key.scope)}
-                            aria-label="Scan"
-                          >
-                            <AiFillSecurityScan className="w-5 h-5" />
-                          </Button>
-                        </div>
-                      </TableCell>
                     </TableRow>
                   ))}
               </TableBody>
@@ -83,12 +61,6 @@ function Scope({ setSeeScope, programState }) {
           </TableContainer>
         )}
       </div>
-
-      <Scan
-        isOpen={isScanModalOpen}
-        setOpen={setIsScanModalOpen}
-        defaultDomain={scanUrl}
-      />
     </>
   );
 }

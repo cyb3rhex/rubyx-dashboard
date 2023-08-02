@@ -7,7 +7,7 @@ import (
 	"math/rand"
 	"time"
 
-	env "github.com/aituglo/rubyx/golang/env"
+	env "github.com/aituglo/rubyx-dashboard/golang/env"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -40,7 +40,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	_, err = dbpool.Exec(context.Background(), "INSERT INTO settings (key, value) VALUES ($1, $2)", "repo_data_url", "https://github.com/Aituglo/rubyx-data")
+	_, err = dbpool.Exec(context.Background(), "INSERT INTO settings (key, value) VALUES ($1, $2)", "repo_data_url", "https://github.com/aituglo/rubyx-dashboard-data")
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -4,14 +4,14 @@ Rubyx is an easy to use dashboard for Bug Hunter to manage your data, your recon
 
 <p align="center">  
     <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-_red.svg"></a>  
-    <a href="https://github.com/Aituglo/rubyx/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"></a>
+    <a href="https://github.com/aituglo/rubyx-dashboard/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"></a>
 </p>
 
 ## Quick Start
 
 ```bash
 # clone the repo
-git clone https://github.com/aituglo/rubyx.git
+git clone https://github.com/aituglo/rubyx-dashboard.git && cd rubyx-dashboard
 
 # copy the .env template for your local version
 cp .env.example .env

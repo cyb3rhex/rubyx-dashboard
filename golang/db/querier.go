@@ -10,14 +10,6 @@ import (
 
 type Querier interface {
 	AddSetting(ctx context.Context, arg AddSettingParams) (Setting, error)
-	CountNotes(ctx context.Context) (int64, error)
-	CountNotesByProgramID(ctx context.Context, programID int64) (int64, error)
-	CountNotesByProgramIDAndTag(ctx context.Context, arg CountNotesByProgramIDAndTagParams) (int64, error)
-	CountNotesBySearch(ctx context.Context, title string) (int64, error)
-	CountNotesBySearchAndProgramID(ctx context.Context, arg CountNotesBySearchAndProgramIDParams) (int64, error)
-	CountNotesBySearchAndProgramIDAndTag(ctx context.Context, arg CountNotesBySearchAndProgramIDAndTagParams) (int64, error)
-	CountNotesBySearchAndTag(ctx context.Context, arg CountNotesBySearchAndTagParams) (int64, error)
-	CountNotesByTag(ctx context.Context, stringToArray string) (int64, error)
 	CountPrograms(ctx context.Context) (int64, error)
 	CountProgramsWithPlatform(ctx context.Context, platformID int64) (int64, error)
 	CountProgramsWithSearch(ctx context.Context, name string) (int64, error)
@@ -37,11 +29,9 @@ type Querier interface {
 	CountUrlsBySubdomain(ctx context.Context, subdomain string) (int64, error)
 	CountVulnerabilities(ctx context.Context) (int64, error)
 	CreateApi(ctx context.Context, arg CreateApiParams) (Api, error)
-	CreateNote(ctx context.Context, arg CreateNoteParams) (Note, error)
 	CreatePlatform(ctx context.Context, arg CreatePlatformParams) (Platform, error)
 	CreateProgram(ctx context.Context, arg CreateProgramParams) (Program, error)
 	CreateReset(ctx context.Context, arg CreateResetParams) (Reset, error)
-	CreateScan(ctx context.Context, arg CreateScanParams) (Scan, error)
 	CreateScope(ctx context.Context, arg CreateScopeParams) (Scope, error)
 	CreateStat(ctx context.Context, arg CreateStatParams) (Stat, error)
 	CreateSubdomain(ctx context.Context, arg CreateSubdomainParams) (Subdomain, error)
@@ -49,28 +39,18 @@ type Querier interface {
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	CreateVulnerability(ctx context.Context, arg CreateVulnerabilityParams) (Vulnerability, error)
 	DeleteApiByIDs(ctx context.Context, id int64) error
-	DeleteNote(ctx context.Context, id int64) error
 	DeletePlatformByIDs(ctx context.Context, id int64) error
 	DeleteProgramByIDs(ctx context.Context, id int64) error
 	DeleteResetsForUser(ctx context.Context, userID int64) error
-	DeleteScanByIDs(ctx context.Context, id string) error
 	DeleteScopeByID(ctx context.Context, id int64) error
 	DeleteStatByID(ctx context.Context, id int64) error
 	DeleteSubdomainByIDs(ctx context.Context, id int64) error
 	DeleteUrlByIDs(ctx context.Context, id int64) error
 	DeleteVulnerabilityByIDs(ctx context.Context, id int64) error
 	FavouriteProgram(ctx context.Context, arg FavouriteProgramParams) (Program, error)
+	FindAllPrograms(ctx context.Context) ([]Program, error)
 	FindApiByIDs(ctx context.Context, id int64) (Api, error)
 	FindApis(ctx context.Context) ([]Api, error)
-	FindNoteByID(ctx context.Context, id int64) (Note, error)
-	FindNotes(ctx context.Context, arg FindNotesParams) ([]Note, error)
-	FindNotesByProgramID(ctx context.Context, arg FindNotesByProgramIDParams) ([]Note, error)
-	FindNotesByProgramIDAndTag(ctx context.Context, arg FindNotesByProgramIDAndTagParams) ([]Note, error)
-	FindNotesBySearch(ctx context.Context, arg FindNotesBySearchParams) ([]Note, error)
-	FindNotesBySearchAndProgramID(ctx context.Context, arg FindNotesBySearchAndProgramIDParams) ([]Note, error)
-	FindNotesBySearchAndProgramIDAndTag(ctx context.Context, arg FindNotesBySearchAndProgramIDAndTagParams) ([]Note, error)
-	FindNotesBySearchAndTag(ctx context.Context, arg FindNotesBySearchAndTagParams) ([]Note, error)
-	FindNotesByTag(ctx context.Context, arg FindNotesByTagParams) ([]Note, error)
 	FindPlatformByIDs(ctx context.Context, id int64) (FindPlatformByIDsRow, error)
 	FindPlatforms(ctx context.Context) ([]FindPlatformsRow, error)
 	FindProgramByIDs(ctx context.Context, id int64) (Program, error)
@@ -85,8 +65,6 @@ type Querier interface {
 	FindProgramsWithType(ctx context.Context, arg FindProgramsWithTypeParams) ([]Program, error)
 	FindProgramsWithTypeAndPlatform(ctx context.Context, arg FindProgramsWithTypeAndPlatformParams) ([]Program, error)
 	FindResetByCode(ctx context.Context, code string) (Reset, error)
-	FindScanByID(ctx context.Context, id string) (Scan, error)
-	FindScans(ctx context.Context) ([]Scan, error)
 	FindScopeByID(ctx context.Context, id int64) (Scope, error)
 	FindScopes(ctx context.Context) ([]Scope, error)
 	FindScopesByProgramID(ctx context.Context, programID int64) ([]Scope, error)
@@ -124,10 +102,8 @@ type Querier interface {
 	GetSettingByKey(ctx context.Context, key string) (Setting, error)
 	GetSettings(ctx context.Context) ([]Setting, error)
 	GetTechnologiesForAllSubdomains(ctx context.Context) ([]string, error)
-	UpdateNote(ctx context.Context, arg UpdateNoteParams) (Note, error)
 	UpdatePlatform(ctx context.Context, arg UpdatePlatformParams) (Platform, error)
 	UpdateProgram(ctx context.Context, arg UpdateProgramParams) (Program, error)
-	UpdateScan(ctx context.Context, arg UpdateScanParams) (Scan, error)
 	UpdateSetting(ctx context.Context, arg UpdateSettingParams) (Setting, error)
 	UpdateStat(ctx context.Context, arg UpdateStatParams) (Stat, error)
 	UpdateSubdomain(ctx context.Context, arg UpdateSubdomainParams) (Subdomain, error)

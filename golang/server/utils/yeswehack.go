@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/aituglo/rubyx/golang/db"
-	"github.com/aituglo/rubyx/golang/env"
+	"github.com/aituglo/rubyx-dashboard/golang/db"
+	"github.com/aituglo/rubyx-dashboard/golang/env"
 	"github.com/pquerna/otp/totp"
 )
 

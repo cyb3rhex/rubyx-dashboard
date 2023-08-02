@@ -8,10 +8,8 @@ const Platform = lazy(() => import('../pages/Platform'))
 const Program = lazy(() => import('../pages/Program'))
 const Vulnerability = lazy(() => import('../pages/Vulnerability'))
 const Subdomain = lazy(() => import('../pages/Subdomain'))
-const Notes = lazy(() => import('../pages/Notes'))
 const Stat = lazy(() => import('../pages/Stat'))
 const Page404 = lazy(() => import('../pages/404'))
-const Scan = lazy(() => import('../pages/Scan'))
 
 /**
  * ⚠ These are internal routes!
@@ -27,10 +25,6 @@ const routes = [
   {
     path: '/dashboard', // the url
     component: Dashboard, // view rendered
-  },
-  {
-    path: '/notes',
-    component: Notes,
   },
   {
     path: '/account',
@@ -59,10 +53,6 @@ const routes = [
   {
     path: '/subdomains',
     component: Subdomain,
-  },
-  {
-    path: '/scan',
-    component: Scan,
   },
   {
     path: '/404',

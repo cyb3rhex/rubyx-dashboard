@@ -6,9 +6,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/aituglo/rubyx/golang/db"
-	"github.com/aituglo/rubyx/golang/env"
-	"github.com/aituglo/rubyx/golang/errors"
+	"github.com/aituglo/rubyx-dashboard/golang/db"
+	"github.com/aituglo/rubyx-dashboard/golang/env"
+	"github.com/aituglo/rubyx-dashboard/golang/errors"
 	jwt "github.com/golang-jwt/jwt/v4"
 )
 

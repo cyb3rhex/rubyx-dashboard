@@ -11,17 +11,14 @@ import {
   Button,
   Pagination,
 } from "@windmill/react-ui";
-import { useHistory } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 import Input from "../Input";
-import { createScan } from "../../actions/scan";
 import { getUrls } from "../../actions/url";
 import { useSelector, useDispatch } from "react-redux";
 import { TbArrowBack } from "react-icons/tb";
 
 function Url({ setSeeUrls, url }) {
   const dispatch = useDispatch();
-  const history = useHistory();
   const urlState = useSelector((state) => state.url);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -35,21 +32,6 @@ function Url({ setSeeUrls, url }) {
     dispatch(getUrls(url, p, resultsPerPage, searchTerm));
   };
 
-  const handleScanUrls = () => {
-    let scan = {
-      domain: url,
-      subdomain: false,
-      screenshot: false,
-      portScan: false,
-      directoryScan: true,
-      vulnerabilityScan: false,
-      nucleiSeverity: "",
-    };
-
-    dispatch(createScan(scan));
-
-    history.push("/app/scan");
-  };
 
   return (
     <>
@@ -59,10 +41,6 @@ function Url({ setSeeUrls, url }) {
         <div className="flex items-center mb-4 space-x-4">
           <Button className="bg-blue-900" onClick={() => setSeeUrls(false)}>
             <TbArrowBack className="w-5 h-5" />
-          </Button>
-
-          <Button className="bg-blue-900" onClick={() => handleScanUrls()}>
-            Scan
           </Button>
 
           <Input

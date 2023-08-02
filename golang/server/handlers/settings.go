@@ -9,10 +9,10 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/aituglo/rubyx/golang/db"
-	"github.com/aituglo/rubyx/golang/env"
-	"github.com/aituglo/rubyx/golang/errors"
-	"github.com/aituglo/rubyx/golang/server/write"
+	"github.com/aituglo/rubyx-dashboard/golang/db"
+	"github.com/aituglo/rubyx-dashboard/golang/env"
+	"github.com/aituglo/rubyx-dashboard/golang/errors"
+	"github.com/aituglo/rubyx-dashboard/golang/server/write"
 )
 
 type SetRepoParams struct {
@@ -86,7 +86,7 @@ func PullRubyxData(env env.Env, user *db.User, w http.ResponseWriter, r *http.Re
 	var url string
 	query, err := env.DB().GetSettingByKey(r.Context(), "repo_data_url")
 	if err != nil {
-		url = "https://github.com/aituglo/rubyx-data"
+		url = "https://github.com/aituglo/rubyx-dashboard-data"
 	} else {
 		url = query.Value
 	}

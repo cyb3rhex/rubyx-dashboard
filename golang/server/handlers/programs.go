@@ -2,19 +2,45 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
-	"github.com/aituglo/rubyx/golang/db"
-	"github.com/aituglo/rubyx/golang/env"
-	"github.com/aituglo/rubyx/golang/errors"
-	"github.com/aituglo/rubyx/golang/server/utils"
-	"github.com/aituglo/rubyx/golang/server/write"
+	"github.com/aituglo/rubyx-dashboard/golang/db"
+	"github.com/aituglo/rubyx-dashboard/golang/env"
+	"github.com/aituglo/rubyx-dashboard/golang/errors"
+	"github.com/aituglo/rubyx-dashboard/golang/server/utils"
+	"github.com/aituglo/rubyx-dashboard/golang/server/write"
 )
 
 type ProgramPagination struct {
 	Programs []db.Program `json:"programs"`
 	Total    int          `json:"total"`
+}
+
+// Special cases for TLDs like .co.uk
+var specialCases = map[string]struct{}{
+	"co.uk":  {},
+	"com.au": {},
+	"com.br": {},
+	"com.sg": {},
+}
+
+func getRootDomain(domain string) (string, error) {
+	labels := strings.Split(domain, ".")
+	if len(labels) < 2 {
+		return "", fmt.Errorf("invalid domain")
+	}
+
+	// Check if it's a special case TLD
+	lastTwoLabels := strings.Join(labels[len(labels)-2:], ".")
+	if _, ok := specialCases[lastTwoLabels]; ok && len(labels) >= 3 {
+		return strings.Join(labels[len(labels)-3:], "."), nil
+	}
+
+	// Regular case
+	return strings.Join(labels[len(labels)-2:], "."), nil
 }
 
 func toProgramType(s string) db.ProgramType {
@@ -92,6 +118,24 @@ func GetProgram(env env.Env, user *db.User, w http.ResponseWriter, r *http.Reque
 	return write.JSON(program)
 }
 
+func GetProgramBySlug(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
+	if user == nil {
+		return write.Error(errors.RouteUnauthorized)
+	}
+
+	slug := getString("name", r)
+
+	program, err := env.DB().FindProgramBySlug(r.Context(), slug)
+	if err != nil {
+		if isNotFound(err) {
+			return write.Error(errors.ItemNotFound)
+		}
+		return write.Error(err)
+	}
+
+	return write.JSON(program)
+}
+
 func FavouriteProgram(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
 	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
@@ -134,6 +178,29 @@ func GetScopeByProgramID(env env.Env, user *db.User, w http.ResponseWriter, r *h
 	return write.JSON(scope)
 }
 
+func GetProgramByScope(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
+	if user == nil {
+		return write.Error(errors.RouteUnauthorized)
+	}
+
+	scope := r.URL.Query().Get("subdomain")
+
+	domain, err := getRootDomain(scope)
+	if err != nil {
+		fmt.Printf("Error extracting root domain: %v\n", err)
+	}
+
+	program_id, err := env.DB().FindProgramByScope(r.Context(), "%"+domain+"%")
+	if err != nil {
+		if isNotFound(err) {
+			return write.JSON(-1)
+		}
+		return write.JSON(-1)
+	}
+
+	return write.JSON(program_id)
+}
+
 func GetPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
 	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
@@ -149,6 +216,7 @@ func GetPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 		resultsPerPage = 30
 	}
 
+	all := r.URL.Query().Get("all")
 	search := r.URL.Query().Get("search")
 	platformType := r.URL.Query().Get("type")
 	platformIDStr := r.URL.Query().Get("platform_id")
@@ -169,7 +237,10 @@ func GetPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 
 	var programs []db.Program
 	var total int64
-	if search != "" && platformType != "" && platformIDProvided {
+
+	if all == "true" {
+		return write.JSONorErr(env.DB().FindAllPrograms(r.Context()))
+	} else if search != "" && platformType != "" && platformIDProvided {
 		programs, err = env.DB().FindProgramsWithSearchAndTypeAndPlatform(r.Context(), db.FindProgramsWithSearchAndTypeAndPlatformParams{
 			Name:       "%" + search + "%",
 			Column2:    toProgramType(platformType),
@@ -177,6 +248,9 @@ func GetPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 			Offset:     int32((page - 1) * resultsPerPage),
 			Limit:      int32(resultsPerPage),
 		})
+		if err != nil {
+			return write.Error(err)
+		}
 		total, err = env.DB().CountProgramsWithSearchAndTypeAndPlatform(r.Context(), db.CountProgramsWithSearchAndTypeAndPlatformParams{
 			Name:       "%" + search + "%",
 			Column2:    toProgramType(platformType),
@@ -189,6 +263,9 @@ func GetPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 			Offset:  int32((page - 1) * resultsPerPage),
 			Limit:   int32(resultsPerPage),
 		})
+		if err != nil {
+			return write.Error(err)
+		}
 		total, err = env.DB().CountProgramsWithSearchAndType(r.Context(), db.CountProgramsWithSearchAndTypeParams{
 			Name:    "%" + search + "%",
 			Column2: toProgramType(platformType),
@@ -200,6 +277,9 @@ func GetPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 			Offset:     int32((page - 1) * resultsPerPage),
 			Limit:      int32(resultsPerPage),
 		})
+		if err != nil {
+			return write.Error(err)
+		}
 		total, err = env.DB().CountProgramsWithSearchAndPlatform(r.Context(), db.CountProgramsWithSearchAndPlatformParams{
 			Name:       "%" + search + "%",
 			PlatformID: platformID,
@@ -211,7 +291,9 @@ func GetPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 			Offset:     int32((page - 1) * resultsPerPage),
 			Limit:      int32(resultsPerPage),
 		})
-
+		if err != nil {
+			return write.Error(err)
+		}
 		total, err = env.DB().CountProgramsWithTypeAndPlatform(r.Context(), db.CountProgramsWithTypeAndPlatformParams{
 			Column1:    toProgramType(platformType),
 			PlatformID: platformID,
@@ -222,6 +304,9 @@ func GetPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 			Offset: int32((page - 1) * resultsPerPage),
 			Limit:  int32(resultsPerPage),
 		})
+		if err != nil {
+			return write.Error(err)
+		}
 		total, err = env.DB().CountProgramsWithSearch(r.Context(), "%"+search+"%")
 	} else if search == "" && platformType != "" && !platformIDProvided {
 		programs, err = env.DB().FindProgramsWithType(r.Context(), db.FindProgramsWithTypeParams{
@@ -229,6 +314,9 @@ func GetPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 			Offset:  int32((page - 1) * resultsPerPage),
 			Limit:   int32(resultsPerPage),
 		})
+		if err != nil {
+			return write.Error(err)
+		}
 		total, err = env.DB().CountProgramsWithType(r.Context(), toProgramType(platformType))
 	} else if search == "" && platformType == "" && platformIDProvided {
 		programs, err = env.DB().FindProgramsWithPlatform(r.Context(), db.FindProgramsWithPlatformParams{
@@ -236,12 +324,18 @@ func GetPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 			Offset:     int32((page - 1) * resultsPerPage),
 			Limit:      int32(resultsPerPage),
 		})
+		if err != nil {
+			return write.Error(err)
+		}
 		total, err = env.DB().CountProgramsWithPlatform(r.Context(), platformID)
 	} else {
 		programs, err = env.DB().FindPrograms(r.Context(), db.FindProgramsParams{
 			Offset: int32((page - 1) * resultsPerPage),
 			Limit:  int32(resultsPerPage),
 		})
+		if err != nil {
+			return write.Error(err)
+		}
 		total, err = env.DB().CountPrograms(r.Context())
 	}
 

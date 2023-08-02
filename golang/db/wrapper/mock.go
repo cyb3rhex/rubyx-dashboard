@@ -8,7 +8,7 @@ import (
 	context "context"
 	reflect "reflect"
 
-	db "github.com/aituglo/rubyx/golang/db"
+	db "github.com/aituglo/rubyx-dashboard/golang/db"
 	gomock "github.com/golang/mock/gomock"
 )
 
@@ -48,126 +48,6 @@ func (m *MockQuerier) AddSetting(ctx context.Context, arg db.AddSettingParams) (
 func (mr *MockQuerierMockRecorder) AddSetting(ctx, arg interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddSetting", reflect.TypeOf((*MockQuerier)(nil).AddSetting), ctx, arg)
-}
-
-// CountNotes mocks base method.
-func (m *MockQuerier) CountNotes(ctx context.Context) (int64, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CountNotes", ctx)
-	ret0, _ := ret[0].(int64)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CountNotes indicates an expected call of CountNotes.
-func (mr *MockQuerierMockRecorder) CountNotes(ctx interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountNotes", reflect.TypeOf((*MockQuerier)(nil).CountNotes), ctx)
-}
-
-// CountNotesByProgramID mocks base method.
-func (m *MockQuerier) CountNotesByProgramID(ctx context.Context, programID int64) (int64, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CountNotesByProgramID", ctx, programID)
-	ret0, _ := ret[0].(int64)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CountNotesByProgramID indicates an expected call of CountNotesByProgramID.
-func (mr *MockQuerierMockRecorder) CountNotesByProgramID(ctx, programID interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountNotesByProgramID", reflect.TypeOf((*MockQuerier)(nil).CountNotesByProgramID), ctx, programID)
-}
-
-// CountNotesByProgramIDAndTag mocks base method.
-func (m *MockQuerier) CountNotesByProgramIDAndTag(ctx context.Context, arg db.CountNotesByProgramIDAndTagParams) (int64, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CountNotesByProgramIDAndTag", ctx, arg)
-	ret0, _ := ret[0].(int64)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CountNotesByProgramIDAndTag indicates an expected call of CountNotesByProgramIDAndTag.
-func (mr *MockQuerierMockRecorder) CountNotesByProgramIDAndTag(ctx, arg interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountNotesByProgramIDAndTag", reflect.TypeOf((*MockQuerier)(nil).CountNotesByProgramIDAndTag), ctx, arg)
-}
-
-// CountNotesBySearch mocks base method.
-func (m *MockQuerier) CountNotesBySearch(ctx context.Context, title string) (int64, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CountNotesBySearch", ctx, title)
-	ret0, _ := ret[0].(int64)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CountNotesBySearch indicates an expected call of CountNotesBySearch.
-func (mr *MockQuerierMockRecorder) CountNotesBySearch(ctx, title interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountNotesBySearch", reflect.TypeOf((*MockQuerier)(nil).CountNotesBySearch), ctx, title)
-}
-
-// CountNotesBySearchAndProgramID mocks base method.
-func (m *MockQuerier) CountNotesBySearchAndProgramID(ctx context.Context, arg db.CountNotesBySearchAndProgramIDParams) (int64, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CountNotesBySearchAndProgramID", ctx, arg)
-	ret0, _ := ret[0].(int64)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CountNotesBySearchAndProgramID indicates an expected call of CountNotesBySearchAndProgramID.
-func (mr *MockQuerierMockRecorder) CountNotesBySearchAndProgramID(ctx, arg interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountNotesBySearchAndProgramID", reflect.TypeOf((*MockQuerier)(nil).CountNotesBySearchAndProgramID), ctx, arg)
-}
-
-// CountNotesBySearchAndProgramIDAndTag mocks base method.
-func (m *MockQuerier) CountNotesBySearchAndProgramIDAndTag(ctx context.Context, arg db.CountNotesBySearchAndProgramIDAndTagParams) (int64, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CountNotesBySearchAndProgramIDAndTag", ctx, arg)
-	ret0, _ := ret[0].(int64)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CountNotesBySearchAndProgramIDAndTag indicates an expected call of CountNotesBySearchAndProgramIDAndTag.
-func (mr *MockQuerierMockRecorder) CountNotesBySearchAndProgramIDAndTag(ctx, arg interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountNotesBySearchAndProgramIDAndTag", reflect.TypeOf((*MockQuerier)(nil).CountNotesBySearchAndProgramIDAndTag), ctx, arg)
-}
-
-// CountNotesBySearchAndTag mocks base method.
-func (m *MockQuerier) CountNotesBySearchAndTag(ctx context.Context, arg db.CountNotesBySearchAndTagParams) (int64, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CountNotesBySearchAndTag", ctx, arg)
-	ret0, _ := ret[0].(int64)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CountNotesBySearchAndTag indicates an expected call of CountNotesBySearchAndTag.
-func (mr *MockQuerierMockRecorder) CountNotesBySearchAndTag(ctx, arg interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountNotesBySearchAndTag", reflect.TypeOf((*MockQuerier)(nil).CountNotesBySearchAndTag), ctx, arg)
-}
-
-// CountNotesByTag mocks base method.
-func (m *MockQuerier) CountNotesByTag(ctx context.Context, stringToArray string) (int64, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CountNotesByTag", ctx, stringToArray)
-	ret0, _ := ret[0].(int64)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CountNotesByTag indicates an expected call of CountNotesByTag.
-func (mr *MockQuerierMockRecorder) CountNotesByTag(ctx, stringToArray interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountNotesByTag", reflect.TypeOf((*MockQuerier)(nil).CountNotesByTag), ctx, stringToArray)
 }
 
 // CountPrograms mocks base method.
@@ -455,21 +335,6 @@ func (mr *MockQuerierMockRecorder) CreateApi(ctx, arg interface{}) *gomock.Call 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateApi", reflect.TypeOf((*MockQuerier)(nil).CreateApi), ctx, arg)
 }
 
-// CreateNote mocks base method.
-func (m *MockQuerier) CreateNote(ctx context.Context, arg db.CreateNoteParams) (db.Note, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateNote", ctx, arg)
-	ret0, _ := ret[0].(db.Note)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CreateNote indicates an expected call of CreateNote.
-func (mr *MockQuerierMockRecorder) CreateNote(ctx, arg interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNote", reflect.TypeOf((*MockQuerier)(nil).CreateNote), ctx, arg)
-}
-
 // CreatePlatform mocks base method.
 func (m *MockQuerier) CreatePlatform(ctx context.Context, arg db.CreatePlatformParams) (db.Platform, error) {
 	m.ctrl.T.Helper()
@@ -513,21 +378,6 @@ func (m *MockQuerier) CreateReset(ctx context.Context, arg db.CreateResetParams)
 func (mr *MockQuerierMockRecorder) CreateReset(ctx, arg interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateReset", reflect.TypeOf((*MockQuerier)(nil).CreateReset), ctx, arg)
-}
-
-// CreateScan mocks base method.
-func (m *MockQuerier) CreateScan(ctx context.Context, arg db.CreateScanParams) (db.Scan, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateScan", ctx, arg)
-	ret0, _ := ret[0].(db.Scan)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CreateScan indicates an expected call of CreateScan.
-func (mr *MockQuerierMockRecorder) CreateScan(ctx, arg interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateScan", reflect.TypeOf((*MockQuerier)(nil).CreateScan), ctx, arg)
 }
 
 // CreateScope mocks base method.
@@ -634,20 +484,6 @@ func (mr *MockQuerierMockRecorder) DeleteApiByIDs(ctx, id interface{}) *gomock.C
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteApiByIDs", reflect.TypeOf((*MockQuerier)(nil).DeleteApiByIDs), ctx, id)
 }
 
-// DeleteNote mocks base method.
-func (m *MockQuerier) DeleteNote(ctx context.Context, id int64) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteNote", ctx, id)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// DeleteNote indicates an expected call of DeleteNote.
-func (mr *MockQuerierMockRecorder) DeleteNote(ctx, id interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteNote", reflect.TypeOf((*MockQuerier)(nil).DeleteNote), ctx, id)
-}
-
 // DeletePlatformByIDs mocks base method.
 func (m *MockQuerier) DeletePlatformByIDs(ctx context.Context, id int64) error {
 	m.ctrl.T.Helper()
@@ -688,20 +524,6 @@ func (m *MockQuerier) DeleteResetsForUser(ctx context.Context, userID int64) err
 func (mr *MockQuerierMockRecorder) DeleteResetsForUser(ctx, userID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteResetsForUser", reflect.TypeOf((*MockQuerier)(nil).DeleteResetsForUser), ctx, userID)
-}
-
-// DeleteScanByIDs mocks base method.
-func (m *MockQuerier) DeleteScanByIDs(ctx context.Context, id string) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteScanByIDs", ctx, id)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// DeleteScanByIDs indicates an expected call of DeleteScanByIDs.
-func (mr *MockQuerierMockRecorder) DeleteScanByIDs(ctx, id interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteScanByIDs", reflect.TypeOf((*MockQuerier)(nil).DeleteScanByIDs), ctx, id)
 }
 
 // DeleteScopeByID mocks base method.
@@ -789,6 +611,21 @@ func (mr *MockQuerierMockRecorder) FavouriteProgram(ctx, arg interface{}) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FavouriteProgram", reflect.TypeOf((*MockQuerier)(nil).FavouriteProgram), ctx, arg)
 }
 
+// FindAllPrograms mocks base method.
+func (m *MockQuerier) FindAllPrograms(ctx context.Context) ([]db.Program, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindAllPrograms", ctx)
+	ret0, _ := ret[0].([]db.Program)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindAllPrograms indicates an expected call of FindAllPrograms.
+func (mr *MockQuerierMockRecorder) FindAllPrograms(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindAllPrograms", reflect.TypeOf((*MockQuerier)(nil).FindAllPrograms), ctx)
+}
+
 // FindApiByIDs mocks base method.
 func (m *MockQuerier) FindApiByIDs(ctx context.Context, id int64) (db.Api, error) {
 	m.ctrl.T.Helper()
@@ -817,141 +654,6 @@ func (m *MockQuerier) FindApis(ctx context.Context) ([]db.Api, error) {
 func (mr *MockQuerierMockRecorder) FindApis(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindApis", reflect.TypeOf((*MockQuerier)(nil).FindApis), ctx)
-}
-
-// FindNoteByID mocks base method.
-func (m *MockQuerier) FindNoteByID(ctx context.Context, id int64) (db.Note, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindNoteByID", ctx, id)
-	ret0, _ := ret[0].(db.Note)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindNoteByID indicates an expected call of FindNoteByID.
-func (mr *MockQuerierMockRecorder) FindNoteByID(ctx, id interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindNoteByID", reflect.TypeOf((*MockQuerier)(nil).FindNoteByID), ctx, id)
-}
-
-// FindNotes mocks base method.
-func (m *MockQuerier) FindNotes(ctx context.Context, arg db.FindNotesParams) ([]db.Note, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindNotes", ctx, arg)
-	ret0, _ := ret[0].([]db.Note)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindNotes indicates an expected call of FindNotes.
-func (mr *MockQuerierMockRecorder) FindNotes(ctx, arg interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindNotes", reflect.TypeOf((*MockQuerier)(nil).FindNotes), ctx, arg)
-}
-
-// FindNotesByProgramID mocks base method.
-func (m *MockQuerier) FindNotesByProgramID(ctx context.Context, arg db.FindNotesByProgramIDParams) ([]db.Note, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindNotesByProgramID", ctx, arg)
-	ret0, _ := ret[0].([]db.Note)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindNotesByProgramID indicates an expected call of FindNotesByProgramID.
-func (mr *MockQuerierMockRecorder) FindNotesByProgramID(ctx, arg interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindNotesByProgramID", reflect.TypeOf((*MockQuerier)(nil).FindNotesByProgramID), ctx, arg)
-}
-
-// FindNotesByProgramIDAndTag mocks base method.
-func (m *MockQuerier) FindNotesByProgramIDAndTag(ctx context.Context, arg db.FindNotesByProgramIDAndTagParams) ([]db.Note, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindNotesByProgramIDAndTag", ctx, arg)
-	ret0, _ := ret[0].([]db.Note)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindNotesByProgramIDAndTag indicates an expected call of FindNotesByProgramIDAndTag.
-func (mr *MockQuerierMockRecorder) FindNotesByProgramIDAndTag(ctx, arg interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindNotesByProgramIDAndTag", reflect.TypeOf((*MockQuerier)(nil).FindNotesByProgramIDAndTag), ctx, arg)
-}
-
-// FindNotesBySearch mocks base method.
-func (m *MockQuerier) FindNotesBySearch(ctx context.Context, arg db.FindNotesBySearchParams) ([]db.Note, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindNotesBySearch", ctx, arg)
-	ret0, _ := ret[0].([]db.Note)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindNotesBySearch indicates an expected call of FindNotesBySearch.
-func (mr *MockQuerierMockRecorder) FindNotesBySearch(ctx, arg interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindNotesBySearch", reflect.TypeOf((*MockQuerier)(nil).FindNotesBySearch), ctx, arg)
-}
-
-// FindNotesBySearchAndProgramID mocks base method.
-func (m *MockQuerier) FindNotesBySearchAndProgramID(ctx context.Context, arg db.FindNotesBySearchAndProgramIDParams) ([]db.Note, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindNotesBySearchAndProgramID", ctx, arg)
-	ret0, _ := ret[0].([]db.Note)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindNotesBySearchAndProgramID indicates an expected call of FindNotesBySearchAndProgramID.
-func (mr *MockQuerierMockRecorder) FindNotesBySearchAndProgramID(ctx, arg interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindNotesBySearchAndProgramID", reflect.TypeOf((*MockQuerier)(nil).FindNotesBySearchAndProgramID), ctx, arg)
-}
-
-// FindNotesBySearchAndProgramIDAndTag mocks base method.
-func (m *MockQuerier) FindNotesBySearchAndProgramIDAndTag(ctx context.Context, arg db.FindNotesBySearchAndProgramIDAndTagParams) ([]db.Note, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindNotesBySearchAndProgramIDAndTag", ctx, arg)
-	ret0, _ := ret[0].([]db.Note)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindNotesBySearchAndProgramIDAndTag indicates an expected call of FindNotesBySearchAndProgramIDAndTag.
-func (mr *MockQuerierMockRecorder) FindNotesBySearchAndProgramIDAndTag(ctx, arg interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindNotesBySearchAndProgramIDAndTag", reflect.TypeOf((*MockQuerier)(nil).FindNotesBySearchAndProgramIDAndTag), ctx, arg)
-}
-
-// FindNotesBySearchAndTag mocks base method.
-func (m *MockQuerier) FindNotesBySearchAndTag(ctx context.Context, arg db.FindNotesBySearchAndTagParams) ([]db.Note, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindNotesBySearchAndTag", ctx, arg)
-	ret0, _ := ret[0].([]db.Note)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindNotesBySearchAndTag indicates an expected call of FindNotesBySearchAndTag.
-func (mr *MockQuerierMockRecorder) FindNotesBySearchAndTag(ctx, arg interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindNotesBySearchAndTag", reflect.TypeOf((*MockQuerier)(nil).FindNotesBySearchAndTag), ctx, arg)
-}
-
-// FindNotesByTag mocks base method.
-func (m *MockQuerier) FindNotesByTag(ctx context.Context, arg db.FindNotesByTagParams) ([]db.Note, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindNotesByTag", ctx, arg)
-	ret0, _ := ret[0].([]db.Note)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindNotesByTag indicates an expected call of FindNotesByTag.
-func (mr *MockQuerierMockRecorder) FindNotesByTag(ctx, arg interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindNotesByTag", reflect.TypeOf((*MockQuerier)(nil).FindNotesByTag), ctx, arg)
 }
 
 // FindPlatformByIDs mocks base method.
@@ -1162,36 +864,6 @@ func (m *MockQuerier) FindResetByCode(ctx context.Context, code string) (db.Rese
 func (mr *MockQuerierMockRecorder) FindResetByCode(ctx, code interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindResetByCode", reflect.TypeOf((*MockQuerier)(nil).FindResetByCode), ctx, code)
-}
-
-// FindScanByID mocks base method.
-func (m *MockQuerier) FindScanByID(ctx context.Context, id string) (db.Scan, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindScanByID", ctx, id)
-	ret0, _ := ret[0].(db.Scan)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindScanByID indicates an expected call of FindScanByID.
-func (mr *MockQuerierMockRecorder) FindScanByID(ctx, id interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindScanByID", reflect.TypeOf((*MockQuerier)(nil).FindScanByID), ctx, id)
-}
-
-// FindScans mocks base method.
-func (m *MockQuerier) FindScans(ctx context.Context) ([]db.Scan, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindScans", ctx)
-	ret0, _ := ret[0].([]db.Scan)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindScans indicates an expected call of FindScans.
-func (mr *MockQuerierMockRecorder) FindScans(ctx interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindScans", reflect.TypeOf((*MockQuerier)(nil).FindScans), ctx)
 }
 
 // FindScopeByID mocks base method.
@@ -1749,21 +1421,6 @@ func (mr *MockQuerierMockRecorder) GetTechnologiesForAllSubdomains(ctx interface
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTechnologiesForAllSubdomains", reflect.TypeOf((*MockQuerier)(nil).GetTechnologiesForAllSubdomains), ctx)
 }
 
-// UpdateNote mocks base method.
-func (m *MockQuerier) UpdateNote(ctx context.Context, arg db.UpdateNoteParams) (db.Note, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateNote", ctx, arg)
-	ret0, _ := ret[0].(db.Note)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// UpdateNote indicates an expected call of UpdateNote.
-func (mr *MockQuerierMockRecorder) UpdateNote(ctx, arg interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateNote", reflect.TypeOf((*MockQuerier)(nil).UpdateNote), ctx, arg)
-}
-
 // UpdatePlatform mocks base method.
 func (m *MockQuerier) UpdatePlatform(ctx context.Context, arg db.UpdatePlatformParams) (db.Platform, error) {
 	m.ctrl.T.Helper()
@@ -1792,21 +1449,6 @@ func (m *MockQuerier) UpdateProgram(ctx context.Context, arg db.UpdateProgramPar
 func (mr *MockQuerierMockRecorder) UpdateProgram(ctx, arg interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateProgram", reflect.TypeOf((*MockQuerier)(nil).UpdateProgram), ctx, arg)
-}
-
-// UpdateScan mocks base method.
-func (m *MockQuerier) UpdateScan(ctx context.Context, arg db.UpdateScanParams) (db.Scan, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateScan", ctx, arg)
-	ret0, _ := ret[0].(db.Scan)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// UpdateScan indicates an expected call of UpdateScan.
-func (mr *MockQuerierMockRecorder) UpdateScan(ctx, arg interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateScan", reflect.TypeOf((*MockQuerier)(nil).UpdateScan), ctx, arg)
 }
 
 // UpdateSetting mocks base method.

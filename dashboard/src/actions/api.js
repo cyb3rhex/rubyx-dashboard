@@ -47,18 +47,6 @@ export default class API {
     _delete(`/api/${id}`)
   )
 
-  static pullRubyxData = () => (
-    _get('/settings/pull_rubyx_data')
-  )
-
-  static getDataRepoUrl = () => (
-    _get('/settings/data_repo_url')
-  )
-
-  static setDataRepoUrl = (body) => (
-    _post('/settings/data_repo_url', body)
-  )
-
   // URLS
   static getUrls = (subdomain, page, resultsPerPage, search) => (
     _get('/url?subdomain=' + subdomain + '&page=' + page + '&resultsPerPage=' + resultsPerPage + '&search=' + search)
@@ -102,21 +90,7 @@ export default class API {
 
   static deleteVulnerability = (id) => (
     _delete(`/vulnerability/${id}`)
-  )
-
-  // SCAN
-  static getScans = () => (
-    _get('/scans')
-  )
-
-  static createScan = (body) => (
-    _post('/scans', body)
-  )
-
-  static deleteScan = (id) => (
-    _delete(`/scan/${id}`)
-  )
-  
+  )  
 
   // STAT
   static getStats = (platform_id) => (
@@ -142,27 +116,6 @@ export default class API {
 
   static deletePlatform = (id) => (
     _delete(`/platform/${id}`)
-  )
-
-  // NOTES
-  static getNotes = (page, resultsPerPage, search, tags, program_id) => (
-    _get('/notes?page=' + page + '&resultsPerPage=' + resultsPerPage + '&search=' + search + '&tags=' + tags + '&program_id=' + program_id)
-  )
-
-  static getNotesByProgram = (id) => (
-    _get('/notes/program/' + id)
-  )
-
-  static createNote = (body) => (
-    _post('/notes', body)
-  )
-
-  static updateNote = (body) => (
-    _put('/notes', body)
-  )
-
-  static deleteNote = (id) => (
-    _delete(`/notes/${id}`)
   )
 
    // PROGRAM

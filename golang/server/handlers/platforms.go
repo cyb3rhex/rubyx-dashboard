@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/aituglo/rubyx/golang/db"
-	"github.com/aituglo/rubyx/golang/env"
-	"github.com/aituglo/rubyx/golang/errors"
-	utils "github.com/aituglo/rubyx/golang/server/utils"
-	"github.com/aituglo/rubyx/golang/server/write"
+	"github.com/aituglo/rubyx-dashboard/golang/db"
+	"github.com/aituglo/rubyx-dashboard/golang/env"
+	"github.com/aituglo/rubyx-dashboard/golang/errors"
+	utils "github.com/aituglo/rubyx-dashboard/golang/server/utils"
+	"github.com/aituglo/rubyx-dashboard/golang/server/write"
 )
 
 func CreatePlatform(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {

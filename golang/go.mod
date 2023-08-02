@@ -1,4 +1,4 @@
-module github.com/aituglo/rubyx/golang
+module github.com/aituglo/rubyx-dashboard/golang
 
 require (
 	github.com/golang-jwt/jwt/v4 v4.5.0

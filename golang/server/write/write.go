@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/aituglo/rubyx/golang/errors"
+	"github.com/aituglo/rubyx-dashboard/golang/errors"
 )
 
 type errorResponse struct {

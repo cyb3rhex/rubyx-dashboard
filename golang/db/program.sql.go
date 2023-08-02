@@ -196,6 +196,42 @@ func (q *Queries) FavouriteProgram(ctx context.Context, arg FavouriteProgramPara
 	return i, err
 }
 
+const findAllPrograms = `-- name: FindAllPrograms :many
+SELECT id, platform_id, name, slug, vdp, favourite, tag, url, type, created_at, updated_at FROM program
+`
+
+func (q *Queries) FindAllPrograms(ctx context.Context) ([]Program, error) {
+	rows, err := q.db.Query(ctx, findAllPrograms)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Program{}
+	for rows.Next() {
+		var i Program
+		if err := rows.Scan(
+			&i.ID,
+			&i.PlatformID,
+			&i.Name,
+			&i.Slug,
+			&i.Vdp,
+			&i.Favourite,
+			&i.Tag,
+			&i.Url,
+			&i.Type,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const findProgramByIDs = `-- name: FindProgramByIDs :one
 SELECT id, platform_id, name, slug, vdp, favourite, tag, url, type, created_at, updated_at FROM program WHERE id = $1 LIMIT 1
 `

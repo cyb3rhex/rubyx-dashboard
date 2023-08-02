@@ -5,12 +5,12 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/aituglo/rubyx/golang/db"
-	"github.com/aituglo/rubyx/golang/env"
-	"github.com/aituglo/rubyx/golang/errors"
+	"github.com/aituglo/rubyx-dashboard/golang/db"
+	"github.com/aituglo/rubyx-dashboard/golang/env"
+	"github.com/aituglo/rubyx-dashboard/golang/errors"
 
-	utils "github.com/aituglo/rubyx/golang/server/utils"
-	"github.com/aituglo/rubyx/golang/server/write"
+	utils "github.com/aituglo/rubyx-dashboard/golang/server/utils"
+	"github.com/aituglo/rubyx-dashboard/golang/server/write"
 )
 
 func ReloadStats(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {

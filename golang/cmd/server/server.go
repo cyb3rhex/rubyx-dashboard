@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/aituglo/rubyx/golang/server"
+	"github.com/aituglo/rubyx-dashboard/golang/server"
 )
 
 const port = ":5000"
