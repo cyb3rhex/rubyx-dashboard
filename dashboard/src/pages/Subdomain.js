@@ -17,7 +17,7 @@ import {
 } from "@windmill/react-ui";
 import ClipLoader from "react-spinners/ClipLoader";
 import Input from "../components/Input";
-import { getPrograms } from "../actions/program";
+import { getAllPrograms } from "../actions/program";
 import Select from "react-tailwindcss-select";
 import { getProgramName } from "../utils/misc";
 import Url from "../components/Subdomain/Url";
@@ -56,7 +56,7 @@ function Subdomain() {
   }
 
   useEffect(() => {
-    dispatch(getPrograms());
+    dispatch(getAllPrograms());
     dispatch(getUniqueTechnologies());
     dispatch(
       getSubdomains(1, resultsPerPage, searchTerm, 0, "")

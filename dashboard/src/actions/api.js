@@ -119,6 +119,10 @@ export default class API {
   )
 
    // PROGRAM
+   static getAllPrograms = () => (
+    _get('/program?all=true')
+  )
+
    static getPrograms = (page, resultsPerPage, search, type, platform_id) => (
     _get('/program?page=' + page + '&resultsPerPage=' + resultsPerPage + '&search=' + search + '&type=' + type + '&platform_id=' + platform_id)
   )

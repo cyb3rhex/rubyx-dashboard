@@ -87,6 +87,36 @@ export const reloadPrograms = (page, resultsPerPage, search, type, platform_id) 
   }
 };
 
+export const getAllPrograms = () => async (dispatch) => {
+  dispatch({
+    type: GET_PROGRAM,
+  });
+  try {
+    API.getAllPrograms()
+      .then((data) => {
+        let result = {
+          programs: data,
+          total: data.length,
+        }
+        dispatch({
+          type: GET_PROGRAM_SUCCESS,
+          payload: result,
+        });
+        
+      })
+      .catch((err) => {
+        dispatch({
+          type: GET_PROGRAM_ERROR,
+          payload: err,
+        });
+      });
+  } catch (err) {
+    dispatch({
+      type: GET_PROGRAM_ERROR,
+      payload: err,
+    });
+  }
+};
 
 export const getPrograms = (page, resultsPerPage, search, type, platform_id) => async (dispatch) => {
   dispatch({

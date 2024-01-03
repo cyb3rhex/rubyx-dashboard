@@ -14,6 +14,7 @@ export const getStats = (platform_id) => async (dispatch) => {
     type: GET_STATS,
   });
   try {
+    platform_id = platform_id ? platform_id : "";
     API.getStats(platform_id)
       .then((data) => {
         dispatch({
@@ -40,6 +41,7 @@ export const reloadStats = (platform_id) => async (dispatch) => {
     type: RELOAD_STAT,
   });
   try {
+    platform_id = platform_id ? platform_id : "";
     API.reloadStats(platform_id)
       .then((res) => {
         API.getStats().then((data) => {
