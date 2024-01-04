@@ -7,6 +7,7 @@ import stat from "./stat";
 import vulnerability from "./vulnerability";
 import subdomain from "./subdomain";
 import url from "./url";
+import task from "./task";
 
 export default combineReducers({
   user,
@@ -17,4 +18,5 @@ export default combineReducers({
   vulnerability,
   subdomain,
   url,
+  task
 });

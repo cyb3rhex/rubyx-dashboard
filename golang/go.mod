@@ -210,6 +210,7 @@ require (
 	github.com/projectdiscovery/utils v0.0.31 // indirect
 	github.com/projectdiscovery/wappalyzergo v0.0.92 // indirect
 	github.com/projectdiscovery/yamldoc-go v1.0.4 // indirect
+	github.com/rabbitmq/amqp091-go v1.9.0 // indirect
 	github.com/remeh/sizedwaitgroup v1.0.0 // indirect
 	github.com/rivo/uniseg v0.4.4 // indirect
 	github.com/rs/xid v1.5.0 // indirect

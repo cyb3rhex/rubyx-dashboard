@@ -1,78 +1,78 @@
 import {
-  GET_SCANS,
-  GET_SCANS_SUCCESS,
-  GET_SCANS_ERROR,
-  CREATE_SCAN,
-  CREATE_SCAN_SUCCESS,
-  CREATE_SCAN_ERROR,
-  DELETE_SCAN,
-  DELETE_SCAN_SUCCESS,
-  DELETE_SCAN_ERROR,
-} from "../constants/scan";
+  GET_TASKS,
+  GET_TASKS_SUCCESS,
+  GET_TASKS_ERROR,
+  CREATE_TASK,
+  CREATE_TASK_SUCCESS,
+  CREATE_TASK_ERROR,
+  DELETE_TASK,
+  DELETE_TASK_SUCCESS,
+  DELETE_TASK_ERROR,
+} from "../constants/task";
 
 const initialState = {
   loading: true,
   error: "",
-  scans: null,
+  tasks: null,
 };
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case GET_SCANS:
+    case GET_TASKS:
       return {
         ...state,
         loading: true,
       };
-    case GET_SCANS_SUCCESS:
+    case GET_TASKS_SUCCESS:
       return {
         ...state,
         loading: false,
-        scans: action.payload,
+        tasks: action.payload,
         error: "",
       };
-    case GET_SCANS_ERROR:
+    case GET_TASKS_ERROR:
       return {
         ...state,
         loading: false,
-        scans: null,
+        tasks: null,
         error: action.payload,
       };
-    case CREATE_SCAN:
+    case CREATE_TASK:
       return {
         ...state,
         loading: true,
       };
-    case CREATE_SCAN_SUCCESS:
+    case CREATE_TASK_SUCCESS:
       return {
         ...state,
         loading: false,
-        scans: action.payload,
+        tasks: action.payload,
         error: "",
       };
-    case CREATE_SCAN_ERROR:
+    case CREATE_TASK_ERROR:
       return {
         ...state,
         loading: false,
-        scans: null,
+        tasks: null,
         error: action.payload,
       };
-    case DELETE_SCAN:
+    case DELETE_TASK:
       return {
         ...state,
         loading: true,
       };
-    case DELETE_SCAN_SUCCESS:
+    case DELETE_TASK_SUCCESS:
       return {
         ...state,
         loading: false,
-        scans: action.payload,
+        tasks: action.payload,
         error: "",
       };
-    case DELETE_SCAN_ERROR:
+    case DELETE_TASK_ERROR:
       return {
         ...state,
         loading: false,
-        scans: null,
+        tasks: null,
         error: action.payload,
       };
     default:

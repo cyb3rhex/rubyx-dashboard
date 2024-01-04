@@ -25,10 +25,10 @@ type server struct {
 
 // New initializes env (database connections and whatnot)
 // and creates a server that implements ServeHTTP
-func New() (*server, error) {
+func New() (*server, env.Env, error) {
 	env, err := env.New()
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	srv := &server{
@@ -37,7 +37,7 @@ func New() (*server, error) {
 
 	srv.ConfigureRouter()
 
-	return srv, nil
+	return srv, env, nil
 }
 
 // ServeHTTP handles routes that start with api

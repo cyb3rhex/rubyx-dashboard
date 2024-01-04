@@ -35,6 +35,7 @@ type Querier interface {
 	CreateScope(ctx context.Context, arg CreateScopeParams) (Scope, error)
 	CreateStat(ctx context.Context, arg CreateStatParams) (Stat, error)
 	CreateSubdomain(ctx context.Context, arg CreateSubdomainParams) (Subdomain, error)
+	CreateTask(ctx context.Context, arg CreateTaskParams) (Task, error)
 	CreateUrl(ctx context.Context, arg CreateUrlParams) (Url, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	CreateVulnerability(ctx context.Context, arg CreateVulnerabilityParams) (Vulnerability, error)
@@ -45,6 +46,7 @@ type Querier interface {
 	DeleteScopeByID(ctx context.Context, id int64) error
 	DeleteStatByID(ctx context.Context, id int64) error
 	DeleteSubdomainByIDs(ctx context.Context, id int64) error
+	DeleteTaskByIDs(ctx context.Context, id string) error
 	DeleteUrlByIDs(ctx context.Context, id int64) error
 	DeleteVulnerabilityByIDs(ctx context.Context, id int64) error
 	FavouriteProgram(ctx context.Context, arg FavouriteProgramParams) (Program, error)
@@ -82,6 +84,8 @@ type Querier interface {
 	FindSubdomainsWithSearchAndProgramIDAndTechnologies(ctx context.Context, arg FindSubdomainsWithSearchAndProgramIDAndTechnologiesParams) ([]Subdomain, error)
 	FindSubdomainsWithSearchAndTechnologies(ctx context.Context, arg FindSubdomainsWithSearchAndTechnologiesParams) ([]Subdomain, error)
 	FindSubdomainsWithTechnologies(ctx context.Context, arg FindSubdomainsWithTechnologiesParams) ([]Subdomain, error)
+	FindTaskByID(ctx context.Context, id string) (Task, error)
+	FindTasks(ctx context.Context) ([]Task, error)
 	FindUrlByIDs(ctx context.Context, id int64) (Url, error)
 	FindUrls(ctx context.Context) ([]Url, error)
 	FindUrlsBySubdomain(ctx context.Context, arg FindUrlsBySubdomainParams) ([]Url, error)
@@ -107,6 +111,7 @@ type Querier interface {
 	UpdateSetting(ctx context.Context, arg UpdateSettingParams) (Setting, error)
 	UpdateStat(ctx context.Context, arg UpdateStatParams) (Stat, error)
 	UpdateSubdomain(ctx context.Context, arg UpdateSubdomainParams) (Subdomain, error)
+	UpdateTask(ctx context.Context, arg UpdateTaskParams) (Task, error)
 	UpdateUrl(ctx context.Context, arg UpdateUrlParams) (Url, error)
 	UpdateUserEmail(ctx context.Context, arg UpdateUserEmailParams) error
 	UpdateUserPassword(ctx context.Context, arg UpdateUserPasswordParams) error

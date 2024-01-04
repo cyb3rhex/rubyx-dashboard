@@ -45,6 +45,11 @@ func (srv *server) ConfigureRouter() {
 	srv.PUT("/platform", handlers.UpdatePlatform)
 	srv.DELETE("/platform/:id", handlers.DeletePlatform)
 
+	// TASKS
+	srv.POST("/tasks", handlers.LaunchTask)
+	srv.GET("/tasks", handlers.GetTasks)
+	srv.DELETE("/task/:id", handlers.DeleteTask)
+
 	// PROGRAMS
 	srv.GET("/program/reload", handlers.ReloadPrograms)
 	srv.GET("/program", handlers.GetPrograms)

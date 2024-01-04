@@ -1,5 +1,6 @@
 import React from "react";
 import { SiHackerone } from "react-icons/si";
+import { AiFillSecurityScan } from "react-icons/ai";
 import { FaPencilAlt, FaSearch, FaList, FaBug, FaMoneyBill, FaHome, FaUser, FaWrench } from "react-icons/fa";
 
 const routes = [
@@ -7,6 +8,11 @@ const routes = [
     label: "Dashboard",
     href: "/app/dashboard",
     icon: <FaHome className="w-6 h-6" />,
+  },
+  {
+    label: "Tasks",
+    href: "/app/tasks",
+    icon: <AiFillSecurityScan className="w-6 h-6" />,
   },
   {
     label: "Stats",

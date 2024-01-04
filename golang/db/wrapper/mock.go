@@ -425,6 +425,21 @@ func (mr *MockQuerierMockRecorder) CreateSubdomain(ctx, arg interface{}) *gomock
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateSubdomain", reflect.TypeOf((*MockQuerier)(nil).CreateSubdomain), ctx, arg)
 }
 
+// CreateTask mocks base method.
+func (m *MockQuerier) CreateTask(ctx context.Context, arg db.CreateTaskParams) (db.Task, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateTask", ctx, arg)
+	ret0, _ := ret[0].(db.Task)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateTask indicates an expected call of CreateTask.
+func (mr *MockQuerierMockRecorder) CreateTask(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTask", reflect.TypeOf((*MockQuerier)(nil).CreateTask), ctx, arg)
+}
+
 // CreateUrl mocks base method.
 func (m *MockQuerier) CreateUrl(ctx context.Context, arg db.CreateUrlParams) (db.Url, error) {
 	m.ctrl.T.Helper()
@@ -566,6 +581,20 @@ func (m *MockQuerier) DeleteSubdomainByIDs(ctx context.Context, id int64) error 
 func (mr *MockQuerierMockRecorder) DeleteSubdomainByIDs(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteSubdomainByIDs", reflect.TypeOf((*MockQuerier)(nil).DeleteSubdomainByIDs), ctx, id)
+}
+
+// DeleteTaskByIDs mocks base method.
+func (m *MockQuerier) DeleteTaskByIDs(ctx context.Context, id string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteTaskByIDs", ctx, id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteTaskByIDs indicates an expected call of DeleteTaskByIDs.
+func (mr *MockQuerierMockRecorder) DeleteTaskByIDs(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteTaskByIDs", reflect.TypeOf((*MockQuerier)(nil).DeleteTaskByIDs), ctx, id)
 }
 
 // DeleteUrlByIDs mocks base method.
@@ -1121,6 +1150,36 @@ func (mr *MockQuerierMockRecorder) FindSubdomainsWithTechnologies(ctx, arg inter
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindSubdomainsWithTechnologies", reflect.TypeOf((*MockQuerier)(nil).FindSubdomainsWithTechnologies), ctx, arg)
 }
 
+// FindTaskByID mocks base method.
+func (m *MockQuerier) FindTaskByID(ctx context.Context, id string) (db.Task, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindTaskByID", ctx, id)
+	ret0, _ := ret[0].(db.Task)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindTaskByID indicates an expected call of FindTaskByID.
+func (mr *MockQuerierMockRecorder) FindTaskByID(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindTaskByID", reflect.TypeOf((*MockQuerier)(nil).FindTaskByID), ctx, id)
+}
+
+// FindTasks mocks base method.
+func (m *MockQuerier) FindTasks(ctx context.Context) ([]db.Task, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindTasks", ctx)
+	ret0, _ := ret[0].([]db.Task)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindTasks indicates an expected call of FindTasks.
+func (mr *MockQuerierMockRecorder) FindTasks(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindTasks", reflect.TypeOf((*MockQuerier)(nil).FindTasks), ctx)
+}
+
 // FindUrlByIDs mocks base method.
 func (m *MockQuerier) FindUrlByIDs(ctx context.Context, id int64) (db.Url, error) {
 	m.ctrl.T.Helper()
@@ -1494,6 +1553,21 @@ func (m *MockQuerier) UpdateSubdomain(ctx context.Context, arg db.UpdateSubdomai
 func (mr *MockQuerierMockRecorder) UpdateSubdomain(ctx, arg interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateSubdomain", reflect.TypeOf((*MockQuerier)(nil).UpdateSubdomain), ctx, arg)
+}
+
+// UpdateTask mocks base method.
+func (m *MockQuerier) UpdateTask(ctx context.Context, arg db.UpdateTaskParams) (db.Task, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateTask", ctx, arg)
+	ret0, _ := ret[0].(db.Task)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateTask indicates an expected call of UpdateTask.
+func (mr *MockQuerierMockRecorder) UpdateTask(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateTask", reflect.TypeOf((*MockQuerier)(nil).UpdateTask), ctx, arg)
 }
 
 // UpdateUrl mocks base method.

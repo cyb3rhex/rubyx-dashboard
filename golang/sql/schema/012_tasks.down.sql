@@ -1,0 +1,2 @@
+DROP SCHEMA tasks;
+DROP TABLE tasks;

@@ -8,6 +8,7 @@ import (
 	"syscall"
 
 	"github.com/aituglo/rubyx-dashboard/golang/server"
+	"github.com/aituglo/rubyx-dashboard/golang/task"
 )
 
 const port = ":5000"
@@ -15,11 +16,17 @@ const port = ":5000"
 func main() {
 	go handleSignals()
 
-	srv, err := server.New()
+	srv, env, err := server.New()
 	if err != nil {
 		log.Fatalln("Unable to initialize server", err)
 	}
 	defer srv.Close()
+
+	// start consuming tasks
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
+
+	go task.ConsumeLocalQueue(env)
 
 	log.Println("API server listening on", port)
 	err = http.ListenAndServe(port, srv)
@@ -27,6 +34,7 @@ func main() {
 	if err != nil {
 		log.Fatalln("ListenAndServe error:", err)
 	}
+	<-stop
 }
 
 func handleSignals() {

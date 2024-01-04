@@ -47,6 +47,19 @@ export default class API {
     _delete(`/api/${id}`)
   )
 
+  // TASK
+  static getTasks = () => (
+    _get('/tasks')
+  )
+
+  static createTask = (body) => (
+    _post('/tasks', body)
+  )
+
+  static deleteTask = (id) => (
+    _delete(`/task/${id}`)
+  )
+
   // URLS
   static getUrls = (subdomain, page, resultsPerPage, search) => (
     _get('/url?subdomain=' + subdomain + '&page=' + page + '&resultsPerPage=' + resultsPerPage + '&search=' + search)

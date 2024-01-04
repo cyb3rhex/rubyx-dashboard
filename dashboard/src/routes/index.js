@@ -10,6 +10,7 @@ const Vulnerability = lazy(() => import('../pages/Vulnerability'))
 const Subdomain = lazy(() => import('../pages/Subdomain'))
 const Stat = lazy(() => import('../pages/Stat'))
 const Page404 = lazy(() => import('../pages/404'))
+const Task = lazy(() => import('../pages/Task'))
 
 /**
  * ⚠ These are internal routes!
@@ -53,6 +54,10 @@ const routes = [
   {
     path: '/subdomains',
     component: Subdomain,
+  },
+  {
+    path: '/tasks',
+    component: Task,
   },
   {
     path: '/404',

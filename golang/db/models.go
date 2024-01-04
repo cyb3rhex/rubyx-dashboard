@@ -186,6 +186,19 @@ type Subdomain struct {
 	UpdatedAt     time.Time `json:"updated_at"`
 }
 
+type Task struct {
+	ID        string    `json:"id"`
+	Domain    string    `json:"domain"`
+	Params    string    `json:"params"`
+	Type      string    `json:"type"`
+	Status    string    `json:"status"`
+	StartTime time.Time `json:"start_time"`
+	EndTime   time.Time `json:"end_time"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Output    string    `json:"output"`
+}
+
 type Url struct {
 	ID         int64     `json:"id"`
 	Subdomain  string    `json:"subdomain"`
