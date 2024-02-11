@@ -10,6 +10,9 @@ import (
 
 type Querier interface {
 	AddSetting(ctx context.Context, arg AddSettingParams) (Setting, error)
+	CountIps(ctx context.Context) (int64, error)
+	CountParams(ctx context.Context) (int64, error)
+	CountPorts(ctx context.Context) (int64, error)
 	CountPrograms(ctx context.Context) (int64, error)
 	CountProgramsWithPlatform(ctx context.Context, platformID int64) (int64, error)
 	CountProgramsWithSearch(ctx context.Context, name string) (int64, error)
@@ -18,21 +21,26 @@ type Querier interface {
 	CountProgramsWithSearchAndTypeAndPlatform(ctx context.Context, arg CountProgramsWithSearchAndTypeAndPlatformParams) (int64, error)
 	CountProgramsWithType(ctx context.Context, dollar_1 ProgramType) (int64, error)
 	CountProgramsWithTypeAndPlatform(ctx context.Context, arg CountProgramsWithTypeAndPlatformParams) (int64, error)
+	CountScreenshots(ctx context.Context) (int64, error)
 	CountSubdomains(ctx context.Context) (int64, error)
 	CountSubdomainsWithProgramID(ctx context.Context, programID int64) (int64, error)
 	CountSubdomainsWithProgramIDAndTechnologies(ctx context.Context, arg CountSubdomainsWithProgramIDAndTechnologiesParams) (int64, error)
-	CountSubdomainsWithSearch(ctx context.Context, url string) (int64, error)
+	CountSubdomainsWithSearch(ctx context.Context, subdomain string) (int64, error)
 	CountSubdomainsWithSearchAndProgramID(ctx context.Context, arg CountSubdomainsWithSearchAndProgramIDParams) (int64, error)
 	CountSubdomainsWithSearchAndProgramIDAndTechnologies(ctx context.Context, arg CountSubdomainsWithSearchAndProgramIDAndTechnologiesParams) (int64, error)
 	CountSubdomainsWithSearchAndTechnologies(ctx context.Context, arg CountSubdomainsWithSearchAndTechnologiesParams) (int64, error)
 	CountSubdomainsWithTechnologies(ctx context.Context, stringToArray string) (int64, error)
-	CountUrlsBySubdomain(ctx context.Context, subdomain string) (int64, error)
+	CountUrlsBySubdomain(ctx context.Context, subdomainID int64) (int64, error)
 	CountVulnerabilities(ctx context.Context) (int64, error)
 	CreateApi(ctx context.Context, arg CreateApiParams) (Api, error)
+	CreateIp(ctx context.Context, arg CreateIpParams) (Ip, error)
+	CreateParam(ctx context.Context, arg CreateParamParams) (Param, error)
 	CreatePlatform(ctx context.Context, arg CreatePlatformParams) (Platform, error)
+	CreatePort(ctx context.Context, arg CreatePortParams) (Port, error)
 	CreateProgram(ctx context.Context, arg CreateProgramParams) (Program, error)
 	CreateReset(ctx context.Context, arg CreateResetParams) (Reset, error)
 	CreateScope(ctx context.Context, arg CreateScopeParams) (Scope, error)
+	CreateScreenshot(ctx context.Context, arg CreateScreenshotParams) (Screenshot, error)
 	CreateStat(ctx context.Context, arg CreateStatParams) (Stat, error)
 	CreateSubdomain(ctx context.Context, arg CreateSubdomainParams) (Subdomain, error)
 	CreateTask(ctx context.Context, arg CreateTaskParams) (Task, error)
@@ -40,21 +48,41 @@ type Querier interface {
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	CreateVulnerability(ctx context.Context, arg CreateVulnerabilityParams) (Vulnerability, error)
 	DeleteApiByIDs(ctx context.Context, id int64) error
+	DeleteIpByIDs(ctx context.Context, id int64) error
+	DeleteParamByIDs(ctx context.Context, id int64) error
 	DeletePlatformByIDs(ctx context.Context, id int64) error
+	DeletePortByIDs(ctx context.Context, id int64) error
 	DeleteProgramByIDs(ctx context.Context, id int64) error
 	DeleteResetsForUser(ctx context.Context, userID int64) error
 	DeleteScopeByID(ctx context.Context, id int64) error
+	DeleteScreenshotByIDs(ctx context.Context, id int64) error
 	DeleteStatByID(ctx context.Context, id int64) error
 	DeleteSubdomainByIDs(ctx context.Context, id int64) error
-	DeleteTaskByIDs(ctx context.Context, id string) error
+	DeleteTaskByIDs(ctx context.Context, id int64) error
 	DeleteUrlByIDs(ctx context.Context, id int64) error
 	DeleteVulnerabilityByIDs(ctx context.Context, id int64) error
 	FavouriteProgram(ctx context.Context, arg FavouriteProgramParams) (Program, error)
+	FavouriteSubdomain(ctx context.Context, arg FavouriteSubdomainParams) (Subdomain, error)
+	FavouriteUrl(ctx context.Context, arg FavouriteUrlParams) (Url, error)
+	FavouriteVulnerability(ctx context.Context, arg FavouriteVulnerabilityParams) (Vulnerability, error)
 	FindAllPrograms(ctx context.Context) ([]Program, error)
 	FindApiByIDs(ctx context.Context, id int64) (Api, error)
 	FindApis(ctx context.Context) ([]Api, error)
+	FindIpByIDs(ctx context.Context, id int64) (Ip, error)
+	FindIps(ctx context.Context, arg FindIpsParams) ([]Ip, error)
+	FindIpsWithIp(ctx context.Context, arg FindIpsWithIpParams) ([]Ip, error)
+	FindIpsWithProgramID(ctx context.Context, arg FindIpsWithProgramIDParams) ([]Ip, error)
+	FindIpsWithSubdomainID(ctx context.Context, arg FindIpsWithSubdomainIDParams) ([]Ip, error)
+	FindParamByIDs(ctx context.Context, id int64) (Param, error)
+	FindParams(ctx context.Context, arg FindParamsParams) ([]Param, error)
+	FindParamsWithParam(ctx context.Context, arg FindParamsWithParamParams) ([]Param, error)
+	FindParamsWithUrlID(ctx context.Context, arg FindParamsWithUrlIDParams) ([]Param, error)
 	FindPlatformByIDs(ctx context.Context, id int64) (FindPlatformByIDsRow, error)
 	FindPlatforms(ctx context.Context) ([]FindPlatformsRow, error)
+	FindPortByIDs(ctx context.Context, id int64) (Port, error)
+	FindPorts(ctx context.Context, arg FindPortsParams) ([]Port, error)
+	FindPortsWithIpID(ctx context.Context, arg FindPortsWithIpIDParams) ([]Port, error)
+	FindPortsWithPort(ctx context.Context, arg FindPortsWithPortParams) ([]Port, error)
 	FindProgramByIDs(ctx context.Context, id int64) (Program, error)
 	FindProgramByScope(ctx context.Context, scope string) (int64, error)
 	FindProgramBySlug(ctx context.Context, slug string) (Program, error)
@@ -70,6 +98,10 @@ type Querier interface {
 	FindScopeByID(ctx context.Context, id int64) (Scope, error)
 	FindScopes(ctx context.Context) ([]Scope, error)
 	FindScopesByProgramID(ctx context.Context, programID int64) ([]Scope, error)
+	FindScreenshotByIDs(ctx context.Context, id int64) (Screenshot, error)
+	FindScreenshots(ctx context.Context, arg FindScreenshotsParams) ([]Screenshot, error)
+	FindScreenshotsWithScreenshot(ctx context.Context, arg FindScreenshotsWithScreenshotParams) ([]Screenshot, error)
+	FindScreenshotsWithSubdomainID(ctx context.Context, arg FindScreenshotsWithSubdomainIDParams) ([]Screenshot, error)
 	FindStatByID(ctx context.Context, id int64) (Stat, error)
 	FindStatByReportID(ctx context.Context, reportID string) (Stat, error)
 	FindStats(ctx context.Context) ([]Stat, error)
@@ -84,7 +116,7 @@ type Querier interface {
 	FindSubdomainsWithSearchAndProgramIDAndTechnologies(ctx context.Context, arg FindSubdomainsWithSearchAndProgramIDAndTechnologiesParams) ([]Subdomain, error)
 	FindSubdomainsWithSearchAndTechnologies(ctx context.Context, arg FindSubdomainsWithSearchAndTechnologiesParams) ([]Subdomain, error)
 	FindSubdomainsWithTechnologies(ctx context.Context, arg FindSubdomainsWithTechnologiesParams) ([]Subdomain, error)
-	FindTaskByID(ctx context.Context, id string) (Task, error)
+	FindTaskByID(ctx context.Context, id int64) (Task, error)
 	FindTasks(ctx context.Context) ([]Task, error)
 	FindUrlByIDs(ctx context.Context, id int64) (Url, error)
 	FindUrls(ctx context.Context) ([]Url, error)
@@ -106,8 +138,12 @@ type Querier interface {
 	GetSettingByKey(ctx context.Context, key string) (Setting, error)
 	GetSettings(ctx context.Context) ([]Setting, error)
 	GetTechnologiesForAllSubdomains(ctx context.Context) ([]string, error)
+	UpdateIp(ctx context.Context, arg UpdateIpParams) (Ip, error)
+	UpdateParam(ctx context.Context, arg UpdateParamParams) (Param, error)
 	UpdatePlatform(ctx context.Context, arg UpdatePlatformParams) (Platform, error)
+	UpdatePort(ctx context.Context, arg UpdatePortParams) (Port, error)
 	UpdateProgram(ctx context.Context, arg UpdateProgramParams) (Program, error)
+	UpdateScreenshot(ctx context.Context, arg UpdateScreenshotParams) (Screenshot, error)
 	UpdateSetting(ctx context.Context, arg UpdateSettingParams) (Setting, error)
 	UpdateStat(ctx context.Context, arg UpdateStatParams) (Stat, error)
 	UpdateSubdomain(ctx context.Context, arg UpdateSubdomainParams) (Subdomain, error)

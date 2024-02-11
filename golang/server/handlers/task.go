@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -10,7 +11,6 @@ import (
 	"github.com/aituglo/rubyx-dashboard/golang/errors"
 	"github.com/aituglo/rubyx-dashboard/golang/server/write"
 	"github.com/aituglo/rubyx-dashboard/golang/task"
-	"github.com/google/uuid"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
@@ -37,7 +37,6 @@ func LaunchTask(env env.Env, user *db.User, w http.ResponseWriter, r *http.Reque
 	}
 
 	task := &task.Task{
-		ID:                uuid.New().String(),
 		Domain:            p.Domain,
 		Subdomain:         p.Subdomain,
 		PortScan:          p.PortScan,
@@ -112,7 +111,10 @@ func DeleteTask(env env.Env, user *db.User, w http.ResponseWriter, r *http.Reque
 		return write.Error(errors.RouteUnauthorized)
 	}
 
-	id := getString("id", r)
+	id, err := getID(r)
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	return write.SuccessOrErr(env.DB().DeleteTaskByIDs(r.Context(), id))
 }

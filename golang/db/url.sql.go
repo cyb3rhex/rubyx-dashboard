@@ -10,30 +10,30 @@ import (
 )
 
 const countUrlsBySubdomain = `-- name: CountUrlsBySubdomain :one
-SELECT COUNT(*) FROM urls WHERE subdomain = $1
+SELECT COUNT(*) FROM urls WHERE subdomain_id = $1
 `
 
-func (q *Queries) CountUrlsBySubdomain(ctx context.Context, subdomain string) (int64, error) {
-	row := q.db.QueryRow(ctx, countUrlsBySubdomain, subdomain)
+func (q *Queries) CountUrlsBySubdomain(ctx context.Context, subdomainID int64) (int64, error) {
+	row := q.db.QueryRow(ctx, countUrlsBySubdomain, subdomainID)
 	var count int64
 	err := row.Scan(&count)
 	return count, err
 }
 
 const createUrl = `-- name: CreateUrl :one
-INSERT INTO urls (subdomain, url, status_code, tag) VALUES ($1, $2, $3, $4) RETURNING id, subdomain, url, tag, status_code, created_at, updated_at
+INSERT INTO urls (subdomain_id, url, status_code, tag) VALUES ($1, $2, $3, $4) RETURNING id, subdomain_id, url, tag, status_code, favourite, created_at, updated_at
 `
 
 type CreateUrlParams struct {
-	Subdomain  string `json:"subdomain"`
-	Url        string `json:"url"`
-	StatusCode int32  `json:"status_code"`
-	Tag        string `json:"tag"`
+	SubdomainID int64  `json:"subdomain_id"`
+	Url         string `json:"url"`
+	StatusCode  int32  `json:"status_code"`
+	Tag         string `json:"tag"`
 }
 
 func (q *Queries) CreateUrl(ctx context.Context, arg CreateUrlParams) (Url, error) {
 	row := q.db.QueryRow(ctx, createUrl,
-		arg.Subdomain,
+		arg.SubdomainID,
 		arg.Url,
 		arg.StatusCode,
 		arg.Tag,
@@ -41,10 +41,11 @@ func (q *Queries) CreateUrl(ctx context.Context, arg CreateUrlParams) (Url, erro
 	var i Url
 	err := row.Scan(
 		&i.ID,
-		&i.Subdomain,
+		&i.SubdomainID,
 		&i.Url,
 		&i.Tag,
 		&i.StatusCode,
+		&i.Favourite,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -60,8 +61,33 @@ func (q *Queries) DeleteUrlByIDs(ctx context.Context, id int64) error {
 	return err
 }
 
+const favouriteUrl = `-- name: FavouriteUrl :one
+UPDATE urls SET favourite = $2, updated_at = NOW() WHERE id = $1 RETURNING id, subdomain_id, url, tag, status_code, favourite, created_at, updated_at
+`
+
+type FavouriteUrlParams struct {
+	ID        int64 `json:"id"`
+	Favourite bool  `json:"favourite"`
+}
+
+func (q *Queries) FavouriteUrl(ctx context.Context, arg FavouriteUrlParams) (Url, error) {
+	row := q.db.QueryRow(ctx, favouriteUrl, arg.ID, arg.Favourite)
+	var i Url
+	err := row.Scan(
+		&i.ID,
+		&i.SubdomainID,
+		&i.Url,
+		&i.Tag,
+		&i.StatusCode,
+		&i.Favourite,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const findUrlByIDs = `-- name: FindUrlByIDs :one
-SELECT id, subdomain, url, tag, status_code, created_at, updated_at FROM urls WHERE id = $1 LIMIT 1
+SELECT id, subdomain_id, url, tag, status_code, favourite, created_at, updated_at FROM urls WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) FindUrlByIDs(ctx context.Context, id int64) (Url, error) {
@@ -69,10 +95,11 @@ func (q *Queries) FindUrlByIDs(ctx context.Context, id int64) (Url, error) {
 	var i Url
 	err := row.Scan(
 		&i.ID,
-		&i.Subdomain,
+		&i.SubdomainID,
 		&i.Url,
 		&i.Tag,
 		&i.StatusCode,
+		&i.Favourite,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -80,7 +107,7 @@ func (q *Queries) FindUrlByIDs(ctx context.Context, id int64) (Url, error) {
 }
 
 const findUrls = `-- name: FindUrls :many
-SELECT id, subdomain, url, tag, status_code, created_at, updated_at FROM urls
+SELECT id, subdomain_id, url, tag, status_code, favourite, created_at, updated_at FROM urls
 `
 
 func (q *Queries) FindUrls(ctx context.Context) ([]Url, error) {
@@ -94,10 +121,11 @@ func (q *Queries) FindUrls(ctx context.Context) ([]Url, error) {
 		var i Url
 		if err := rows.Scan(
 			&i.ID,
-			&i.Subdomain,
+			&i.SubdomainID,
 			&i.Url,
 			&i.Tag,
 			&i.StatusCode,
+			&i.Favourite,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -112,17 +140,17 @@ func (q *Queries) FindUrls(ctx context.Context) ([]Url, error) {
 }
 
 const findUrlsBySubdomain = `-- name: FindUrlsBySubdomain :many
-SELECT id, subdomain, url, tag, status_code, created_at, updated_at FROM urls WHERE subdomain = $1 LIMIT $2 OFFSET $3
+SELECT id, subdomain_id, url, tag, status_code, favourite, created_at, updated_at FROM urls WHERE subdomain_id = $1 LIMIT $2 OFFSET $3
 `
 
 type FindUrlsBySubdomainParams struct {
-	Subdomain string `json:"subdomain"`
-	Limit     int32  `json:"limit"`
-	Offset    int32  `json:"offset"`
+	SubdomainID int64 `json:"subdomain_id"`
+	Limit       int32 `json:"limit"`
+	Offset      int32 `json:"offset"`
 }
 
 func (q *Queries) FindUrlsBySubdomain(ctx context.Context, arg FindUrlsBySubdomainParams) ([]Url, error) {
-	rows, err := q.db.Query(ctx, findUrlsBySubdomain, arg.Subdomain, arg.Limit, arg.Offset)
+	rows, err := q.db.Query(ctx, findUrlsBySubdomain, arg.SubdomainID, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
@@ -132,10 +160,11 @@ func (q *Queries) FindUrlsBySubdomain(ctx context.Context, arg FindUrlsBySubdoma
 		var i Url
 		if err := rows.Scan(
 			&i.ID,
-			&i.Subdomain,
+			&i.SubdomainID,
 			&i.Url,
 			&i.Tag,
 			&i.StatusCode,
+			&i.Favourite,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -150,19 +179,19 @@ func (q *Queries) FindUrlsBySubdomain(ctx context.Context, arg FindUrlsBySubdoma
 }
 
 const findUrlsBySubdomainWithSearch = `-- name: FindUrlsBySubdomainWithSearch :many
-SELECT id, subdomain, url, tag, status_code, created_at, updated_at FROM urls WHERE subdomain = $1 AND url LIKE $2 LIMIT $3 OFFSET $4
+SELECT id, subdomain_id, url, tag, status_code, favourite, created_at, updated_at FROM urls WHERE subdomain_id = $1 AND url LIKE $2 LIMIT $3 OFFSET $4
 `
 
 type FindUrlsBySubdomainWithSearchParams struct {
-	Subdomain string `json:"subdomain"`
-	Url       string `json:"url"`
-	Limit     int32  `json:"limit"`
-	Offset    int32  `json:"offset"`
+	SubdomainID int64  `json:"subdomain_id"`
+	Url         string `json:"url"`
+	Limit       int32  `json:"limit"`
+	Offset      int32  `json:"offset"`
 }
 
 func (q *Queries) FindUrlsBySubdomainWithSearch(ctx context.Context, arg FindUrlsBySubdomainWithSearchParams) ([]Url, error) {
 	rows, err := q.db.Query(ctx, findUrlsBySubdomainWithSearch,
-		arg.Subdomain,
+		arg.SubdomainID,
 		arg.Url,
 		arg.Limit,
 		arg.Offset,
@@ -176,10 +205,11 @@ func (q *Queries) FindUrlsBySubdomainWithSearch(ctx context.Context, arg FindUrl
 		var i Url
 		if err := rows.Scan(
 			&i.ID,
-			&i.Subdomain,
+			&i.SubdomainID,
 			&i.Url,
 			&i.Tag,
 			&i.StatusCode,
+			&i.Favourite,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -194,21 +224,21 @@ func (q *Queries) FindUrlsBySubdomainWithSearch(ctx context.Context, arg FindUrl
 }
 
 const updateUrl = `-- name: UpdateUrl :one
-UPDATE urls SET subdomain = $2, url = $3, status_code = $4, tag = $5, updated_at = NOW() WHERE id = $1 RETURNING id, subdomain, url, tag, status_code, created_at, updated_at
+UPDATE urls SET subdomain_id = $2, url = $3, status_code = $4, tag = $5, updated_at = NOW() WHERE id = $1 RETURNING id, subdomain_id, url, tag, status_code, favourite, created_at, updated_at
 `
 
 type UpdateUrlParams struct {
-	ID         int64  `json:"id"`
-	Subdomain  string `json:"subdomain"`
-	Url        string `json:"url"`
-	StatusCode int32  `json:"status_code"`
-	Tag        string `json:"tag"`
+	ID          int64  `json:"id"`
+	SubdomainID int64  `json:"subdomain_id"`
+	Url         string `json:"url"`
+	StatusCode  int32  `json:"status_code"`
+	Tag         string `json:"tag"`
 }
 
 func (q *Queries) UpdateUrl(ctx context.Context, arg UpdateUrlParams) (Url, error) {
 	row := q.db.QueryRow(ctx, updateUrl,
 		arg.ID,
-		arg.Subdomain,
+		arg.SubdomainID,
 		arg.Url,
 		arg.StatusCode,
 		arg.Tag,
@@ -216,10 +246,11 @@ func (q *Queries) UpdateUrl(ctx context.Context, arg UpdateUrlParams) (Url, erro
 	var i Url
 	err := row.Scan(
 		&i.ID,
-		&i.Subdomain,
+		&i.SubdomainID,
 		&i.Url,
 		&i.Tag,
 		&i.StatusCode,
+		&i.Favourite,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)

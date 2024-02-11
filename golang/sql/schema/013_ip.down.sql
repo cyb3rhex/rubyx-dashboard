@@ -1,0 +1,2 @@
+DROP SCHEMA ip;
+DROP TABLE ip;

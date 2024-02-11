@@ -16,5 +16,6 @@ CREATE TABLE program (
   url text NOT NULL,
   type program_type NOT NULL,
   created_at timestamp NOT NULL DEFAULT now(),
-  updated_at timestamp NOT NULL DEFAULT now()
+  updated_at timestamp NOT NULL DEFAULT now(),
+  FOREIGN KEY (platform_id) REFERENCES platform(id)
 );

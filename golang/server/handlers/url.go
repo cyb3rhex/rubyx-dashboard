@@ -29,9 +29,9 @@ func CreateUrl(env env.Env, user *db.User, w http.ResponseWriter, r *http.Reques
 	}
 
 	return write.JSONorErr(env.DB().CreateUrl(r.Context(), db.CreateUrlParams{
-		Subdomain:  p.Subdomain,
-		Url:        p.Url,
-		StatusCode: p.StatusCode,
+		SubdomainID: p.SubdomainID,
+		Url:         p.Url,
+		StatusCode:  p.StatusCode,
 	}))
 }
 
@@ -72,21 +72,21 @@ func GetUrls(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request)
 		resultsPerPage = 30
 	}
 
-	subdomain := r.URL.Query().Get("subdomain")
+	subdomain, err := getInt64("subdomain", r)
 
 	var urls []db.Url
 	if search != "" {
 		urls, err = env.DB().FindUrlsBySubdomainWithSearch(r.Context(), db.FindUrlsBySubdomainWithSearchParams{
-			Subdomain: subdomain,
-			Url:       "%" + search + "%",
-			Limit:     int32(resultsPerPage),
-			Offset:    int32((page - 1) * resultsPerPage),
+			SubdomainID: subdomain,
+			Url:         "%" + search + "%",
+			Limit:       int32(resultsPerPage),
+			Offset:      int32((page - 1) * resultsPerPage),
 		})
 	} else {
 		urls, err = env.DB().FindUrlsBySubdomain(r.Context(), db.FindUrlsBySubdomainParams{
-			Subdomain: subdomain,
-			Limit:     int32(resultsPerPage),
-			Offset:    int32((page - 1) * resultsPerPage),
+			SubdomainID: subdomain,
+			Limit:       int32(resultsPerPage),
+			Offset:      int32((page - 1) * resultsPerPage),
 		})
 	}
 	if err != nil {
@@ -117,10 +117,10 @@ func UpdateUrl(env env.Env, user *db.User, w http.ResponseWriter, r *http.Reques
 	}
 
 	return write.JSONorErr(env.DB().UpdateUrl(r.Context(), db.UpdateUrlParams{
-		ID:         p.ID,
-		Subdomain:  p.Subdomain,
-		Url:        p.Url,
-		StatusCode: p.StatusCode,
+		ID:          p.ID,
+		SubdomainID: p.SubdomainID,
+		Url:         p.Url,
+		StatusCode:  p.StatusCode,
 	}))
 }
 

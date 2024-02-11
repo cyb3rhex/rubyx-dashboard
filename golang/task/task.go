@@ -9,7 +9,7 @@ import (
 )
 
 type Task struct {
-	ID                string
+	ID                int64
 	Domain            string
 	Subdomain         bool
 	PortScan          bool

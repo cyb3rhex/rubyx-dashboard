@@ -62,7 +62,7 @@ func CreateSubdomain(env env.Env, user *db.User, w http.ResponseWriter, r *http.
 
 	return write.JSONorErr(env.DB().CreateSubdomain(r.Context(), db.CreateSubdomainParams{
 		ProgramID:     p.ProgramID,
-		Url:           p.Url,
+		Subdomain:     p.Subdomain,
 		Title:         p.Title,
 		BodyHash:      p.BodyHash,
 		StatusCode:    p.StatusCode,
@@ -186,44 +186,44 @@ func GetSubdomains(env env.Env, user *db.User, w http.ResponseWriter, r *http.Re
 	var total int64
 	if search != "" && programIDProvided && technologies != "" {
 		subdomains, err = env.DB().FindSubdomainsWithSearchAndProgramIDAndTechnologies(r.Context(), db.FindSubdomainsWithSearchAndProgramIDAndTechnologiesParams{
-			Url:           "%" + search + "%",
+			Subdomain:     "%" + search + "%",
 			ProgramID:     programID,
 			StringToArray: technologies,
 			Offset:        int32((page - 1) * resultsPerPage),
 			Limit:         int32(resultsPerPage),
 		})
 		total, err = env.DB().CountSubdomainsWithSearchAndProgramIDAndTechnologies(r.Context(), db.CountSubdomainsWithSearchAndProgramIDAndTechnologiesParams{
-			Url:           "%" + search + "%",
+			Subdomain:     "%" + search + "%",
 			ProgramID:     programID,
 			StringToArray: technologies,
 		})
 	} else if search != "" && programIDProvided && technologies == "" {
 		subdomains, err = env.DB().FindSubdomainsWithSearchAndProgramID(r.Context(), db.FindSubdomainsWithSearchAndProgramIDParams{
-			Url:       "%" + search + "%",
+			Subdomain: "%" + search + "%",
 			ProgramID: programID,
 			Offset:    int32((page - 1) * resultsPerPage),
 			Limit:     int32(resultsPerPage),
 		})
 		total, err = env.DB().CountSubdomainsWithSearchAndProgramID(r.Context(), db.CountSubdomainsWithSearchAndProgramIDParams{
-			Url:       "%" + search + "%",
+			Subdomain: "%" + search + "%",
 			ProgramID: programID,
 		})
 	} else if search != "" && programIDProvided == false && technologies != "" {
 		subdomains, err = env.DB().FindSubdomainsWithSearchAndTechnologies(r.Context(), db.FindSubdomainsWithSearchAndTechnologiesParams{
-			Url:           "%" + search + "%",
+			Subdomain:     "%" + search + "%",
 			StringToArray: technologies,
 			Offset:        int32((page - 1) * resultsPerPage),
 			Limit:         int32(resultsPerPage),
 		})
 		total, err = env.DB().CountSubdomainsWithSearchAndTechnologies(r.Context(), db.CountSubdomainsWithSearchAndTechnologiesParams{
-			Url:           "%" + search + "%",
+			Subdomain:     "%" + search + "%",
 			StringToArray: technologies,
 		})
 	} else if search != "" && programIDProvided == false && technologies == "" {
 		subdomains, err = env.DB().FindSubdomainsWithSearch(r.Context(), db.FindSubdomainsWithSearchParams{
-			Url:    "%" + search + "%",
-			Offset: int32((page - 1) * resultsPerPage),
-			Limit:  int32(resultsPerPage),
+			Subdomain: "%" + search + "%",
+			Offset:    int32((page - 1) * resultsPerPage),
+			Limit:     int32(resultsPerPage),
 		})
 		total, err = env.DB().CountSubdomainsWithSearch(r.Context(), "%"+search+"%")
 	} else if search == "" && programIDProvided && technologies != "" {

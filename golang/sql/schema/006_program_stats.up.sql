@@ -12,5 +12,6 @@ CREATE TABLE stats (
     report_date DATE NOT NULL,
     platform_id BIGSERIAL NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT now(),
-    updated_at TIMESTAMP NOT NULL DEFAULT now()
+    updated_at TIMESTAMP NOT NULL DEFAULT now(),
+    FOREIGN KEY (platform_id) REFERENCES platform(id)
 );

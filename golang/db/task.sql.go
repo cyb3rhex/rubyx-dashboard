@@ -17,7 +17,7 @@ RETURNING id, domain, params, type, status, start_time, end_time, created_at, up
 `
 
 type CreateTaskParams struct {
-	ID     string `json:"id"`
+	ID     int64  `json:"id"`
 	Domain string `json:"domain"`
 	Params string `json:"params"`
 	Status string `json:"status"`
@@ -54,7 +54,7 @@ const deleteTaskByIDs = `-- name: DeleteTaskByIDs :exec
 DELETE FROM tasks WHERE id = $1
 `
 
-func (q *Queries) DeleteTaskByIDs(ctx context.Context, id string) error {
+func (q *Queries) DeleteTaskByIDs(ctx context.Context, id int64) error {
 	_, err := q.db.Exec(ctx, deleteTaskByIDs, id)
 	return err
 }
@@ -63,7 +63,7 @@ const findTaskByID = `-- name: FindTaskByID :one
 SELECT id, domain, params, type, status, start_time, end_time, created_at, updated_at, output FROM tasks WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) FindTaskByID(ctx context.Context, id string) (Task, error) {
+func (q *Queries) FindTaskByID(ctx context.Context, id int64) (Task, error) {
 	row := q.db.QueryRow(ctx, findTaskByID, id)
 	var i Task
 	err := row.Scan(
@@ -124,7 +124,7 @@ RETURNING id, domain, params, type, status, start_time, end_time, created_at, up
 `
 
 type UpdateTaskParams struct {
-	ID        string    `json:"id"`
+	ID        int64     `json:"id"`
 	Status    string    `json:"status"`
 	StartTime time.Time `json:"start_time"`
 	EndTime   time.Time `json:"end_time"`
