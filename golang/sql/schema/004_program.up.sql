@@ -7,15 +7,14 @@ CREATE TYPE program_type AS ENUM (
 
 CREATE TABLE program (
   id bigserial PRIMARY KEY,
-  platform_id bigserial NOT NULL,
+  platform_id bigserial NOT NULL REFERENCES platform(id) ON DELETE CASCADE,
   name varchar(200) NOT NULL,
   slug varchar(200) NOT NULL UNIQUE,
   vdp boolean NOT NULL,
   favourite boolean NOT NULL DEFAULT false,
-  tag text NOT NULL,
-  url text NOT NULL,
+  tag varchar NOT NULL,
+  url varchar NOT NULL,
   type program_type NOT NULL,
   created_at timestamp NOT NULL DEFAULT now(),
-  updated_at timestamp NOT NULL DEFAULT now(),
-  FOREIGN KEY (platform_id) REFERENCES platform(id)
+  updated_at timestamp NOT NULL DEFAULT now()
 );

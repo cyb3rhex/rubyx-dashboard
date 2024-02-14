@@ -2,10 +2,7 @@
 INSERT INTO program (platform_id, name, slug, vdp, tag, url, type) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;
 
 -- name: UpdateProgram :one
-UPDATE program SET platform_id = $2, name = $3, slug = $4, vdp = $5, url = $6, type = $7, updated_at = NOW() WHERE id = $1 RETURNING *;
-
--- name: FavouriteProgram :one
-UPDATE program SET favourite = $2, updated_at = NOW() WHERE id = $1 RETURNING *;
+UPDATE program SET platform_id = $2, name = $3, slug = $4, vdp = $5, url = $6, type = $7, favourite = $8, updated_at = NOW() WHERE id = $1 RETURNING *;
 
 -- name: FindProgramByIDs :one
 SELECT * FROM program WHERE id = $1 LIMIT 1;

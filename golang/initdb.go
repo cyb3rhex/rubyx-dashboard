@@ -35,12 +35,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	_, err = dbpool.Exec(context.Background(), "INSERT INTO users (email, pass, salt) VALUES ($1, $2, $3)", "admin@admin.com", hashedPassword, salt)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	_, err = dbpool.Exec(context.Background(), "INSERT INTO settings (key, value) VALUES ($1, $2)", "repo_data_url", "https://github.com/aituglo/rubyx-dashboard-data")
+	_, err = dbpool.Exec(context.Background(), "INSERT INTO users (email, username, pass, salt) VALUES ($1, $2, $3, $4)", "admin@admin.com", "admin", hashedPassword, salt)
 	if err != nil {
 		log.Fatal(err)
 	}

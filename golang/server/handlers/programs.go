@@ -104,60 +104,27 @@ func GetProgram(env env.Env, user *db.User, w http.ResponseWriter, r *http.Reque
 
 	id, err := getID(r)
 	if err != nil {
-		return write.Error(errors.RouteNotFound)
-	}
+		slug := getString("id", r)
 
-	program, err := env.DB().FindProgramByIDs(r.Context(), id)
-	if err != nil {
-		if isNotFound(err) {
-			return write.Error(errors.ItemNotFound)
+		program, err := env.DB().FindProgramBySlug(r.Context(), slug)
+		if err != nil {
+			if isNotFound(err) {
+				return write.Error(errors.ItemNotFound)
+			}
+			return write.Error(err)
 		}
-		return write.Error(err)
-	}
-
-	return write.JSON(program)
-}
-
-func GetProgramBySlug(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user == nil {
-		return write.Error(errors.RouteUnauthorized)
-	}
-
-	slug := getString("name", r)
-
-	program, err := env.DB().FindProgramBySlug(r.Context(), slug)
-	if err != nil {
-		if isNotFound(err) {
-			return write.Error(errors.ItemNotFound)
+		return write.JSON(program)
+	} else {
+		program, err := env.DB().FindProgramByIDs(r.Context(), id)
+		if err != nil {
+			if isNotFound(err) {
+				return write.Error(errors.ItemNotFound)
+			}
+			return write.Error(err)
 		}
-		return write.Error(err)
+
+		return write.JSON(program)
 	}
-
-	return write.JSON(program)
-}
-
-func FavouriteProgram(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
-	if user == nil {
-		return write.Error(errors.RouteUnauthorized)
-	}
-
-	id, err := getID(r)
-	if err != nil {
-		return write.Error(errors.RouteNotFound)
-	}
-
-	program, err := env.DB().FindProgramByIDs(r.Context(), id)
-	if err != nil {
-		if isNotFound(err) {
-			return write.Error(errors.ItemNotFound)
-		}
-		return write.Error(err)
-	}
-
-	return write.JSONorErr(env.DB().FavouriteProgram(r.Context(), db.FavouriteProgramParams{
-		ID:        id,
-		Favourite: !program.Favourite,
-	}))
 }
 
 func GetScopeByProgramID(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
@@ -206,6 +173,20 @@ func GetPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 		return write.Error(errors.RouteUnauthorized)
 	}
 
+	reload, err := strconv.Atoi(r.URL.Query().Get("reload"))
+	if err != nil || reload > 1 {
+		reload = 0
+	}
+
+	if reload == 1 {
+		return ReloadPrograms(env, user, w, r)
+	}
+
+	all, err := strconv.Atoi(r.URL.Query().Get("all"))
+	if err != nil || all > 1 {
+		all = 0
+	}
+
 	page, err := strconv.Atoi(r.URL.Query().Get("page"))
 	if err != nil || page < 1 {
 		page = 1
@@ -216,7 +197,6 @@ func GetPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 		resultsPerPage = 30
 	}
 
-	all := r.URL.Query().Get("all")
 	search := r.URL.Query().Get("search")
 	platformType := r.URL.Query().Get("type")
 	platformIDStr := r.URL.Query().Get("platform_id")
@@ -238,7 +218,7 @@ func GetPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 	var programs []db.Program
 	var total int64
 
-	if all == "true" {
+	if all == 1 {
 		return write.JSONorErr(env.DB().FindAllPrograms(r.Context()))
 	} else if search != "" && platformType != "" && platformIDProvided {
 		programs, err = env.DB().FindProgramsWithSearchAndTypeAndPlatform(r.Context(), db.FindProgramsWithSearchAndTypeAndPlatformParams{
@@ -368,6 +348,7 @@ func UpdateProgram(env env.Env, user *db.User, w http.ResponseWriter, r *http.Re
 		Slug:       p.Slug,
 		Url:        p.Url,
 		Vdp:        p.Vdp,
+		Favourite:  p.Favourite,
 		Type:       db.ProgramTypePublic,
 	}))
 }

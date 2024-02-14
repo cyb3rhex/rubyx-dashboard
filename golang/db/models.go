@@ -163,9 +163,9 @@ type Reset struct {
 
 type Scope struct {
 	ID        int64     `json:"id"`
+	ProgramID int64     `json:"program_id"`
 	Scope     string    `json:"scope"`
 	ScopeType string    `json:"scope_type"`
-	ProgramID int64     `json:"program_id"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
@@ -188,6 +188,7 @@ type Setting struct {
 
 type Stat struct {
 	ID           int64     `json:"id"`
+	PlatformID   int64     `json:"platform_id"`
 	ReportID     string    `json:"report_id"`
 	ReportTitle  string    `json:"report_title"`
 	Severity     string    `json:"severity"`
@@ -196,7 +197,6 @@ type Stat struct {
 	Collab       bool      `json:"collab"`
 	ReportStatus string    `json:"report_status"`
 	ReportDate   time.Time `json:"report_date"`
-	PlatformID   int64     `json:"platform_id"`
 	CreatedAt    time.Time `json:"created_at"`
 	UpdatedAt    time.Time `json:"updated_at"`
 }
@@ -206,11 +206,10 @@ type Subdomain struct {
 	ProgramID     int64     `json:"program_id"`
 	Subdomain     string    `json:"subdomain"`
 	Tag           string    `json:"tag"`
-	Port          string    `json:"port"`
+	Port          int32     `json:"port"`
 	Title         string    `json:"title"`
 	BodyHash      string    `json:"body_hash"`
 	StatusCode    int32     `json:"status_code"`
-	Technologies  string    `json:"technologies"`
 	ContentLength int32     `json:"content_length"`
 	Favourite     bool      `json:"favourite"`
 	CreatedAt     time.Time `json:"created_at"`
@@ -230,6 +229,29 @@ type Task struct {
 	Output    string    `json:"output"`
 }
 
+type TechnologieSubdomain struct {
+	ID                int64     `json:"id"`
+	TechnologyVersion int64     `json:"technology_version"`
+	SubdomainID       int64     `json:"subdomain_id"`
+	CreatedAt         time.Time `json:"created_at"`
+	UpdatedAt         time.Time `json:"updated_at"`
+}
+
+type TechnologieVersion struct {
+	ID           int64     `json:"id"`
+	TechnologyID int64     `json:"technology_id"`
+	Version      string    `json:"version"`
+	CreatedAt    time.Time `json:"created_at"`
+	UpdatedAt    time.Time `json:"updated_at"`
+}
+
+type Technology struct {
+	ID        int64     `json:"id"`
+	Name      string    `json:"name"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
 type Url struct {
 	ID          int64     `json:"id"`
 	SubdomainID int64     `json:"subdomain_id"`
@@ -244,6 +266,7 @@ type Url struct {
 type User struct {
 	ID        int64     `json:"id"`
 	Email     string    `json:"email"`
+	Username  string    `json:"username"`
 	Pass      string    `json:"pass"`
 	Salt      string    `json:"salt"`
 	CreatedAt time.Time `json:"created_at"`

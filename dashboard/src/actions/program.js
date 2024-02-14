@@ -58,9 +58,9 @@ export const reloadPrograms = (page, resultsPerPage, search, type, platform_id) 
     type: RELOAD_PROGRAM,
   });
   try {
-    API.reloadPrograms(page, resultsPerPage, search, type, platform_id)
+    API.reloadPrograms()
       .then((res) => {
-        API.getPrograms().then((data) => {
+        API.getPrograms(page, resultsPerPage, search, type, platform_id).then((data) => {
           dispatch({
             type: RELOAD_PROGRAM_SUCCESS,
             payload: data,

@@ -13,7 +13,7 @@ import (
 const createStat = `-- name: CreateStat :one
 INSERT INTO stats (report_id, report_title, severity, reward, currency, collab, report_status, report_date, platform_id, created_at, updated_at)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW(), NOW())
-RETURNING id, report_id, report_title, severity, reward, currency, collab, report_status, report_date, platform_id, created_at, updated_at
+RETURNING id, platform_id, report_id, report_title, severity, reward, currency, collab, report_status, report_date, created_at, updated_at
 `
 
 type CreateStatParams struct {
@@ -43,6 +43,7 @@ func (q *Queries) CreateStat(ctx context.Context, arg CreateStatParams) (Stat, e
 	var i Stat
 	err := row.Scan(
 		&i.ID,
+		&i.PlatformID,
 		&i.ReportID,
 		&i.ReportTitle,
 		&i.Severity,
@@ -51,7 +52,6 @@ func (q *Queries) CreateStat(ctx context.Context, arg CreateStatParams) (Stat, e
 		&i.Collab,
 		&i.ReportStatus,
 		&i.ReportDate,
-		&i.PlatformID,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -68,7 +68,7 @@ func (q *Queries) DeleteStatByID(ctx context.Context, id int64) error {
 }
 
 const findStatByID = `-- name: FindStatByID :one
-SELECT id, report_id, report_title, severity, reward, currency, collab, report_status, report_date, platform_id, created_at, updated_at FROM stats WHERE id = $1 LIMIT 1
+SELECT id, platform_id, report_id, report_title, severity, reward, currency, collab, report_status, report_date, created_at, updated_at FROM stats WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) FindStatByID(ctx context.Context, id int64) (Stat, error) {
@@ -76,6 +76,7 @@ func (q *Queries) FindStatByID(ctx context.Context, id int64) (Stat, error) {
 	var i Stat
 	err := row.Scan(
 		&i.ID,
+		&i.PlatformID,
 		&i.ReportID,
 		&i.ReportTitle,
 		&i.Severity,
@@ -84,7 +85,6 @@ func (q *Queries) FindStatByID(ctx context.Context, id int64) (Stat, error) {
 		&i.Collab,
 		&i.ReportStatus,
 		&i.ReportDate,
-		&i.PlatformID,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -92,7 +92,7 @@ func (q *Queries) FindStatByID(ctx context.Context, id int64) (Stat, error) {
 }
 
 const findStatByReportID = `-- name: FindStatByReportID :one
-SELECT id, report_id, report_title, severity, reward, currency, collab, report_status, report_date, platform_id, created_at, updated_at FROM stats WHERE report_id = $1 LIMIT 1
+SELECT id, platform_id, report_id, report_title, severity, reward, currency, collab, report_status, report_date, created_at, updated_at FROM stats WHERE report_id = $1 LIMIT 1
 `
 
 func (q *Queries) FindStatByReportID(ctx context.Context, reportID string) (Stat, error) {
@@ -100,6 +100,7 @@ func (q *Queries) FindStatByReportID(ctx context.Context, reportID string) (Stat
 	var i Stat
 	err := row.Scan(
 		&i.ID,
+		&i.PlatformID,
 		&i.ReportID,
 		&i.ReportTitle,
 		&i.Severity,
@@ -108,7 +109,6 @@ func (q *Queries) FindStatByReportID(ctx context.Context, reportID string) (Stat
 		&i.Collab,
 		&i.ReportStatus,
 		&i.ReportDate,
-		&i.PlatformID,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -116,7 +116,7 @@ func (q *Queries) FindStatByReportID(ctx context.Context, reportID string) (Stat
 }
 
 const findStats = `-- name: FindStats :many
-SELECT id, report_id, report_title, severity, reward, currency, collab, report_status, report_date, platform_id, created_at, updated_at FROM stats
+SELECT id, platform_id, report_id, report_title, severity, reward, currency, collab, report_status, report_date, created_at, updated_at FROM stats
 `
 
 func (q *Queries) FindStats(ctx context.Context) ([]Stat, error) {
@@ -130,6 +130,7 @@ func (q *Queries) FindStats(ctx context.Context) ([]Stat, error) {
 		var i Stat
 		if err := rows.Scan(
 			&i.ID,
+			&i.PlatformID,
 			&i.ReportID,
 			&i.ReportTitle,
 			&i.Severity,
@@ -138,7 +139,6 @@ func (q *Queries) FindStats(ctx context.Context) ([]Stat, error) {
 			&i.Collab,
 			&i.ReportStatus,
 			&i.ReportDate,
-			&i.PlatformID,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -153,7 +153,7 @@ func (q *Queries) FindStats(ctx context.Context) ([]Stat, error) {
 }
 
 const findStatsWithPlatform = `-- name: FindStatsWithPlatform :many
-SELECT id, report_id, report_title, severity, reward, currency, collab, report_status, report_date, platform_id, created_at, updated_at FROM stats WHERE platform_id = $1
+SELECT id, platform_id, report_id, report_title, severity, reward, currency, collab, report_status, report_date, created_at, updated_at FROM stats WHERE platform_id = $1
 `
 
 func (q *Queries) FindStatsWithPlatform(ctx context.Context, platformID int64) ([]Stat, error) {
@@ -167,6 +167,7 @@ func (q *Queries) FindStatsWithPlatform(ctx context.Context, platformID int64) (
 		var i Stat
 		if err := rows.Scan(
 			&i.ID,
+			&i.PlatformID,
 			&i.ReportID,
 			&i.ReportTitle,
 			&i.Severity,
@@ -175,7 +176,6 @@ func (q *Queries) FindStatsWithPlatform(ctx context.Context, platformID int64) (
 			&i.Collab,
 			&i.ReportStatus,
 			&i.ReportDate,
-			&i.PlatformID,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -193,7 +193,7 @@ const updateStat = `-- name: UpdateStat :one
 UPDATE stats
 SET report_id = $2, report_title = $3, severity = $4, reward = $5, collab = $6, report_status = $7, updated_at = NOW()
 WHERE id = $1
-RETURNING id, report_id, report_title, severity, reward, currency, collab, report_status, report_date, platform_id, created_at, updated_at
+RETURNING id, platform_id, report_id, report_title, severity, reward, currency, collab, report_status, report_date, created_at, updated_at
 `
 
 type UpdateStatParams struct {
@@ -219,6 +219,7 @@ func (q *Queries) UpdateStat(ctx context.Context, arg UpdateStatParams) (Stat, e
 	var i Stat
 	err := row.Scan(
 		&i.ID,
+		&i.PlatformID,
 		&i.ReportID,
 		&i.ReportTitle,
 		&i.Severity,
@@ -227,7 +228,6 @@ func (q *Queries) UpdateStat(ctx context.Context, arg UpdateStatParams) (Stat, e
 		&i.Collab,
 		&i.ReportStatus,
 		&i.ReportDate,
-		&i.PlatformID,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)

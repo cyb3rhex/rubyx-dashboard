@@ -11,7 +11,7 @@ import (
 
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (email, salt, pass)
-  VALUES (LOWER($1::varchar), $2::varchar, $3::varchar) RETURNING id, email, pass, salt, created_at, updated_at
+  VALUES (LOWER($1::varchar), $2::varchar, $3::varchar) RETURNING id, email, username, pass, salt, created_at, updated_at
 `
 
 type CreateUserParams struct {
@@ -26,6 +26,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	err := row.Scan(
 		&i.ID,
 		&i.Email,
+		&i.Username,
 		&i.Pass,
 		&i.Salt,
 		&i.CreatedAt,
@@ -35,7 +36,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 }
 
 const findUserByEmail = `-- name: FindUserByEmail :one
-SELECT id, email, pass, salt, created_at, updated_at FROM users WHERE email = LOWER($1) LIMIT 1
+SELECT id, email, username, pass, salt, created_at, updated_at FROM users WHERE email = LOWER($1) LIMIT 1
 `
 
 func (q *Queries) FindUserByEmail(ctx context.Context, lower string) (User, error) {
@@ -44,6 +45,7 @@ func (q *Queries) FindUserByEmail(ctx context.Context, lower string) (User, erro
 	err := row.Scan(
 		&i.ID,
 		&i.Email,
+		&i.Username,
 		&i.Pass,
 		&i.Salt,
 		&i.CreatedAt,
@@ -53,7 +55,7 @@ func (q *Queries) FindUserByEmail(ctx context.Context, lower string) (User, erro
 }
 
 const findUserByID = `-- name: FindUserByID :one
-SELECT id, email, pass, salt, created_at, updated_at FROM users WHERE id = $1 LIMIT 1
+SELECT id, email, username, pass, salt, created_at, updated_at FROM users WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) FindUserByID(ctx context.Context, id int64) (User, error) {
@@ -62,6 +64,7 @@ func (q *Queries) FindUserByID(ctx context.Context, id int64) (User, error) {
 	err := row.Scan(
 		&i.ID,
 		&i.Email,
+		&i.Username,
 		&i.Pass,
 		&i.Salt,
 		&i.CreatedAt,

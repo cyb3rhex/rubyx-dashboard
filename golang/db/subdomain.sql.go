@@ -31,22 +31,6 @@ func (q *Queries) CountSubdomainsWithProgramID(ctx context.Context, programID in
 	return count, err
 }
 
-const countSubdomainsWithProgramIDAndTechnologies = `-- name: CountSubdomainsWithProgramIDAndTechnologies :one
-SELECT COUNT(*) FROM subdomain WHERE program_id = $1 AND string_to_array(technologies, ',') && string_to_array($2, ',')
-`
-
-type CountSubdomainsWithProgramIDAndTechnologiesParams struct {
-	ProgramID     int64  `json:"program_id"`
-	StringToArray string `json:"string_to_array"`
-}
-
-func (q *Queries) CountSubdomainsWithProgramIDAndTechnologies(ctx context.Context, arg CountSubdomainsWithProgramIDAndTechnologiesParams) (int64, error) {
-	row := q.db.QueryRow(ctx, countSubdomainsWithProgramIDAndTechnologies, arg.ProgramID, arg.StringToArray)
-	var count int64
-	err := row.Scan(&count)
-	return count, err
-}
-
 const countSubdomainsWithSearch = `-- name: CountSubdomainsWithSearch :one
 SELECT COUNT(*) FROM subdomain WHERE subdomain LIKE $1
 `
@@ -74,52 +58,8 @@ func (q *Queries) CountSubdomainsWithSearchAndProgramID(ctx context.Context, arg
 	return count, err
 }
 
-const countSubdomainsWithSearchAndProgramIDAndTechnologies = `-- name: CountSubdomainsWithSearchAndProgramIDAndTechnologies :one
-SELECT COUNT(*) FROM subdomain WHERE subdomain LIKE $1 AND program_id = $2 AND string_to_array(technologies, ',') && string_to_array($3, ',')
-`
-
-type CountSubdomainsWithSearchAndProgramIDAndTechnologiesParams struct {
-	Subdomain     string `json:"subdomain"`
-	ProgramID     int64  `json:"program_id"`
-	StringToArray string `json:"string_to_array"`
-}
-
-func (q *Queries) CountSubdomainsWithSearchAndProgramIDAndTechnologies(ctx context.Context, arg CountSubdomainsWithSearchAndProgramIDAndTechnologiesParams) (int64, error) {
-	row := q.db.QueryRow(ctx, countSubdomainsWithSearchAndProgramIDAndTechnologies, arg.Subdomain, arg.ProgramID, arg.StringToArray)
-	var count int64
-	err := row.Scan(&count)
-	return count, err
-}
-
-const countSubdomainsWithSearchAndTechnologies = `-- name: CountSubdomainsWithSearchAndTechnologies :one
-SELECT COUNT(*) FROM subdomain WHERE subdomain LIKE $1 AND string_to_array(technologies, ',') && string_to_array($2, ',')
-`
-
-type CountSubdomainsWithSearchAndTechnologiesParams struct {
-	Subdomain     string `json:"subdomain"`
-	StringToArray string `json:"string_to_array"`
-}
-
-func (q *Queries) CountSubdomainsWithSearchAndTechnologies(ctx context.Context, arg CountSubdomainsWithSearchAndTechnologiesParams) (int64, error) {
-	row := q.db.QueryRow(ctx, countSubdomainsWithSearchAndTechnologies, arg.Subdomain, arg.StringToArray)
-	var count int64
-	err := row.Scan(&count)
-	return count, err
-}
-
-const countSubdomainsWithTechnologies = `-- name: CountSubdomainsWithTechnologies :one
-SELECT COUNT(*) FROM subdomain WHERE string_to_array(technologies, ',') && string_to_array($1, ',')
-`
-
-func (q *Queries) CountSubdomainsWithTechnologies(ctx context.Context, stringToArray string) (int64, error) {
-	row := q.db.QueryRow(ctx, countSubdomainsWithTechnologies, stringToArray)
-	var count int64
-	err := row.Scan(&count)
-	return count, err
-}
-
 const createSubdomain = `-- name: CreateSubdomain :one
-INSERT INTO subdomain (program_id, subdomain, title, body_hash, status_code, technologies, content_length, tag, port) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id, program_id, subdomain, tag, port, title, body_hash, status_code, technologies, content_length, favourite, created_at, updated_at
+INSERT INTO subdomain (program_id, subdomain, title, body_hash, status_code, content_length, tag, port) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id, program_id, subdomain, tag, port, title, body_hash, status_code, content_length, favourite, created_at, updated_at
 `
 
 type CreateSubdomainParams struct {
@@ -128,10 +68,9 @@ type CreateSubdomainParams struct {
 	Title         string `json:"title"`
 	BodyHash      string `json:"body_hash"`
 	StatusCode    int32  `json:"status_code"`
-	Technologies  string `json:"technologies"`
 	ContentLength int32  `json:"content_length"`
 	Tag           string `json:"tag"`
-	Port          string `json:"port"`
+	Port          int32  `json:"port"`
 }
 
 func (q *Queries) CreateSubdomain(ctx context.Context, arg CreateSubdomainParams) (Subdomain, error) {
@@ -141,7 +80,6 @@ func (q *Queries) CreateSubdomain(ctx context.Context, arg CreateSubdomainParams
 		arg.Title,
 		arg.BodyHash,
 		arg.StatusCode,
-		arg.Technologies,
 		arg.ContentLength,
 		arg.Tag,
 		arg.Port,
@@ -156,7 +94,6 @@ func (q *Queries) CreateSubdomain(ctx context.Context, arg CreateSubdomainParams
 		&i.Title,
 		&i.BodyHash,
 		&i.StatusCode,
-		&i.Technologies,
 		&i.ContentLength,
 		&i.Favourite,
 		&i.CreatedAt,
@@ -175,7 +112,7 @@ func (q *Queries) DeleteSubdomainByIDs(ctx context.Context, id int64) error {
 }
 
 const favouriteSubdomain = `-- name: FavouriteSubdomain :one
-UPDATE subdomain SET favourite = $2, updated_at = NOW() WHERE id = $1 RETURNING id, program_id, subdomain, tag, port, title, body_hash, status_code, technologies, content_length, favourite, created_at, updated_at
+UPDATE subdomain SET favourite = $2, updated_at = NOW() WHERE id = $1 RETURNING id, program_id, subdomain, tag, port, title, body_hash, status_code, content_length, favourite, created_at, updated_at
 `
 
 type FavouriteSubdomainParams struct {
@@ -195,7 +132,6 @@ func (q *Queries) FavouriteSubdomain(ctx context.Context, arg FavouriteSubdomain
 		&i.Title,
 		&i.BodyHash,
 		&i.StatusCode,
-		&i.Technologies,
 		&i.ContentLength,
 		&i.Favourite,
 		&i.CreatedAt,
@@ -205,7 +141,7 @@ func (q *Queries) FavouriteSubdomain(ctx context.Context, arg FavouriteSubdomain
 }
 
 const findSubdomainByIDs = `-- name: FindSubdomainByIDs :one
-SELECT id, program_id, subdomain, tag, port, title, body_hash, status_code, technologies, content_length, favourite, created_at, updated_at FROM subdomain WHERE id = $1 LIMIT 1
+SELECT id, program_id, subdomain, tag, port, title, body_hash, status_code, content_length, favourite, created_at, updated_at FROM subdomain WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) FindSubdomainByIDs(ctx context.Context, id int64) (Subdomain, error) {
@@ -220,7 +156,6 @@ func (q *Queries) FindSubdomainByIDs(ctx context.Context, id int64) (Subdomain, 
 		&i.Title,
 		&i.BodyHash,
 		&i.StatusCode,
-		&i.Technologies,
 		&i.ContentLength,
 		&i.Favourite,
 		&i.CreatedAt,
@@ -229,46 +164,8 @@ func (q *Queries) FindSubdomainByIDs(ctx context.Context, id int64) (Subdomain, 
 	return i, err
 }
 
-const findSubdomainByProgram = `-- name: FindSubdomainByProgram :many
-SELECT id, program_id, subdomain, tag, port, title, body_hash, status_code, technologies, content_length, favourite, created_at, updated_at FROM subdomain WHERE program_id = $1
-`
-
-func (q *Queries) FindSubdomainByProgram(ctx context.Context, programID int64) ([]Subdomain, error) {
-	rows, err := q.db.Query(ctx, findSubdomainByProgram, programID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	items := []Subdomain{}
-	for rows.Next() {
-		var i Subdomain
-		if err := rows.Scan(
-			&i.ID,
-			&i.ProgramID,
-			&i.Subdomain,
-			&i.Tag,
-			&i.Port,
-			&i.Title,
-			&i.BodyHash,
-			&i.StatusCode,
-			&i.Technologies,
-			&i.ContentLength,
-			&i.Favourite,
-			&i.CreatedAt,
-			&i.UpdatedAt,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const findSubdomains = `-- name: FindSubdomains :many
-SELECT id, program_id, subdomain, tag, port, title, body_hash, status_code, technologies, content_length, favourite, created_at, updated_at FROM subdomain LIMIT $1 OFFSET $2
+SELECT id, program_id, subdomain, tag, port, title, body_hash, status_code, content_length, favourite, created_at, updated_at FROM subdomain LIMIT $1 OFFSET $2
 `
 
 type FindSubdomainsParams struct {
@@ -294,7 +191,6 @@ func (q *Queries) FindSubdomains(ctx context.Context, arg FindSubdomainsParams) 
 			&i.Title,
 			&i.BodyHash,
 			&i.StatusCode,
-			&i.Technologies,
 			&i.ContentLength,
 			&i.Favourite,
 			&i.CreatedAt,
@@ -311,7 +207,7 @@ func (q *Queries) FindSubdomains(ctx context.Context, arg FindSubdomainsParams) 
 }
 
 const findSubdomainsWithProgramID = `-- name: FindSubdomainsWithProgramID :many
-SELECT id, program_id, subdomain, tag, port, title, body_hash, status_code, technologies, content_length, favourite, created_at, updated_at FROM subdomain WHERE program_id = $1 LIMIT $2 OFFSET $3
+SELECT id, program_id, subdomain, tag, port, title, body_hash, status_code, content_length, favourite, created_at, updated_at FROM subdomain WHERE program_id = $1 LIMIT $2 OFFSET $3
 `
 
 type FindSubdomainsWithProgramIDParams struct {
@@ -338,57 +234,6 @@ func (q *Queries) FindSubdomainsWithProgramID(ctx context.Context, arg FindSubdo
 			&i.Title,
 			&i.BodyHash,
 			&i.StatusCode,
-			&i.Technologies,
-			&i.ContentLength,
-			&i.Favourite,
-			&i.CreatedAt,
-			&i.UpdatedAt,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const findSubdomainsWithProgramIDAndTechnologies = `-- name: FindSubdomainsWithProgramIDAndTechnologies :many
-SELECT id, program_id, subdomain, tag, port, title, body_hash, status_code, technologies, content_length, favourite, created_at, updated_at FROM subdomain WHERE program_id = $1 AND string_to_array(technologies, ',') && string_to_array($2, ',') LIMIT $3 OFFSET $4
-`
-
-type FindSubdomainsWithProgramIDAndTechnologiesParams struct {
-	ProgramID     int64  `json:"program_id"`
-	StringToArray string `json:"string_to_array"`
-	Limit         int32  `json:"limit"`
-	Offset        int32  `json:"offset"`
-}
-
-func (q *Queries) FindSubdomainsWithProgramIDAndTechnologies(ctx context.Context, arg FindSubdomainsWithProgramIDAndTechnologiesParams) ([]Subdomain, error) {
-	rows, err := q.db.Query(ctx, findSubdomainsWithProgramIDAndTechnologies,
-		arg.ProgramID,
-		arg.StringToArray,
-		arg.Limit,
-		arg.Offset,
-	)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	items := []Subdomain{}
-	for rows.Next() {
-		var i Subdomain
-		if err := rows.Scan(
-			&i.ID,
-			&i.ProgramID,
-			&i.Subdomain,
-			&i.Tag,
-			&i.Port,
-			&i.Title,
-			&i.BodyHash,
-			&i.StatusCode,
-			&i.Technologies,
 			&i.ContentLength,
 			&i.Favourite,
 			&i.CreatedAt,
@@ -405,7 +250,7 @@ func (q *Queries) FindSubdomainsWithProgramIDAndTechnologies(ctx context.Context
 }
 
 const findSubdomainsWithSearch = `-- name: FindSubdomainsWithSearch :many
-SELECT id, program_id, subdomain, tag, port, title, body_hash, status_code, technologies, content_length, favourite, created_at, updated_at FROM subdomain WHERE subdomain LIKE $1 LIMIT $2 OFFSET $3
+SELECT id, program_id, subdomain, tag, port, title, body_hash, status_code, content_length, favourite, created_at, updated_at FROM subdomain WHERE subdomain LIKE $1 LIMIT $2 OFFSET $3
 `
 
 type FindSubdomainsWithSearchParams struct {
@@ -432,7 +277,6 @@ func (q *Queries) FindSubdomainsWithSearch(ctx context.Context, arg FindSubdomai
 			&i.Title,
 			&i.BodyHash,
 			&i.StatusCode,
-			&i.Technologies,
 			&i.ContentLength,
 			&i.Favourite,
 			&i.CreatedAt,
@@ -449,7 +293,7 @@ func (q *Queries) FindSubdomainsWithSearch(ctx context.Context, arg FindSubdomai
 }
 
 const findSubdomainsWithSearchAndProgramID = `-- name: FindSubdomainsWithSearchAndProgramID :many
-SELECT id, program_id, subdomain, tag, port, title, body_hash, status_code, technologies, content_length, favourite, created_at, updated_at FROM subdomain WHERE subdomain LIKE $1 AND program_id = $2 LIMIT $3 OFFSET $4
+SELECT id, program_id, subdomain, tag, port, title, body_hash, status_code, content_length, favourite, created_at, updated_at FROM subdomain WHERE subdomain LIKE $1 AND program_id = $2 LIMIT $3 OFFSET $4
 `
 
 type FindSubdomainsWithSearchAndProgramIDParams struct {
@@ -482,7 +326,6 @@ func (q *Queries) FindSubdomainsWithSearchAndProgramID(ctx context.Context, arg 
 			&i.Title,
 			&i.BodyHash,
 			&i.StatusCode,
-			&i.Technologies,
 			&i.ContentLength,
 			&i.Favourite,
 			&i.CreatedAt,
@@ -491,176 +334,6 @@ func (q *Queries) FindSubdomainsWithSearchAndProgramID(ctx context.Context, arg 
 			return nil, err
 		}
 		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const findSubdomainsWithSearchAndProgramIDAndTechnologies = `-- name: FindSubdomainsWithSearchAndProgramIDAndTechnologies :many
-SELECT id, program_id, subdomain, tag, port, title, body_hash, status_code, technologies, content_length, favourite, created_at, updated_at FROM subdomain WHERE subdomain LIKE $1 AND program_id = $2 AND string_to_array(technologies, ',') && string_to_array($3, ',') LIMIT $4 OFFSET $5
-`
-
-type FindSubdomainsWithSearchAndProgramIDAndTechnologiesParams struct {
-	Subdomain     string `json:"subdomain"`
-	ProgramID     int64  `json:"program_id"`
-	StringToArray string `json:"string_to_array"`
-	Limit         int32  `json:"limit"`
-	Offset        int32  `json:"offset"`
-}
-
-func (q *Queries) FindSubdomainsWithSearchAndProgramIDAndTechnologies(ctx context.Context, arg FindSubdomainsWithSearchAndProgramIDAndTechnologiesParams) ([]Subdomain, error) {
-	rows, err := q.db.Query(ctx, findSubdomainsWithSearchAndProgramIDAndTechnologies,
-		arg.Subdomain,
-		arg.ProgramID,
-		arg.StringToArray,
-		arg.Limit,
-		arg.Offset,
-	)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	items := []Subdomain{}
-	for rows.Next() {
-		var i Subdomain
-		if err := rows.Scan(
-			&i.ID,
-			&i.ProgramID,
-			&i.Subdomain,
-			&i.Tag,
-			&i.Port,
-			&i.Title,
-			&i.BodyHash,
-			&i.StatusCode,
-			&i.Technologies,
-			&i.ContentLength,
-			&i.Favourite,
-			&i.CreatedAt,
-			&i.UpdatedAt,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const findSubdomainsWithSearchAndTechnologies = `-- name: FindSubdomainsWithSearchAndTechnologies :many
-SELECT id, program_id, subdomain, tag, port, title, body_hash, status_code, technologies, content_length, favourite, created_at, updated_at FROM subdomain WHERE subdomain LIKE $1 AND string_to_array(technologies, ',') && string_to_array($2, ',') LIMIT $3 OFFSET $4
-`
-
-type FindSubdomainsWithSearchAndTechnologiesParams struct {
-	Subdomain     string `json:"subdomain"`
-	StringToArray string `json:"string_to_array"`
-	Limit         int32  `json:"limit"`
-	Offset        int32  `json:"offset"`
-}
-
-func (q *Queries) FindSubdomainsWithSearchAndTechnologies(ctx context.Context, arg FindSubdomainsWithSearchAndTechnologiesParams) ([]Subdomain, error) {
-	rows, err := q.db.Query(ctx, findSubdomainsWithSearchAndTechnologies,
-		arg.Subdomain,
-		arg.StringToArray,
-		arg.Limit,
-		arg.Offset,
-	)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	items := []Subdomain{}
-	for rows.Next() {
-		var i Subdomain
-		if err := rows.Scan(
-			&i.ID,
-			&i.ProgramID,
-			&i.Subdomain,
-			&i.Tag,
-			&i.Port,
-			&i.Title,
-			&i.BodyHash,
-			&i.StatusCode,
-			&i.Technologies,
-			&i.ContentLength,
-			&i.Favourite,
-			&i.CreatedAt,
-			&i.UpdatedAt,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const findSubdomainsWithTechnologies = `-- name: FindSubdomainsWithTechnologies :many
-SELECT id, program_id, subdomain, tag, port, title, body_hash, status_code, technologies, content_length, favourite, created_at, updated_at FROM subdomain WHERE string_to_array(technologies, ',') && string_to_array($1, ',') LIMIT $2 OFFSET $3
-`
-
-type FindSubdomainsWithTechnologiesParams struct {
-	StringToArray string `json:"string_to_array"`
-	Limit         int32  `json:"limit"`
-	Offset        int32  `json:"offset"`
-}
-
-func (q *Queries) FindSubdomainsWithTechnologies(ctx context.Context, arg FindSubdomainsWithTechnologiesParams) ([]Subdomain, error) {
-	rows, err := q.db.Query(ctx, findSubdomainsWithTechnologies, arg.StringToArray, arg.Limit, arg.Offset)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	items := []Subdomain{}
-	for rows.Next() {
-		var i Subdomain
-		if err := rows.Scan(
-			&i.ID,
-			&i.ProgramID,
-			&i.Subdomain,
-			&i.Tag,
-			&i.Port,
-			&i.Title,
-			&i.BodyHash,
-			&i.StatusCode,
-			&i.Technologies,
-			&i.ContentLength,
-			&i.Favourite,
-			&i.CreatedAt,
-			&i.UpdatedAt,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getTechnologiesForAllSubdomains = `-- name: GetTechnologiesForAllSubdomains :many
-SELECT technologies FROM subdomain
-`
-
-func (q *Queries) GetTechnologiesForAllSubdomains(ctx context.Context) ([]string, error) {
-	rows, err := q.db.Query(ctx, getTechnologiesForAllSubdomains)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	items := []string{}
-	for rows.Next() {
-		var technologies string
-		if err := rows.Scan(&technologies); err != nil {
-			return nil, err
-		}
-		items = append(items, technologies)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -669,7 +342,7 @@ func (q *Queries) GetTechnologiesForAllSubdomains(ctx context.Context) ([]string
 }
 
 const updateSubdomain = `-- name: UpdateSubdomain :one
-UPDATE subdomain SET program_id = $2, subdomain = $3, title = $4, body_hash = $5, status_code = $6, technologies = $7, content_length = $8, tag = $9, port = $10, updated_at = NOW() WHERE id = $1 RETURNING id, program_id, subdomain, tag, port, title, body_hash, status_code, technologies, content_length, favourite, created_at, updated_at
+UPDATE subdomain SET program_id = $2, subdomain = $3, title = $4, body_hash = $5, status_code = $6, content_length = $7, tag = $8, port = $9, updated_at = NOW() WHERE id = $1 RETURNING id, program_id, subdomain, tag, port, title, body_hash, status_code, content_length, favourite, created_at, updated_at
 `
 
 type UpdateSubdomainParams struct {
@@ -679,10 +352,9 @@ type UpdateSubdomainParams struct {
 	Title         string `json:"title"`
 	BodyHash      string `json:"body_hash"`
 	StatusCode    int32  `json:"status_code"`
-	Technologies  string `json:"technologies"`
 	ContentLength int32  `json:"content_length"`
 	Tag           string `json:"tag"`
-	Port          string `json:"port"`
+	Port          int32  `json:"port"`
 }
 
 func (q *Queries) UpdateSubdomain(ctx context.Context, arg UpdateSubdomainParams) (Subdomain, error) {
@@ -693,7 +365,6 @@ func (q *Queries) UpdateSubdomain(ctx context.Context, arg UpdateSubdomainParams
 		arg.Title,
 		arg.BodyHash,
 		arg.StatusCode,
-		arg.Technologies,
 		arg.ContentLength,
 		arg.Tag,
 		arg.Port,
@@ -708,7 +379,6 @@ func (q *Queries) UpdateSubdomain(ctx context.Context, arg UpdateSubdomainParams
 		&i.Title,
 		&i.BodyHash,
 		&i.StatusCode,
-		&i.Technologies,
 		&i.ContentLength,
 		&i.Favourite,
 		&i.CreatedAt,

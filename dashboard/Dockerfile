@@ -1,11 +1,11 @@
-FROM node:16-alpine as dev
+FROM node:18-alpine as dev
 WORKDIR /root/
 CMD echo "getting latest npm modules" \
     && yarn \
     && echo "installation complete, starting" \
     && yarn start
 
-FROM node:16-alpine as build
+FROM node:18-alpine as build
 WORKDIR /root
 COPY ./package*.json ./
 RUN yarn

@@ -168,34 +168,6 @@ func (q *Queries) DeleteProgramByIDs(ctx context.Context, id int64) error {
 	return err
 }
 
-const favouriteProgram = `-- name: FavouriteProgram :one
-UPDATE program SET favourite = $2, updated_at = NOW() WHERE id = $1 RETURNING id, platform_id, name, slug, vdp, favourite, tag, url, type, created_at, updated_at
-`
-
-type FavouriteProgramParams struct {
-	ID        int64 `json:"id"`
-	Favourite bool  `json:"favourite"`
-}
-
-func (q *Queries) FavouriteProgram(ctx context.Context, arg FavouriteProgramParams) (Program, error) {
-	row := q.db.QueryRow(ctx, favouriteProgram, arg.ID, arg.Favourite)
-	var i Program
-	err := row.Scan(
-		&i.ID,
-		&i.PlatformID,
-		&i.Name,
-		&i.Slug,
-		&i.Vdp,
-		&i.Favourite,
-		&i.Tag,
-		&i.Url,
-		&i.Type,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-	)
-	return i, err
-}
-
 const findAllPrograms = `-- name: FindAllPrograms :many
 SELECT id, platform_id, name, slug, vdp, favourite, tag, url, type, created_at, updated_at FROM program
 `
@@ -640,7 +612,7 @@ func (q *Queries) FindProgramsWithTypeAndPlatform(ctx context.Context, arg FindP
 }
 
 const updateProgram = `-- name: UpdateProgram :one
-UPDATE program SET platform_id = $2, name = $3, slug = $4, vdp = $5, url = $6, type = $7, updated_at = NOW() WHERE id = $1 RETURNING id, platform_id, name, slug, vdp, favourite, tag, url, type, created_at, updated_at
+UPDATE program SET platform_id = $2, name = $3, slug = $4, vdp = $5, url = $6, type = $7, favourite = $8, updated_at = NOW() WHERE id = $1 RETURNING id, platform_id, name, slug, vdp, favourite, tag, url, type, created_at, updated_at
 `
 
 type UpdateProgramParams struct {
@@ -651,6 +623,7 @@ type UpdateProgramParams struct {
 	Vdp        bool        `json:"vdp"`
 	Url        string      `json:"url"`
 	Type       ProgramType `json:"type"`
+	Favourite  bool        `json:"favourite"`
 }
 
 func (q *Queries) UpdateProgram(ctx context.Context, arg UpdateProgramParams) (Program, error) {
@@ -662,6 +635,7 @@ func (q *Queries) UpdateProgram(ctx context.Context, arg UpdateProgramParams) (P
 		arg.Vdp,
 		arg.Url,
 		arg.Type,
+		arg.Favourite,
 	)
 	var i Program
 	err := row.Scan(

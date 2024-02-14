@@ -10,7 +10,7 @@ import (
 )
 
 const createScope = `-- name: CreateScope :one
-INSERT INTO scopes (program_id, scope, scope_type) VALUES ($1, $2, $3) RETURNING id, scope, scope_type, program_id, created_at, updated_at
+INSERT INTO scopes (program_id, scope, scope_type) VALUES ($1, $2, $3) RETURNING id, program_id, scope, scope_type, created_at, updated_at
 `
 
 type CreateScopeParams struct {
@@ -24,9 +24,9 @@ func (q *Queries) CreateScope(ctx context.Context, arg CreateScopeParams) (Scope
 	var i Scope
 	err := row.Scan(
 		&i.ID,
+		&i.ProgramID,
 		&i.Scope,
 		&i.ScopeType,
-		&i.ProgramID,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -54,7 +54,7 @@ func (q *Queries) FindProgramByScope(ctx context.Context, scope string) (int64, 
 }
 
 const findScopeByID = `-- name: FindScopeByID :one
-SELECT id, scope, scope_type, program_id, created_at, updated_at FROM scopes WHERE id = $1 LIMIT 1
+SELECT id, program_id, scope, scope_type, created_at, updated_at FROM scopes WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) FindScopeByID(ctx context.Context, id int64) (Scope, error) {
@@ -62,9 +62,9 @@ func (q *Queries) FindScopeByID(ctx context.Context, id int64) (Scope, error) {
 	var i Scope
 	err := row.Scan(
 		&i.ID,
+		&i.ProgramID,
 		&i.Scope,
 		&i.ScopeType,
-		&i.ProgramID,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -72,7 +72,7 @@ func (q *Queries) FindScopeByID(ctx context.Context, id int64) (Scope, error) {
 }
 
 const findScopes = `-- name: FindScopes :many
-SELECT id, scope, scope_type, program_id, created_at, updated_at FROM scopes
+SELECT id, program_id, scope, scope_type, created_at, updated_at FROM scopes
 `
 
 func (q *Queries) FindScopes(ctx context.Context) ([]Scope, error) {
@@ -86,9 +86,9 @@ func (q *Queries) FindScopes(ctx context.Context) ([]Scope, error) {
 		var i Scope
 		if err := rows.Scan(
 			&i.ID,
+			&i.ProgramID,
 			&i.Scope,
 			&i.ScopeType,
-			&i.ProgramID,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -103,7 +103,7 @@ func (q *Queries) FindScopes(ctx context.Context) ([]Scope, error) {
 }
 
 const findScopesByProgramID = `-- name: FindScopesByProgramID :many
-SELECT id, scope, scope_type, program_id, created_at, updated_at FROM scopes WHERE program_id = $1
+SELECT id, program_id, scope, scope_type, created_at, updated_at FROM scopes WHERE program_id = $1
 `
 
 func (q *Queries) FindScopesByProgramID(ctx context.Context, programID int64) ([]Scope, error) {
@@ -117,9 +117,9 @@ func (q *Queries) FindScopesByProgramID(ctx context.Context, programID int64) ([
 		var i Scope
 		if err := rows.Scan(
 			&i.ID,
+			&i.ProgramID,
 			&i.Scope,
 			&i.ScopeType,
-			&i.ProgramID,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -134,7 +134,7 @@ func (q *Queries) FindScopesByProgramID(ctx context.Context, programID int64) ([
 }
 
 const getScopeByProgramIDAndScope = `-- name: GetScopeByProgramIDAndScope :one
-SELECT id, scope, scope_type, program_id, created_at, updated_at FROM scopes WHERE program_id = $1 AND scope = $2 LIMIT 1
+SELECT id, program_id, scope, scope_type, created_at, updated_at FROM scopes WHERE program_id = $1 AND scope = $2 LIMIT 1
 `
 
 type GetScopeByProgramIDAndScopeParams struct {
@@ -147,9 +147,9 @@ func (q *Queries) GetScopeByProgramIDAndScope(ctx context.Context, arg GetScopeB
 	var i Scope
 	err := row.Scan(
 		&i.ID,
+		&i.ProgramID,
 		&i.Scope,
 		&i.ScopeType,
-		&i.ProgramID,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)

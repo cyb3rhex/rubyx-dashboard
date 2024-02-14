@@ -71,10 +71,6 @@ export default class API {
     _get('/subdomain?page=' + page + '&resultsPerPage=' + resultsPerPage + '&search=' + search + '&program_id=' + program_id + '&technologies=' + technologies)
   )
 
-  static getUniqueTechnologies = () => (
-    _get('/subdomain/technologies')
-  )
-
   static createSubdomain = (body) => (
     _post('/subdomain', body)
   )
@@ -133,11 +129,11 @@ export default class API {
 
    // PROGRAM
    static getAllPrograms = () => (
-    _get('/program?all=true')
+    _get('/programs?all=1')
   )
 
    static getPrograms = (page, resultsPerPage, search, type, platform_id) => (
-    _get('/program?page=' + page + '&resultsPerPage=' + resultsPerPage + '&search=' + search + '&type=' + type + '&platform_id=' + platform_id)
+    _get('/programs?page=' + (page || 0 ) + '&resultsPerPage=' + (resultsPerPage || 30) + '&search=' + (search || '') + '&type=' + (type || "") + '&platform_id=' + (platform_id || 0))
   )
 
   static createProgram = (body) => (
@@ -153,11 +149,11 @@ export default class API {
   )
 
   static reloadPrograms = () => (
-    _get('/program/reload')
+    _get('/programs?reload=1')
   )
 
   static getScope = (id) => (
-    _get(`/program/scope/${id}`)
+    _get(`/scope/${id}`)
   )
 
   static favouriteProgram = (id) => (

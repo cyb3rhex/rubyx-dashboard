@@ -51,21 +51,19 @@ func (srv *server) ConfigureRouter() {
 	srv.DELETE("/task/:id", handlers.DeleteTask)
 
 	// PROGRAMS
-	srv.GET("/program/reload", handlers.ReloadPrograms)
-	srv.GET("/program", handlers.GetPrograms)
-	srv.GET("/scope", handlers.GetProgramByScope)
-	srv.GET("/program/scope/:id", handlers.GetScopeByProgramID)
-	srv.GET("/program/id/:id", handlers.GetProgram)
-	srv.GET("/program/slug/:name", handlers.GetProgramBySlug)
-	srv.GET("/program/favourite/:id", handlers.FavouriteProgram)
+	srv.GET("/programs", handlers.GetPrograms)
+	srv.GET("/program/:id", handlers.GetProgram)
 	srv.POST("/program", handlers.CreateProgram)
 	srv.PUT("/program", handlers.UpdateProgram)
-	srv.DELETE("/program/id/:id", handlers.DeleteProgram)
+	srv.DELETE("/program/:id", handlers.DeleteProgram)
+
+	// SCOPE
+	srv.GET("/scope", handlers.GetProgramByScope)
+	srv.GET("/scope/:id", handlers.GetScopeByProgramID)
 
 	// SUBDOMAIN
-	srv.GET("/subdomain", handlers.GetSubdomains)
-	srv.GET("/subdomain/technologies", handlers.GetTechnologies)
-	srv.GET("/subdomain/program/:id", handlers.GetSubdomainByProgram)
+	srv.GET("/subdomains", handlers.GetSubdomains)
+	srv.GET("/subdomain/:id", handlers.GetSubdomain)
 	srv.POST("/subdomain", handlers.CreateSubdomain)
 	srv.PUT("/subdomain", handlers.UpdateSubdomain)
 	srv.DELETE("/subdomain/:id", handlers.DeleteSubdomain)
