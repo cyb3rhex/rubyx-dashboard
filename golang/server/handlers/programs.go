@@ -224,7 +224,7 @@ func GetPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 		programs, err = env.DB().FindProgramsWithSearchAndTypeAndPlatform(r.Context(), db.FindProgramsWithSearchAndTypeAndPlatformParams{
 			Name:       "%" + search + "%",
 			Column2:    toProgramType(platformType),
-			PlatformID: platformID,
+			PlatformID: &platformID,
 			Offset:     int32((page - 1) * resultsPerPage),
 			Limit:      int32(resultsPerPage),
 		})
@@ -234,7 +234,7 @@ func GetPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 		total, err = env.DB().CountProgramsWithSearchAndTypeAndPlatform(r.Context(), db.CountProgramsWithSearchAndTypeAndPlatformParams{
 			Name:       "%" + search + "%",
 			Column2:    toProgramType(platformType),
-			PlatformID: platformID,
+			PlatformID: &platformID,
 		})
 	} else if search != "" && platformType != "" && !platformIDProvided {
 		programs, err = env.DB().FindProgramsWithSearchAndType(r.Context(), db.FindProgramsWithSearchAndTypeParams{
@@ -253,7 +253,7 @@ func GetPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 	} else if search != "" && platformType == "" && platformIDProvided {
 		programs, err = env.DB().FindProgramsWithSearchAndPlatform(r.Context(), db.FindProgramsWithSearchAndPlatformParams{
 			Name:       "%" + search + "%",
-			PlatformID: platformID,
+			PlatformID: &platformID,
 			Offset:     int32((page - 1) * resultsPerPage),
 			Limit:      int32(resultsPerPage),
 		})
@@ -262,12 +262,12 @@ func GetPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 		}
 		total, err = env.DB().CountProgramsWithSearchAndPlatform(r.Context(), db.CountProgramsWithSearchAndPlatformParams{
 			Name:       "%" + search + "%",
-			PlatformID: platformID,
+			PlatformID: &platformID,
 		})
 	} else if search == "" && platformType != "" && platformIDProvided {
 		programs, err = env.DB().FindProgramsWithTypeAndPlatform(r.Context(), db.FindProgramsWithTypeAndPlatformParams{
 			Column1:    toProgramType(platformType),
-			PlatformID: platformID,
+			PlatformID: &platformID,
 			Offset:     int32((page - 1) * resultsPerPage),
 			Limit:      int32(resultsPerPage),
 		})
@@ -276,7 +276,7 @@ func GetPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 		}
 		total, err = env.DB().CountProgramsWithTypeAndPlatform(r.Context(), db.CountProgramsWithTypeAndPlatformParams{
 			Column1:    toProgramType(platformType),
-			PlatformID: platformID,
+			PlatformID: &platformID,
 		})
 	} else if search != "" && platformType == "" && !platformIDProvided {
 		programs, err = env.DB().FindProgramsWithSearch(r.Context(), db.FindProgramsWithSearchParams{
@@ -300,14 +300,14 @@ func GetPrograms(env env.Env, user *db.User, w http.ResponseWriter, r *http.Requ
 		total, err = env.DB().CountProgramsWithType(r.Context(), toProgramType(platformType))
 	} else if search == "" && platformType == "" && platformIDProvided {
 		programs, err = env.DB().FindProgramsWithPlatform(r.Context(), db.FindProgramsWithPlatformParams{
-			PlatformID: platformID,
+			PlatformID: &platformID,
 			Offset:     int32((page - 1) * resultsPerPage),
 			Limit:      int32(resultsPerPage),
 		})
 		if err != nil {
 			return write.Error(err)
 		}
-		total, err = env.DB().CountProgramsWithPlatform(r.Context(), platformID)
+		total, err = env.DB().CountProgramsWithPlatform(r.Context(), &platformID)
 	} else {
 		programs, err = env.DB().FindPrograms(r.Context(), db.FindProgramsParams{
 			Offset: int32((page - 1) * resultsPerPage),

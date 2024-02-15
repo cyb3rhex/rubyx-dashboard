@@ -1,7 +1,7 @@
 CREATE SCHEMA urls;
 
 CREATE TABLE urls (
-  id bigserial PRIMARY KEY,
+  id bigserial NOT NULL PRIMARY KEY,
   subdomain_id bigserial NOT NULL REFERENCES subdomain(id) ON DELETE CASCADE,
   url text NOT NULL UNIQUE,
   tag text NOT NULL,

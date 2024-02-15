@@ -1,7 +1,7 @@
 CREATE SCHEMA params;
 
 CREATE TABLE params (
-  id bigserial PRIMARY KEY,
+  id bigserial NOT NULL PRIMARY KEY,
   url_id bigserial NOT NULL REFERENCES urls(id) ON DELETE CASCADE,
   param VARCHAR NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT now(),

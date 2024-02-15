@@ -6,8 +6,8 @@ CREATE TYPE program_type AS ENUM (
 );
 
 CREATE TABLE program (
-  id bigserial PRIMARY KEY,
-  platform_id bigserial NOT NULL REFERENCES platform(id) ON DELETE CASCADE,
+  id bigserial NOT NULL PRIMARY KEY,
+  platform_id bigserial REFERENCES platform(id) ON DELETE CASCADE,
   name varchar(200) NOT NULL,
   slug varchar(200) NOT NULL UNIQUE,
   vdp boolean NOT NULL,

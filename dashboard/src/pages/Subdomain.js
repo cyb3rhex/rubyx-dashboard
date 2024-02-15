@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getSubdomains, getUniqueTechnologies } from "../actions/subdomain";
+import { getSubdomains, getAllSubdomains } from "../actions/subdomain";
 import PageTitle from "../components/Typography/PageTitle";
 import { AiFillSecurityScan } from "react-icons/ai";
 import ModalImage from "react-modal-image";
@@ -31,63 +31,42 @@ function Subdomain() {
   const [url, setUrl] = useState("");
 
   const [programSelect, setProgramSelect] = useState([]);
-  const [technologiesSelect, setTechnologiesSelect] = useState([]);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filterProgram, setFilterProgram] = useState(0);
-  const [filterTechnology, setFilterTechnology] = useState([]);
 
   const resultsPerPage = 30;
 
   function onPageChangeTable(p) {
-    let technologies = filterTechnology
-      ? filterTechnology.map((option) => option.value).join(",")
-      : "";
-      let program = filterProgram.value ? filterProgram.value : 0;
+    let program = filterProgram.value ? filterProgram.value : 0;
     dispatch(
       getSubdomains(
         p,
         resultsPerPage,
         searchTerm,
-        program,
-        technologies
+        program
       )
     );
   }
 
   useEffect(() => {
     dispatch(getAllPrograms());
-    dispatch(getUniqueTechnologies());
     dispatch(
-      getSubdomains(1, resultsPerPage, searchTerm, 0, "")
+      getAllSubdomains(1, resultsPerPage)
     );
   }, []);
 
   useEffect(() => {
-    if (subdomainState && subdomainState.uniqueTechnologies) {
-      setTechnologiesSelect([
-        ...subdomainState.uniqueTechnologies.map((technology) => {
-          return { value: technology, label: technology };
-        }),
-      ]);
-    }
-  }, [subdomainState]);
-
-  useEffect(() => {
-    let technologies = filterTechnology
-      ? filterTechnology.map((option) => option.value).join(",")
-      : "";
-      let program = filterProgram.value ? filterProgram.value : 0;
+    let program = filterProgram.value ? filterProgram.value : 0;
     dispatch(
       getSubdomains(
         1,
         resultsPerPage,
         searchTerm,
         program,
-        technologies
       )
     );
-  }, [searchTerm, filterProgram, filterTechnology]);
+  }, [searchTerm, filterProgram]);
 
   useEffect(() => {
     if (programState && programState.programs) {
@@ -130,15 +109,6 @@ function Subdomain() {
                 onChange={(e) => setFilterProgram(e)}
                 options={programSelect}
               />
-
-              <Select
-                value={filterTechnology}
-                isSearchable={true}
-                isMultiple={true}
-                placeholder="Filter by technology"
-                onChange={(e) => setFilterTechnology(e)}
-                options={technologiesSelect}
-              />
             </div>
 
             {subdomainState.loading && (
@@ -159,7 +129,6 @@ function Subdomain() {
                       <TableCell>Ports</TableCell>
                       <TableCell>Status Code</TableCell>
                       <TableCell>Content Length</TableCell>
-                      <TableCell>Technology</TableCell>
                       <TableCell>Screenshot</TableCell>
                       <TableCell>Urls</TableCell>
                     </tr>
@@ -170,8 +139,8 @@ function Subdomain() {
                         <TableRow key={i}>
                           <TableCell>
                             <span className="text-sm">
-                              <a href={key.url} target="__blank">
-                                {key.url}
+                              <a href={key.subdomain} target="__blank">
+                                {key.subdomain}
                               </a>
                             </span>
                             <br />
@@ -199,19 +168,6 @@ function Subdomain() {
                             <span className="text-sm">
                               {key.content_length}
                             </span>
-                          </TableCell>
-                          <TableCell>
-                            {key.technologies !== "" &&
-                              key.technologies
-                                .split(",")
-                                .map(
-                                  (tech, i) =>
-                                    tech !== "" && (
-                                      <span class="bg-sky-700 text-white text-xs font-medium mr-2 px-2 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
-                                        {tech}
-                                      </span>
-                                    )
-                                )}
                           </TableCell>
                           <TableCell>
                             {key.screenshot !== "" ? (

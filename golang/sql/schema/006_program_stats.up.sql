@@ -1,8 +1,8 @@
 CREATE SCHEMA stats;
 
 CREATE TABLE stats (
-    id BIGSERIAL PRIMARY KEY,
-    platform_id BIGSERIAL NOT NULL REFERENCES platform(id) ON DELETE CASCADE,
+    id bigserial NOT NULL PRIMARY KEY,
+    platform_id bigserial NOT NULL REFERENCES platform(id) ON DELETE CASCADE,
     report_id VARCHAR(255) NOT NULL,
     report_title VARCHAR(255) NOT NULL,
     severity VARCHAR(255) NOT NULL,

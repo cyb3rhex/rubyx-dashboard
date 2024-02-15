@@ -72,25 +72,22 @@ func GetUrls(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request)
 		resultsPerPage = 30
 	}
 
-	subdomain, err := getInt64("subdomain", r)
+	subdomain, err := getint64("subdomain", r)
 
 	var urls []db.Url
 	if search != "" {
 		urls, err = env.DB().FindUrlsBySubdomainWithSearch(r.Context(), db.FindUrlsBySubdomainWithSearchParams{
 			SubdomainID: subdomain,
 			Url:         "%" + search + "%",
-			Limit:       int32(resultsPerPage),
 			Offset:      int32((page - 1) * resultsPerPage),
+			Limit:       int32(resultsPerPage),
 		})
 	} else {
 		urls, err = env.DB().FindUrlsBySubdomain(r.Context(), db.FindUrlsBySubdomainParams{
 			SubdomainID: subdomain,
-			Limit:       int32(resultsPerPage),
 			Offset:      int32((page - 1) * resultsPerPage),
+			Limit:       int32(resultsPerPage),
 		})
-	}
-	if err != nil {
-		return write.Error(err)
 	}
 
 	total, err := env.DB().CountUrlsBySubdomain(r.Context(), subdomain)

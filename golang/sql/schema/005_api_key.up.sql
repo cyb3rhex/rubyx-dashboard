@@ -1,7 +1,7 @@
 CREATE SCHEMA api;
 
 CREATE TABLE api (
-  id bigserial PRIMARY KEY,
+  id bigserial NOT NULL PRIMARY KEY,
   user_id bigserial NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   api_key text NOT NULL,
   created_at timestamp NOT NULL DEFAULT now(),

@@ -35,6 +35,11 @@ func main() {
 		log.Fatal(err)
 	}
 
+	_, err = dbpool.Exec(context.Background(), "INSERT INTO platform (name, slug, type) VALUES ($1, $2, $3)", "Default", "default", "private")
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	_, err = dbpool.Exec(context.Background(), "INSERT INTO users (email, username, pass, salt) VALUES ($1, $2, $3, $4)", "admin@admin.com", "admin", hashedPassword, salt)
 	if err != nil {
 		log.Fatal(err)

@@ -67,8 +67,12 @@ export default class API {
 
 
   // SUBDOMAIN
-  static getSubdomains = (page, resultsPerPage, search, program_id, technologies) => (
-    _get('/subdomain?page=' + page + '&resultsPerPage=' + resultsPerPage + '&search=' + search + '&program_id=' + program_id + '&technologies=' + technologies)
+  static getAllSubdomains = (page, resultsPerPage) => (
+    _get('/subdomains?page=' + page + '&resultsPerPage=' + resultsPerPage)
+  )
+
+  static getSubdomains = (page, resultsPerPage, search, program_id) => (
+    _get('/subdomains?page=' + page + '&resultsPerPage=' + resultsPerPage + '&search=' + (search || '') + '&program_id=' + (program_id || ''))
   )
 
   static createSubdomain = (body) => (

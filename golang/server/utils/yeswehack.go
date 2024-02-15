@@ -27,8 +27,8 @@ type ProgramResponse struct {
 }
 
 func GetJWTYWH(platform *db.Platform) (string, error) {
-	if platform.Jwt != "" && time.Since(platform.UpdatedAt) <= 3500*time.Second {
-		return platform.Jwt, nil
+	if *platform.Jwt != "" && time.Since(platform.UpdatedAt) <= 3500*time.Second {
+		return *platform.Jwt, nil
 	}
 
 	totpToken, err := GetTOTPTokenYWH(platform)
@@ -43,7 +43,7 @@ func GetJWTYWH(platform *db.Platform) (string, error) {
 		return "", err
 	}
 
-	platform.Jwt = jwtToken
+	*platform.Jwt = jwtToken
 	platform.UpdatedAt = time.Now()
 
 	return jwtToken, nil
@@ -51,8 +51,8 @@ func GetJWTYWH(platform *db.Platform) (string, error) {
 
 func GetTOTPTokenYWH(platform *db.Platform) (string, error) {
 	data := map[string]string{
-		"email":    platform.Email,
-		"password": platform.Password,
+		"email":    *(platform.Email),
+		"password": *(platform.Password),
 	}
 	jsonData, err := json.Marshal(data)
 	if err != nil {
@@ -84,7 +84,7 @@ func GetTOTPTokenYWH(platform *db.Platform) (string, error) {
 }
 
 func GetJWTTokenYWH(platform *db.Platform, totpToken string) (string, error) {
-	code, err := totp.GenerateCode(platform.Otp, time.Now())
+	code, err := totp.GenerateCode(*platform.Otp, time.Now())
 	if err != nil {
 		fmt.Println("Error in generation of TOTP", err)
 		return "", nil
@@ -206,7 +206,7 @@ func ParseProgramsYWH(programs []interface{}, platform *db.Platform, env env.Env
 				Url:        programUrl,
 				Tag:        "",
 				Type:       programType,
-				PlatformID: platform.ID,
+				PlatformID: &platform.ID,
 			})
 
 			if err != nil {
@@ -432,7 +432,7 @@ func apiGetRequestYWH(url string, platform *db.Platform) (*http.Response, error)
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer "+platform.Jwt)
+	req.Header.Set("Authorization", "Bearer "+*platform.Jwt) // Convert null.String to string
 
 	client := &http.Client{}
 	resp, err := client.Do(req)

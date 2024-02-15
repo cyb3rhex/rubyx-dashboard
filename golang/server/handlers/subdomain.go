@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -25,19 +26,41 @@ func CreateSubdomain(env env.Env, user *db.User, w http.ResponseWriter, r *http.
 	p := &db.Subdomain{}
 	err := decoder.Decode(p)
 	if err != nil || p == nil {
+		fmt.Println("err", err)
 		return write.Error(errors.NoJSONBody)
 	}
 
-	return write.JSONorErr(env.DB().CreateSubdomain(r.Context(), db.CreateSubdomainParams{
-		ProgramID:     p.ProgramID,
-		Subdomain:     p.Subdomain,
-		Title:         p.Title,
-		BodyHash:      p.BodyHash,
-		StatusCode:    p.StatusCode,
-		ContentLength: p.ContentLength,
-		Port:          p.Port,
-		Tag:           p.Tag,
-	}))
+	subdomainExist, err := env.DB().FindSubdomainsBySubdomainAndProgramID(r.Context(), db.FindSubdomainsBySubdomainAndProgramIDParams{
+		ProgramID: p.ProgramID,
+		Subdomain: p.Subdomain,
+	})
+	if err != nil {
+
+		return write.JSONorErr(env.DB().CreateSubdomain(r.Context(), db.CreateSubdomainParams{
+			ProgramID:     p.ProgramID,
+			Subdomain:     p.Subdomain,
+			Title:         p.Title,
+			BodyHash:      p.BodyHash,
+			StatusCode:    p.StatusCode,
+			ContentLength: p.ContentLength,
+			Screenshot:    p.Screenshot,
+			Ip:            p.Ip,
+			Tag:           p.Tag,
+		}))
+	} else {
+
+		return write.JSONorErr(env.DB().UpdateSubdomain(r.Context(), db.UpdateSubdomainParams{
+			ID:            subdomainExist.ID,
+			ProgramID:     p.ProgramID,
+			Title:         p.Title,
+			BodyHash:      p.BodyHash,
+			StatusCode:    p.StatusCode,
+			ContentLength: p.ContentLength,
+			Screenshot:    p.Screenshot,
+			Ip:            p.Ip,
+			Tag:           p.Tag,
+		}))
+	}
 }
 
 func GetSubdomain(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
@@ -80,7 +103,8 @@ func UpdateSubdomain(env env.Env, user *db.User, w http.ResponseWriter, r *http.
 		BodyHash:      p.BodyHash,
 		StatusCode:    p.StatusCode,
 		ContentLength: p.ContentLength,
-		Port:          p.Port,
+		Screenshot:    p.Screenshot,
+		Ip:            p.Ip,
 		Tag:           p.Tag,
 	}))
 }
@@ -101,6 +125,11 @@ func DeleteSubdomain(env env.Env, user *db.User, w http.ResponseWriter, r *http.
 func GetSubdomains(env env.Env, user *db.User, w http.ResponseWriter, r *http.Request) http.HandlerFunc {
 	if user == nil {
 		return write.Error(errors.RouteUnauthorized)
+	}
+
+	all, err := strconv.Atoi(r.URL.Query().Get("all"))
+	if err != nil || all > 1 {
+		all = 0
 	}
 
 	page, err := strconv.Atoi(r.URL.Query().Get("page"))
@@ -132,7 +161,11 @@ func GetSubdomains(env env.Env, user *db.User, w http.ResponseWriter, r *http.Re
 
 	var subdomains []db.Subdomain
 	var total int64
-	if search != "" && programIDProvided == false {
+
+	if all == 1 {
+		subdomains, err = env.DB().FindAllSubdomains(r.Context())
+		total, err = env.DB().CountSubdomains(r.Context())
+	} else if search != "" && programIDProvided == false {
 		subdomains, err = env.DB().FindSubdomainsWithSearch(r.Context(), db.FindSubdomainsWithSearchParams{
 			Subdomain: "%" + search + "%",
 			Offset:    int32((page - 1) * resultsPerPage),

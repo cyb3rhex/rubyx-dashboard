@@ -25,7 +25,7 @@ func isDupe(err error) bool {
 }
 
 // helpers for easily parsing params
-func getInt64(name string, r *http.Request) (out int64, err error) {
+func getint64(name string, r *http.Request) (out int64, err error) {
 	params := httprouter.ParamsFromContext(r.Context())
 	arg := params.ByName(name)
 	out, err = strconv.ParseInt(arg, 10, 64)
@@ -33,7 +33,7 @@ func getInt64(name string, r *http.Request) (out int64, err error) {
 }
 
 func getID(r *http.Request) (out int64, err error) {
-	return getInt64("id", r)
+	return getint64("id", r)
 }
 
 func getString(name string, r *http.Request) (param string) {

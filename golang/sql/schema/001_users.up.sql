@@ -1,7 +1,7 @@
 CREATE SCHEMA users;
 
 CREATE TABLE users (
-  id bigserial PRIMARY KEY,
+  id bigserial NOT NULL PRIMARY KEY,
   email varchar(254) NOT NULL UNIQUE,
   username varchar(60) NOT NULL UNIQUE,
   pass varchar(60) NOT NULL,

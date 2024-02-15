@@ -1,7 +1,7 @@
 CREATE SCHEMA tasks;
 
 CREATE TABLE tasks (
-  id bigserial PRIMARY KEY,
+  id bigserial NOT NULL PRIMARY KEY,
   domain VARCHAR NOT NULL,
   params VARCHAR NOT NULL,
   type VARCHAR NOT NULL,

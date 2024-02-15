@@ -30,7 +30,7 @@ func GetJWTH1(platform *db.Platform) (string, error) {
 	}
 	platform.Jwt = platform.Password
 
-	return platform.Jwt, nil
+	return *platform.Jwt, nil
 }
 
 func GetUsernameH1(platform *db.Platform) (string, error) {
@@ -44,7 +44,7 @@ func GetUsernameH1(platform *db.Platform) (string, error) {
 		return "", nil
 	}
 
-	return platform.HunterUsername, err
+	return *platform.HunterUsername, err
 }
 
 func UpdateProgramsH1(platform *db.Platform, pageID int, env env.Env) {
@@ -126,7 +126,7 @@ func ParseProgramsH1(programs []interface{}, platform *db.Platform, env env.Env)
 				Url:        fmt.Sprintf("https://hackerone.com/%s", slug),
 				Tag:        "",
 				Type:       public,
-				PlatformID: platform.ID,
+				PlatformID: &platform.ID,
 			})
 		}
 
@@ -304,7 +304,7 @@ func apiRequestH1(platform *db.Platform, url string) (*http.Response, error) {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
 
-	req.SetBasicAuth(platform.HunterUsername, platform.Password)
+	req.SetBasicAuth(*platform.HunterUsername, *platform.Password)
 	req.Header.Set("Accept", "application/json")
 
 	client := http.DefaultClient
